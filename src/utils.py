@@ -1,3 +1,6 @@
+# import xml.etree.ElementTree as ET
+from lxml import etree
+
 def tab(text, tabulator='  '):
     return '\n'.join([
                       tabulator + line
@@ -5,45 +8,30 @@ def tab(text, tabulator='  '):
                       ])
 
 
-class Tag(object):
+def getMatchingChildren(element, tag):
+    for child in element:
+        if child.tag == tag:
+            yield child
+ 
+def child(element, tag):
+    for child in getMatchingChildren(element, tag):
+        return child 
+            
+def tostring(element):
+    return etree.tostring(element, method='html', pretty_print=True)
 
-    def __init__(self, tagName, tagContent='', joiner='\n', doTab=True, **kwargs):
-        ''' Kwarg hyphens should be mutilated to quadruple underscores.'''
-        self.tagName = tagName
-        self.joiner = joiner
-        self.doTab = doTab
-        kwargsList = []
-        for (key, value) in kwargs.items():
-            if key is 'cls':
-                key = 'class'
-            if '____' in key:
-                newKey = key.replace('____', '-')
-                kwargsList.append('%s="%s"' % (newKey, value))
-            else:
-                kwargsList.append('%s="%s"' % (key, value))
-        self.kwargs = ' '.join(kwargsList)
-        if len(self.kwargs) > 0:
-            self.kwargs = ' ' + self.kwargs
-        self.tagContent = tagContent
+def Tag(*args, **kwargs):
+    attribToAdd = {}
+    for k, v in kwargs.items():
+        if k == 'cls':
+            attribToAdd['class'] = kwargs.pop(k)
+        if '____' in k:
+            newKey = k.replace('____', '-')
+            attribToAdd[newKey] = kwargs.pop(k) 
+    tag = etree.Element(*args, **kwargs)
+    tag.attrib.update(attribToAdd)
+    return tag
 
-    def __call__(self, enclosed):
-        if enclosed.strip() == '':
-            return '<%s%s />' % (self.tagName, self.kwargs)
-
-        if self.doTab:
-            enclosed = tab(enclosed)
-        return self.joiner.join([
-                '<%s%s>' % (self.tagName, self.kwargs),
-                enclosed,
-                '</%s>' % self.tagName,
-                ]).replace('\n \n', '\n').replace('\n  \n', '\n')
-    
-    def __str__(self):
-        return self(self.tagContent)
-
-
-class Div(Tag):
-    def __init__(self, **kwargs):
-        #Tag.__init__(self, 'div', **kwargs)
-        super(Div, self).__init__('div', **kwargs)
-
+        
+def Div(**kwargs):
+    return etree.Element('div', **kwargs)

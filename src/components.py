@@ -65,6 +65,7 @@ def button(text, raised=True, primary=True, accent=False, **kwargs):
         cls += ' mdl-button--primary'
     elif accent:
         cls += ' mdl-button--accent'
-    return Tag('button', cls=cls, **kwargs)(text)
-
+    tag = Tag('button', cls=cls, **kwargs)
+    tag.text = text
+    return tag
 
