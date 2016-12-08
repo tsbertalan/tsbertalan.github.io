@@ -26,7 +26,7 @@ def parseAnonymousHTML(toparse, disp=False):
         print 'parsed is', tostring(parsed)
     body = child(parsed, 'body')
     if len(body) == 1:
-        return child(body, 'p')
+        return body[0]
     else:
         return body
 
@@ -68,9 +68,11 @@ def Div(**kwargs):
 
 
 def writePage(html, fname):
+    print 'Opening', fname
     f = open(fname, 'w')
     f.write(tostring(html))
     f.close()
+    print 'Saved', fname
 
 
 def showPage(fname, browser='google-chrome'):    
@@ -81,6 +83,6 @@ def showPage(fname, browser='google-chrome'):
 def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
     writePage(html, fname)
     if browser is not None:
-        showPage(browser, fname)
+        showPage(fname, browser)
     
     

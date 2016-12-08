@@ -1,7 +1,5 @@
-#!/usr/local/bin/python2.7
-# encoding: utf-8
+#!/usr/var/env python
 '''
-buildPage -- Make a project description page from a set of input files.
 @author:     Tom Bertalan
 @contact:    tom@tombertalan.com
 '''

@@ -9,8 +9,8 @@ def Head():
     head.append(Tag('meta', name='viewport', content="width=device-width, initial-scale=1.0"))
     return head
 
-def Html(head=None, body=None):
-    html = Tag('html')
+def Html(head=None, body=None, **kwargs):
+    html = Tag('html', **kwargs)
     if head is None:
         head = Head()
     if body is None:
