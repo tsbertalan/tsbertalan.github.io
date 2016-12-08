@@ -22,6 +22,12 @@ def tostring(element):
 
 def Tag(*args, **kwargs):
     attribToAdd = {}
+    
+    if 'tagText' in kwargs:
+        tagText = kwargs.pop('tagText')
+    else:
+        tagText = None
+    
     for k, v in kwargs.items():
         if k == 'cls':
             attribToAdd['class'] = kwargs.pop(k)
@@ -30,8 +36,25 @@ def Tag(*args, **kwargs):
             attribToAdd[newKey] = kwargs.pop(k) 
     tag = etree.Element(*args, **kwargs)
     tag.attrib.update(attribToAdd)
+    
+    if tagText is not None:
+        parsed = etree.HTML(tagText)
+        p = child(child(parsed, 'body'), 'p')
+        tag.text = p.text
+        for contents in p:
+            tag.append(contents) 
+        
     return tag
 
         
 def Div(**kwargs):
     return Tag('div', **kwargs)
+
+def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
+    f = open(fname, 'w')
+    f.write(tostring(html))
+    f.close()
+    if browser is not None:
+        from os import system
+        system('%s "%s"' % (browser, fname))
+    

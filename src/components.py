@@ -30,17 +30,14 @@ def cardTask(title, text=None, img=None, shadowLevel=2, indent=1, color=None, pr
         cls +=' mdl-color-text--accent-contrast'
     elif primary:
         cls += ' mdl-color-text--primary-contrast'
-    div = Div(cls=cls)
-    div.text = title
-    out.append(div)
+    out.append(Div(cls=cls, tagText=title))
     if text is not None:
         cls = "mdl-card__supporting-text"
         if accent:
             cls += ' mdl-color-text--accent-contrast'
         elif primary:
             cls += ' mdl-color-text--primary-contrast'
-        div = Div(cls=cls)
-        div.text = text
+        div = Div(cls=cls, tagText=text)
         out.append(div)
         
     if color is not None:
@@ -69,7 +66,6 @@ def button(text, raised=True, primary=True, accent=False, **kwargs):
         cls += ' mdl-button--primary'
     elif accent:
         cls += ' mdl-button--accent'
-    tag = Tag('button', cls=cls, **kwargs)
-    tag.text = text
+    tag = Tag('button', cls=cls, tagText=text, **kwargs)
     return tag
 
