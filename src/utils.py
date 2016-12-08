@@ -20,6 +20,16 @@ def child(element, tag):
 def tostring(element):
     return etree.tostring(element, method='html', pretty_print=True)
 
+def parseAnonymousHTML(toparse, disp=False):
+    parsed = etree.HTML(toparse)
+    if disp:
+        print 'parsed is', tostring(parsed)
+    body = child(parsed, 'body')
+    if len(body) == 1:
+        return child(body, 'p')
+    else:
+        return body
+
 def Tag(*args, **kwargs):
     attribToAdd = {}
     
@@ -27,6 +37,11 @@ def Tag(*args, **kwargs):
         tagText = kwargs.pop('tagText')
     else:
         tagText = None
+        
+    if 'toAppend' in kwargs:
+        toAppend = kwargs.pop('toAppend')
+    else:
+        toAppend = []
     
     for k, v in kwargs.items():
         if k == 'cls':
@@ -38,11 +53,12 @@ def Tag(*args, **kwargs):
     tag.attrib.update(attribToAdd)
     
     if tagText is not None:
-        parsed = etree.HTML(tagText)
-        p = child(child(parsed, 'body'), 'p')
+        p = parseAnonymousHTML(tagText)
         tag.text = p.text
         for contents in p:
-            tag.append(contents) 
+            tag.append(contents)
+            
+    tag.extend(toAppend)
         
     return tag
 
@@ -50,11 +66,21 @@ def Tag(*args, **kwargs):
 def Div(**kwargs):
     return Tag('div', **kwargs)
 
-def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
+
+def writePage(html, fname):
     f = open(fname, 'w')
     f.write(tostring(html))
     f.close()
+
+
+def showPage(fname, browser='google-chrome'):    
+    from os import system
+    system('%s "%s"' % (browser, fname))
+    
+    
+def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
+    writePage(html, fname)
     if browser is not None:
-        from os import system
-        system('%s "%s"' % (browser, fname))
+        showPage(browser, fname)
+    
     

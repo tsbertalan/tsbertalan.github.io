@@ -4,9 +4,11 @@ Created on Dec 8, 2016
 @author: tsbertalan
 '''
 import page
-from utils import child, tostring, Tag 
+from utils import child, tostring, Tag
+from standalonePage import article
 
 def makePage(projectName, projectDescription):
+    return article(projectName, projectDescription)
     html = page.Html()
     
     head = child(html, 'head')
