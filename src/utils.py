@@ -34,4 +34,4 @@ def Tag(*args, **kwargs):
 
         
 def Div(**kwargs):
-    return etree.Element('div', **kwargs)
+    return Tag('div', **kwargs)

@@ -1,4 +1,4 @@
-from utils import Tag, Div
+from utils import Tag, Div, tostring
 
     
 
@@ -30,17 +30,18 @@ def cardTask(title, text=None, img=None, shadowLevel=2, indent=1, color=None, pr
         cls +=' mdl-color-text--accent-contrast'
     elif primary:
         cls += ' mdl-color-text--primary-contrast'
-    out.append(Div(cls=cls)(
-        #Tag('h3', cls="mdl-card__title-text")(title)
-        title
-        ))
+    div = Div(cls=cls)
+    div.text = title
+    out.append(div)
     if text is not None:
         cls = "mdl-card__supporting-text"
         if accent:
             cls += ' mdl-color-text--accent-contrast'
         elif primary:
             cls += ' mdl-color-text--primary-contrast'
-        out.append(Div(cls=cls)(text))
+        div = Div(cls=cls)
+        div.text = text
+        out.append(div)
         
     if color is not None:
         colorstyle = 'background-color: %s;' % color
@@ -52,9 +53,12 @@ def cardTask(title, text=None, img=None, shadowLevel=2, indent=1, color=None, pr
     elif primary:
         cls += ' mdl-color--primary'
     style = 'width: 90%%;%s' % colorstyle
-    return Tag('span', style='padding: 20px; margin-left: %dpx; %s' % ((indent-1)*4, spanStyle) )(
-        Div(cls=cls, style=style)('\n'.join(out))
-        )
+    div = Div(cls=cls, style=style)
+    for o in out:
+        div.append(o)
+    span = Tag('span', style='padding: 20px; margin-left: %dpx; %s' % ((indent-1)*4, spanStyle) )
+    span.append(div)
+    return span
 
 
 def button(text, raised=True, primary=True, accent=False, **kwargs):
