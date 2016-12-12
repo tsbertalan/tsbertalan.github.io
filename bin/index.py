@@ -11,7 +11,7 @@ def portfolioCard(title, supportingText, linkDest='#', imgSrc='images/1px.png', 
     out = parseAnonymousHTML(
     ''' <div class="mdl-cell mdl-card mdl-shadow--4dp portfolio-card">
             <div class="mdl-card__media">
-                <img class="article-image" src="%s" border="0" alt="%s">
+                <img class="article-image" src="%s" border="0" alt="%s" width="100%%" />
             </div>
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">%s</h2>
@@ -97,6 +97,7 @@ def index(cards=[]):
 #                 </div>
 #             </footer>
     return html
+   
     
 if __name__ == '__main__':
     from utils import displayHtml

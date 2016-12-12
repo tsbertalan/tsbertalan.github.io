@@ -12,6 +12,7 @@ import index
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
+wwwDir = '../'
 
 def listdirs(folder):
     return [
@@ -54,16 +55,18 @@ for projectDir in projectDirs:
         continue  # Skip this project if there's not /*doc*/ subfolder.
     
     # Prepare a folder to put the output in.
-    destination = join('.', baseProjectName, 'index.html')
+    destinationFileLocation = join(wwwDir, baseProjectName, 'index.html')
+    linkDestination = join(baseProjectName, 'index.html')
     try:
-        mkdir(dirname(destination))
+        mkdir(dirname(destinationFileLocation))
     except OSError:
         pass
 
     # Copy hero image to output folder.        
     print 'hero is', hero
-    imgSrc = join(dirname(destination), basename(hero))
-    copy(join(projectDir, hero), imgSrc)
+    imgSrc = join(baseProjectName, basename(hero))
+    imgCpLoc = join(dirname(destinationFileLocation), basename(hero))
+    copy(join(projectDir, hero), imgCpLoc)
     
     # Try to construct a github link.
     repo = None
@@ -83,11 +86,11 @@ for projectDir in projectDirs:
                        #utils.Tag('a', href='../index.html', tagText='Tom Bertalan'),
                        'Tom Bertalan',
                        readmeHtml, breadcrumbs=breadcrumbs, sourceLink=repo, heading=False)
-    utils.writePage(pageHtml, destination)
+    utils.writePage(pageHtml, destinationFileLocation)
         
     # Generate a card for this project to put on the home page.
-    cards.append(index.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=destination, imgAlt=blurb))
+    cards.append(index.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb))
     
 # Generate, write, and display the home page. 
 homepageHtml = index.index(cards=cards)
-utils.displayHtml(homepageHtml, fname='./index.html')
+utils.displayHtml(homepageHtml, fname=join(wwwDir, 'index.html'))
