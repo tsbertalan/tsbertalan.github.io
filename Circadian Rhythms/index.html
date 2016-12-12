@@ -1,0 +1,98 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.blue_grey-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #607D8B;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+</style>
+</head>
+<body>
+<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title">Tom Bertalan</span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Circadian Rhythms</span>
+</div>
+<span></span><h1>Circadian rhythsm in the heterogeneous suprachiasmatic nucleus</h1>
+<p>A Python simulation of circadian dynamics in the suprachiasmatic nuclei of the
+mouse hypothalamus.</p>
+<p>Requires NumPy, SciPy, Matplotlib, and other packages listed in
+circadian/req1.txt and circadian.req2.txt</p>
+<p>The subdirectory <code>circadian</code> (containing <code>__init__.py</code>) should be in your
+<code>$PYTHONPATH</code> environment variable to allow you to import this.
+Or, you can open a python prompt in the
+directory above that (the same as this file) and you should be able to
+issue a <code>import circadian</code>. Or, you should be able to
+do <code>python scripts/runMe.py</code> in this directory to see some results, 
+or <code>python scripts/runTests.py</code> or just <code>make tests</code> to run the tests.
+Some of the tests additionally require SymPy.</p>
+<p><a href="https://codeship.com/projects/65fbf810-e43c-0131-c757-3ea301df01cd/status?branch=master"></a></p>
+<p><a href="https://codeship.com/projects/25556"><img alt="build status" src="https://img.shields.io/codeship/65fbf810-e43c-0131-c757-3ea301df01cd/master.svg"></a></p>
+</div>
+</div>
+<footer class="demo-footer mdl-mini-footer"><div class="mdl-mini-footer--left-section"><ul class="mdl-mini-footer--link-list">
+<li><a href="#">Help</a></li>
+<li><a href="#">Privacy and terms</a></li>
+<li><a href="#">User Agreement</a></li>
+</ul></div></footer></main>
+</div>
+<a href="http://github.com/tsbertalan/circadian" id="view-source" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View project files.</a>
+</body>
+</html>
