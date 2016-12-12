@@ -1,11 +1,11 @@
 #!/usr/var/env python
-# encoding: utf-8
 '''
 @author:     Tom Bertalan
 @contact:    tom@tombertalan.com
 '''
 from page import Html
 from utils import child, Tag, Div, parseAnonymousHTML
+import datetime
 
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     print 'Generating card with linkDest=', linkDest
@@ -60,19 +60,23 @@ def index(cards=[]):
                 </span>
             </div>
             <div class="mdl-layout__header-row portfolio-navigation-row mdl-layout--large-screen-only">
+                <!--
                 <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
                     <a class="mdl-navigation__link is-active" href="index.html">Portfolio</a>
                     <a class="mdl-navigation__link" href="about.html">About</a>
                 </nav>
+                -->
             </div>
         </header>''')
     layout.extend(content)
     
     head, content, tail = parseAnonymousHTML('''<div class="mdl-layout__drawer mdl-layout--small-screen-only">
+            <!--
             <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
                 <a class="mdl-navigation__link is-active" href="index.html">Portfolio</a>
                 <a class="mdl-navigation__link" href="about.html">About</a>
             </nav>
+            -->
         </div>''')
     layout.extend(content)
     
@@ -91,12 +95,14 @@ def index(cards=[]):
     footer.append(leftFooter)
     rightFooter = Div(cls='mdl-mini-footer__right-section')
     footer.append(rightFooter)
-    leftFooter.append(Div(cls='mdl-logo', tagText='Tom Bertalan'))
+    now = datetime.datetime.now()
+    leftFooter.append(Div(cls='mdl-logo', tagText='Copyright Tom Bertalan %d.' % now.year))
     rightFooter.append(Tag('ul', cls='mdl-mini-footer__link-list',
-                           toAppend=[
-                                     Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]),
-                                     Tag('li', toAppend=[Tag('a', href='#', tagText='Pricacy & Terms')]),
-                                     ]))
+#                            toAppend=[
+#                                      Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]),
+#                                      Tag('li', toAppend=[Tag('a', href='#', tagText='Pricacy & Terms')]),
+#                                      ]
+                           ))
     
     
 #     <footer class="mdl-mini-footer">
