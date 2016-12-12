@@ -20,28 +20,38 @@ def child(element, tag):
 def tostring(element):
     return etree.tostring(element, method='html', pretty_print=True)
 
-def parseAnonymousHTML(toparse, disp=False):
+def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
     parsed = etree.HTML(toparse)
+    out = child(parsed, 'body')
+    if not keepEnclosingP and len(out) == 1 and out[0].tag == 'p':
+        out = out[0]
+    outTup = out.text, [c for c in out], out.tail
     if disp:
-        print 'parsed is', tostring(parsed)
-    body = child(parsed, 'body')
-    if len(body) == 1:
-        return body[0]
-    else:
-        return body
+        print 'Returning', outTup[0], '['
+        for c in outTup[1]:
+            print tostring(c)
+            print ','
+        print ']', outTup[2]
+    return outTup
 
 def Tag(*args, **kwargs):
     attribToAdd = {}
     
+    tagText = None
     if 'tagText' in kwargs:
         tagText = kwargs.pop('tagText')
-    else:
-        tagText = None
-        
+
+    parseTagText = False        
+    if 'parseTagText' in kwargs:
+        parseTagText = kwargs.pop('parseTagText')
+    
+    toAppend = []
     if 'toAppend' in kwargs:
         toAppend = kwargs.pop('toAppend')
-    else:
-        toAppend = []
+        
+    disp = False
+    if 'disp' in kwargs:
+        disp = kwargs.pop('disp')
     
     for k, v in kwargs.items():
         if k == 'cls':
@@ -53,10 +63,13 @@ def Tag(*args, **kwargs):
     tag.attrib.update(attribToAdd)
     
     if tagText is not None:
-        p = parseAnonymousHTML(tagText)
-        tag.text = p.text
-        for contents in p:
-            tag.append(contents)
+        if not parseTagText:
+            tag.text = tagText
+        else:
+            parsedText, parsedChildren, parsedTail = parseAnonymousHTML(tagText, disp=disp)
+            tag.text = parsedText
+            parsedChildren[-1].tail += parsedTail
+            tag.extend(parsedChildren)
             
     tag.extend(toAppend)
         
@@ -68,11 +81,9 @@ def Div(**kwargs):
 
 
 def writePage(html, fname):
-    print 'Opening', fname
     f = open(fname, 'w')
     f.write(tostring(html))
     f.close()
-    print 'Saved', fname
 
 
 def showPage(fname, browser='google-chrome'):    
@@ -84,5 +95,10 @@ def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
     writePage(html, fname)
     if browser is not None:
         showPage(fname, browser)
-    
+        
+def first(l):
+    if len(l) > 0:
+        return l[0]
+    else:
+        return None
     

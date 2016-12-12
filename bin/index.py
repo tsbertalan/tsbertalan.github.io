@@ -22,12 +22,12 @@ def portfolioCard(title, supportingText, linkDest='#', imgSrc='images/1px.png', 
             <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--accent" href="%s">Read more</a>
             </div>
-         </div>''' % (imgSrc, imgAlt, title, supportingText, linkDest)
-        )
+         </div>''' % (imgSrc, imgAlt, title, supportingText, linkDest),
+        )[1][0]
     return out
 
 
-def index():
+def index(cards=[]):
     html = Html(lang='en')
     head = child(html, 'head')
     body = child(html, 'body')
@@ -38,7 +38,7 @@ def index():
     layout = Div(cls='mdl-layout mdl-js-layout mdl-layout--fixed-header')
     body.append(layout)
     
-    header = parseAnonymousHTML('''<header class="mdl-layout__header mdl-layout__header--waterfall portfolio-header">
+    head, content, tail = parseAnonymousHTML('''<header class="mdl-layout__header mdl-layout__header--waterfall portfolio-header">
             <div class="mdl-layout__header-row portfolio-logo-row">
                 <span class="mdl-layout__title">
                     <div class="portfolio-logo"></div>
@@ -52,15 +52,15 @@ def index():
                 </nav>
             </div>
         </header>''')
-    layout.append(header)
+    layout.extend(content)
     
-    smallScreenMenu = parseAnonymousHTML('''<div class="mdl-layout__drawer mdl-layout--small-screen-only">
+    head, content, tail = parseAnonymousHTML('''<div class="mdl-layout__drawer mdl-layout--small-screen-only">
             <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
                 <a class="mdl-navigation__link is-active" href="index.html">Portfolio</a>
                 <a class="mdl-navigation__link" href="about.html">About</a>
             </nav>
         </div>''')
-    layout.append(smallScreenMenu)
+    layout.extend(content)
     
     mainContent = Tag('main', cls='mdl-layout__content')
     layout.append(mainContent)
@@ -68,19 +68,7 @@ def index():
     grid = Div(cls='mdl-grid portfolio-max-width')
     mainContent.append(grid)
     
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
-    
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
-    card = portfolioCard('Gunnar', 'Gunnar is a robot.')
-    grid.append(card)
+    grid.extend(cards)
     
     footer = Tag('footer', cls='mdl-mini-footer')
     layout.append(footer)
@@ -112,4 +100,4 @@ def index():
     
 if __name__ == '__main__':
     from utils import displayHtml
-    displayHtml(index(), fname='./.test.html')
+    displayHtml(index(cards=[portfolioCard('Gunnar', 'Gunnar is a robot.', imgSrc='images/rover.jpg')]), fname='./.test.html')

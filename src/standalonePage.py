@@ -5,7 +5,7 @@ Created on Dec 8, 2016
 '''
 from page import Html
 from utils import Tag, child, Div, parseAnonymousHTML, tostring
-
+from lxml.etree import _Element
 
 def articleStyle():
 # /**
@@ -27,7 +27,8 @@ def articleStyle():
 .demo-ribbon {
   width: 100%;
   height: 40vh;
-  background-color: #3F51B5;
+  //background-image: url("hero.png");
+  background-color: #607D8B;
   flex-shrink: 0;
 }
 
@@ -79,12 +80,11 @@ def articleStyle():
 ''' 
 
 
-def article(title, content, breadcrumbs=None, sourceLink=None):
-    if breadcrumbs is None:
-        breadcrumbs = 'Main', title
+def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
+
     html = Html()
     head = child(html, 'head')
-    head.append(Tag('style', tagText=articleStyle()))
+    head.append(Tag('style', tagText=articleStyle(), disp=True, parseTagText=False))
     body = child(html, 'body')
     
     container = Div(cls='demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100')
@@ -102,7 +102,10 @@ def article(title, content, breadcrumbs=None, sourceLink=None):
     headerRow = Div(cls='mdl-layout__header-row')
     header.append(headerRow)
     
-    headerRow.append(Tag('span', cls='mdl-layout-title', tagText=title))
+    if isinstance(title, _Element):
+        headerRow.append(Tag('span', cls='mdl-layout-title', toAppend=[title]))
+    else:
+        headerRow.append(Tag('span', cls='mdl-layout-title', tagText=title))
     headerRow.append(Div(cls='mdl-layout-spacer'))
     
     container.append(Div(cls='demo-ribbon'))
@@ -117,14 +120,30 @@ def article(title, content, breadcrumbs=None, sourceLink=None):
     
     col = Div(cls='demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col')
     grid.append(col)
-    
-    col.append(Div(cls='demo-crumbs mdl-color-text--grey-500',
-                   tagText=' > '.join(breadcrumbs)))
-    maintitle = Tag('h3', tagText=title)
-    col.append(maintitle)
-    parsed = parseAnonymousHTML(content)
-    maintitle.tail = parsed.text
-    col.extend(parsed)
+
+    # Construct breadcrumbs.    
+    if breadcrumbs is not None:
+        for crumb in breadcrumbs:
+            assert isinstance(crumb, _Element)
+        if len(breadcrumbs) > 1:
+            for crumb in breadcrumbs[:-1]:
+                if crumb.tail is None:
+                    crumb.tail = ''
+                crumb.tail += ' > '
+        col.append(Div(cls='demo-crumbs mdl-color-text--grey-500',
+                       toAppend=breadcrumbs,
+                       disp=True,
+                       )
+                   )
+        
+    initialSpan = Tag('span')
+    col.append(initialSpan)
+    head, contents, tail = parseAnonymousHTML(content)
+    if head is not None:
+        initialSpan.tail = head
+    if tail is not None:
+        contents[-1].tail += tail
+    col.extend(contents)
     
     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
     mainDiv.append(footer)
