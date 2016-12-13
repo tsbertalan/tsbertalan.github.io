@@ -9,7 +9,7 @@ import datetime
 
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     print 'Generating card with linkDest=', linkDest
-    out = Div(cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card')
+    out = Div(cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col')
     if imgSrc is not None:
         out.append(Div(cls='mdl-card__media', toAppend=[
             Tag('img', cls='article-image', src=imgSrc, border='0', alt=imgAlt, width='100%')
@@ -41,7 +41,7 @@ def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     return out
 
 
-def index(cards=[]):
+def index(cards=[], DEBUG=False):
     html = Html(lang='en')
     head = child(html, 'head')
     body = child(html, 'body')
@@ -49,73 +49,31 @@ def index(cards=[]):
     head.append(Tag('title', tagText='Tom Bertalan'))
     head.append(Tag('link', rel='stylesheet', href='styles.css'))
 
-    layout = Div(cls='mdl-layout mdl-js-layout mdl-layout--fixed-header')
+    layout = Div(cls='mdl-layout mdl-js-layout')
     body.append(layout)
-    
-    head, content, tail = parseAnonymousHTML('''<header class="mdl-layout__header mdl-layout__header--waterfall portfolio-header">
-            <div class="mdl-layout__header-row portfolio-logo-row">
-                <span class="mdl-layout__title">
-                    <div class="portfolio-logo"></div>
-                    <span class="mdl-layout__title">Tom Bertalan</span>
-                </span>
-            </div>
-            <div class="mdl-layout__header-row portfolio-navigation-row mdl-layout--large-screen-only">
-                <!--
-                <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
-                    <a class="mdl-navigation__link is-active" href="index.html">Portfolio</a>
-                    <a class="mdl-navigation__link" href="about.html">About</a>
-                </nav>
-                -->
-            </div>
-        </header>''')
-    layout.extend(content)
-    
-    head, content, tail = parseAnonymousHTML('''<div class="mdl-layout__drawer mdl-layout--small-screen-only">
-            <!--
-            <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
-                <a class="mdl-navigation__link is-active" href="index.html">Portfolio</a>
-                <a class="mdl-navigation__link" href="about.html">About</a>
-            </nav>
-            -->
-        </div>''')
-    layout.extend(content)
     
     mainContent = Tag('main', cls='mdl-layout__content')
     layout.append(mainContent)
     
-    grid = Div(cls='mdl-grid portfolio-max-width')
+    if DEBUG:
+        grid = Div(cls='mdl-grid portfolio-max-width', style='border:1px solid brown;')
+        bioCell = Div(cls='mdl-cell mdl-cell--4-col', style='border:1px solid green;')
+        cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid', style='border:1px solid black;')
+    else:
+        grid = Div(cls='mdl-grid portfolio-max-width')
+        bioCell = Div(cls='mdl-cell mdl-cell--4-col')
+        cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid')
+
     mainContent.append(grid)
+    grid.append(bioCell)
     
-    grid.extend(cards)
+    bioCell.append(Div(cls='portfolio-logo'))
+    bioCell.append(Tag('center', toAppend=[Tag('h1', cls='mdl-typography--display-3', style='color: #333;', tagText='Tom Bertalan')]))
     
-    footer = Tag('footer', cls='mdl-mini-footer')
-    layout.append(footer)
-    
-    leftFooter = Div(cls='mdl-mini-footer__left-section')
-    footer.append(leftFooter)
-    rightFooter = Div(cls='mdl-mini-footer__right-section')
-    footer.append(rightFooter)
-    now = datetime.datetime.now()
-    leftFooter.append(Div(cls='mdl-logo', tagText='Copyright Tom Bertalan %d.' % now.year))
-    rightFooter.append(Tag('ul', cls='mdl-mini-footer__link-list',
-#                            toAppend=[
-#                                      Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]),
-#                                      Tag('li', toAppend=[Tag('a', href='#', tagText='Pricacy & Terms')]),
-#                                      ]
-                           ))
+    grid.append(cardsCell)
+    cardsCell.extend(cards)
     
     
-#     <footer class="mdl-mini-footer">
-#                 <div class="mdl-mini-footer__left-section">
-#                     <div class="mdl-logo">Simple portfolio website</div>
-#                 </div>
-#                 <div class="mdl-mini-footer__right-section">
-#                     <ul class="mdl-mini-footer__link-list">
-#                         <li><a href="#">Help</a></li>
-#                         <li><a href="#">Privacy & Terms</a></li>
-#                     </ul>
-#                 </div>
-#             </footer>
     return html
    
     

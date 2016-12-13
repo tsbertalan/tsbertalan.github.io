@@ -32,7 +32,7 @@
   height: 150px;
   width: 150px;
   margin: auto auto 10px;
-  border-radius: 50%;
+  border-radius: 5%;
 }
 
 .is-compact .portfolio-logo {
@@ -111,7 +111,7 @@ img.article-image {
 }
 
 .portfolio-max-width {
-  max-width: 900px;
+  max-width: 1400px;
   margin: auto;
 }
 

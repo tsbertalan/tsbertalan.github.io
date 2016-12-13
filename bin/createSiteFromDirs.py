@@ -45,6 +45,7 @@ for projectDir in projectDirs:
         print 'Got hero image',  hero
         blurb = config.get('blurb', '')
         description = config.get('description', None)
+        starred = config.get('starred', False)
         if description == 'see README.md':
             
             for f in listdir(projectDir):
@@ -104,7 +105,11 @@ for projectDir in projectDirs:
         linkDestination = None
         
     # Generate a card for this project to put on the home page.
+    if starred:
+        cards.reverse()
     cards.append(index.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb))
+    if starred:
+        cards.reverse()
     
 # Generate, write, and display the home page. 
 homepageHtml = index.index(cards=cards)
