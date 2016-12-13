@@ -26,6 +26,8 @@
   min-height: auto;
 }
 
+
+
 .portfolio-logo {
   background: url(https://www.gravatar.com/avatar/4a351f1422aa0ae4e9c3b900765be931?s=200) 50% no-repeat;
   background-size: cover;
@@ -161,3 +163,18 @@ footer {
   background-size: cover;
 }
 
+.h1-mainpage {
+  color: #444;
+}
+
+.button-at-bottom {
+  position: absolute;
+  bottom: 1px;
+}
+
+.card-img-heightcrop {
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  background-size: cover;
+}
