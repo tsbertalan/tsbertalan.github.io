@@ -22,6 +22,8 @@ def listdirs(folder):
     ]
     
 projectDirs = listdirs(baseDir)
+projectDirs.sort()
+projectDirs = projectDirs[::-1]
 cards = []
 
 for projectDir in projectDirs:
