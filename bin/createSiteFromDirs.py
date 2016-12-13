@@ -10,6 +10,7 @@ import json
 from standalonePage import article
 import utils
 import index
+from utils import writePage
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
@@ -98,7 +99,7 @@ for projectDir in projectDirs:
         breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
         pageHtml = article(
                            #utils.Tag('a', href='../index.html', tagText='Tom Bertalan'),
-                           'Tom Bertalan',
+                           None,
                            readmeHtml, breadcrumbs=breadcrumbs, sourceLink=repo, heading=False)
         utils.writePage(pageHtml, destinationFileLocation)
     else:
@@ -113,4 +114,6 @@ for projectDir in projectDirs:
     
 # Generate, write, and display the home page. 
 homepageHtml = index.index(cards=cards)
-utils.displayHtml(homepageHtml, fname=join(wwwDir, 'index.html'))
+homepageFileLocation = join(wwwDir, 'index.html')
+utils.writePage(homepageHtml, homepageFileLocation)
+# utils.displayHtml(homepageHtml, fname=homepageFileLocation)

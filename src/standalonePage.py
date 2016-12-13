@@ -96,17 +96,16 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
                            cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
         body.append(sourceButton)
     
-    header = Tag('header', cls='demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800')
-    container.append(header)
-    
-    headerRow = Div(cls='mdl-layout__header-row')
-    header.append(headerRow)
-    
-    if isinstance(title, _Element):
-        headerRow.append(Tag('span', cls='mdl-layout-title', toAppend=[title]))
-    else:
-        headerRow.append(Tag('span', cls='mdl-layout-title', tagText=title))
-    headerRow.append(Div(cls='mdl-layout-spacer'))
+    if title is not None:
+        header = Tag('header', cls='demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800')
+        container.append(header)
+        headerRow = Div(cls='mdl-layout__header-row')
+        header.append(headerRow)
+        if isinstance(title, _Element):
+            headerRow.append(Tag('span', cls='mdl-layout-title', toAppend=[title]))
+        else:
+            headerRow.append(Tag('span', cls='mdl-layout-title', tagText=title))
+        headerRow.append(Div(cls='mdl-layout-spacer'))
     
     container.append(Div(cls='demo-ribbon'))
     
@@ -145,18 +144,18 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
         contents[-1].tail += tail
     col.extend(contents)
     
-    footer = Tag('footer', cls='demo-footer mdl-mini-footer')
-    mainDiv.append(footer)
-
-    lsec = Div(cls='mdl-mini-footer--left-section')
-    footer.append(lsec)
-    
-    ul = Tag('ul', cls='mdl-mini-footer--link-list') 
-    lsec.append(ul)
-
-    ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]))
-    ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Privacy and terms')]))
-    ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='User Agreement')]))
+#     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
+#     mainDiv.append(footer)
+# 
+#     lsec = Div(cls='mdl-mini-footer--left-section')
+#     footer.append(lsec)
+#     
+#     ul = Tag('ul', cls='mdl-mini-footer--link-list') 
+#     lsec.append(ul)
+# 
+#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]))
+#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Privacy and terms')]))
+#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='User Agreement')]))
     
     return html
 
