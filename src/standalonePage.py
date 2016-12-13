@@ -28,7 +28,7 @@ def articleStyle():
   width: 100%;
   height: 40vh;
   //background-image: url("hero.png");
-  background-color: #607D8B;
+  background-color: #f5f5f5;
   flex-shrink: 0;
 }
 
