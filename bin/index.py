@@ -7,9 +7,22 @@ from page import Html
 from utils import child, Tag, Div, parseAnonymousHTML, textArea, textField
 import datetime
 
+def idSanitize(s):
+    out = ''
+    allowed = 'abcdefghijklmnopqrstuvwxyz'
+    allowed += allowed.upper()
+    allowed += '-_1234567890'
+    for c in s:
+        if c in allowed:
+            out += c
+    return out
+
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     print 'Generating card with linkDest=', linkDest
-    out = Div(cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col')
+    out = Div(
+        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col',
+        onclick="location.href='%s'" % linkDest
+        )
     if imgSrc is not None:
         out.append(Div(cls='mdl-card__media', toAppend=[
             Div(cls='card-img-heightcrop', style="background-image: url('%s');" % imgSrc),
@@ -17,11 +30,7 @@ def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     out.append(Div(cls='mdl-card__title', toAppend=[
         Tag('h2', cls='mdl-card__title-text', tagText=title)
                                                     ]))
-    out.append(Div(cls='mdl-card__supporting-text', style='padding-bottom: 70px;', tagText=supportingText))
-    if linkDest is not None:
-        out.append(Div(cls='mdl-card__actions mdl-card--border button-at-bottom', toAppend=[
-            Tag('a', cls='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--accent', href=linkDest, tagText='Read more') 
-                                                                            ]))
+    out.append(Div(cls='mdl-card__supporting-text', tagText=supportingText))
     return out
 
 
@@ -52,7 +61,7 @@ def index(cards=[]):
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
     bioCellSubcell.append(Tag('p', tagText='''
-    I'm a fifth-year grad student soon to receive my PhD from Princeton University's
+    I am a fifth-year graduate student soon to receive my PhD from Princeton University's
     department of Chemical and Biological Engineering, with a Graduate Certificate in Computational and Information Science.  
                                                                   '''))
     bioCellSubcell.append(Tag('p', tagText='''
@@ -124,7 +133,7 @@ window.onclick = function(event) {
 }'''))
     
     grid.append(cardsCell)
-    cardsCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[Tag('h3', tagText='Projects')]))
+#     cardsCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[Tag('h3', tagText='Projects')]))
     cardsCell.extend(cards)
     
     
