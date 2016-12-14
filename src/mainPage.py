@@ -20,7 +20,7 @@ def idSanitize(s):
 
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     out = Div(
-        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card',
+        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card mdl-cell--12-col-phone',
         onclick="location.href='%s'" % linkDest
         )
     if imgSrc is not None:
@@ -51,7 +51,7 @@ def index(cards=[]):
     grid = Div(cls='mdl-grid portfolio-max-width')
     mainContent.append(grid)
     
-    bioCell = Div(cls='mdl-cell mdl-cell--4-col')
+    bioCell = Div(cls='mdl-cell mdl-cell--4-col anim-card mdl-cell--12-col-phone')
     grid.append(bioCell)
     
     bioCell.append(Tag('br'))  # tiny vertical filler
@@ -131,7 +131,7 @@ window.onclick = function(event) {
     }
 }'''))
     
-    cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid')
+    cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid  anim-card mdl-cell--12-col-phone')
     grid.append(cardsCell)
 #     cardsCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[Tag('h3', tagText='Projects')]))
     cardsCell.extend(cards)
