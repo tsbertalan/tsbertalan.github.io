@@ -21,7 +21,7 @@ def idSanitize(s):
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     print 'Generating card with linkDest=', linkDest
     out = Div(
-        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col anim-card',
+        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card',
         onclick="location.href='%s'" % linkDest
         )
     if imgSrc is not None:
@@ -50,13 +50,12 @@ def index(cards=[]):
     layout.append(mainContent)
     
     grid = Div(cls='mdl-grid portfolio-max-width')
-    bioCell = Div(cls='mdl-cell mdl-cell--4-col')
-    cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid')
-    
-
     mainContent.append(grid)
+    
+    bioCell = Div(cls='mdl-cell mdl-cell--4-col')
     grid.append(bioCell)
     
+    bioCell.append(Tag('br'))  # tiny vertical filler
     bioCell.append(Div(cls='portfolio-logo'))
     bioCell.append(Tag('center', toAppend=[Tag('h1', cls='mdl-typography--display-3 h1-mainpage', tagText='Tom Bertalan')]))
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
@@ -133,6 +132,7 @@ window.onclick = function(event) {
     }
 }'''))
     
+    cardsCell = Div(cls='mdl-cell mdl-cell--8-col mdl-grid')
     grid.append(cardsCell)
 #     cardsCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[Tag('h3', tagText='Projects')]))
     cardsCell.extend(cards)
