@@ -123,7 +123,7 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
         breadcrumbsDiv.extend(breadcrumbs)
         
     if sourceLink is not None:
-        sourceButton = Tag('a', href=sourceLink, id='view-source',
+        sourceButton = Tag('a', href=sourceLink, id='view-source', target="_blank",
                            tagText='View project files.',
             cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
         breadcrumbsDiv.append(sourceButton)
