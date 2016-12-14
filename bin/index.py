@@ -17,10 +17,11 @@ def idSanitize(s):
             out += c
     return out
 
+
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     print 'Generating card with linkDest=', linkDest
     out = Div(
-        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col',
+        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--4-col anim-card',
         onclick="location.href='%s'" % linkDest
         )
     if imgSrc is not None:
