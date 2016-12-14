@@ -69,14 +69,8 @@ def articleStyle():
   font-size: 13px;
 }
 #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
+    float: right;
+}
 ''' 
 
 
@@ -89,12 +83,6 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
     
     container = Div(cls='demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100')
     body.append(container)
-    
-    if sourceLink is not None:
-        sourceButton = Tag('a', href=sourceLink, target="_blank", id="view-source",
-                           tagText='View project files.',
-                           cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
-        body.append(sourceButton)
     
     if title is not None:
         header = Tag('header', cls='demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800')
@@ -121,6 +109,9 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
     grid.append(col)
 
     # Construct breadcrumbs.    
+    breadcrumbsDiv = Div(cls='demo-crumbs mdl-color-text--grey-500',
+                   toAppend=breadcrumbs)
+    col.append(breadcrumbsDiv)
     if breadcrumbs is not None:
         for crumb in breadcrumbs:
             assert isinstance(crumb, _Element)
@@ -129,11 +120,13 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
                 if crumb.tail is None:
                     crumb.tail = ''
                 crumb.tail += ' > '
-        col.append(Div(cls='demo-crumbs mdl-color-text--grey-500',
-                       toAppend=breadcrumbs,
-                       disp=True,
-                       )
-                   )
+        breadcrumbsDiv.extend(breadcrumbs)
+        
+    if sourceLink is not None:
+        sourceButton = Tag('a', href=sourceLink, id='view-source',
+                           tagText='View project files.',
+            cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
+        breadcrumbsDiv.append(sourceButton)
         
     initialSpan = Tag('span')
     col.append(initialSpan)

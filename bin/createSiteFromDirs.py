@@ -99,7 +99,8 @@ for projectDir in projectDirs:
         breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
         pageHtml = article(
                            #utils.Tag('a', href='../index.html', tagText='Tom Bertalan'),
-                           'Tom Bertalan',
+                           utils.Tag('a', tagText='Tom Bertalan', href='../index.html',
+                                     cls='mdl-typography--headline', style='text-decoration:none; color:#444;'),
                            readmeHtml, breadcrumbs=breadcrumbs, sourceLink=repo, heading=False)
         utils.writePage(pageHtml, destinationFileLocation)
     else:
