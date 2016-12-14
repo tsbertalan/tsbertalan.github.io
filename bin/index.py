@@ -4,7 +4,7 @@
 @contact:    tom@tombertalan.com
 '''
 from page import Html
-from utils import child, Tag, Div, parseAnonymousHTML
+from utils import child, Tag, Div, parseAnonymousHTML, textArea, textField
 import datetime
 
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
@@ -49,17 +49,79 @@ def index(cards=[]):
     
     bioCell.append(Div(cls='portfolio-logo'))
     bioCell.append(Tag('center', toAppend=[Tag('h1', cls='mdl-typography--display-3 h1-mainpage', tagText='Tom Bertalan')]))
-    bioCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[
-                                                                  Tag('p', tagText='''
+    bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
+    bioCell.append(bioCellSubcell)
+    bioCellSubcell.append(Tag('p', tagText='''
     I'm a fifth-year grad student soon to receive my PhD from Princeton University's
     department of Chemical and Biological Engineering, with a Graduate Certificate in Computational and Information Science.  
-                                                                  '''),
-                                                                  Tag('p', tagText='''
+                                                                  '''))
+    bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in data mining and dimensionality reduction for high-dimensional dynamical systems,
     with applications in computational neuroscience.
     I also work on robotic design and perception projects.
-                                                                  '''),
-    ]))
+                                                                  '''))
+    
+    # A menu.
+    bioCellSubcell.append(
+        Tag('center', toAppend=[
+        Tag('button', id='open-contact-form-modal-button', tagText='Contact',
+            cls='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect',
+            )
+        ])
+                          )
+    
+    # Contact form modal.
+    modal = Div(cls='modal', id='contact-form-modal')
+    body.append(modal)
+    
+    modalContent = Div(cls='modal-content')
+    modal.append(modalContent)
+    
+    modalContent.append(Tag('span', cls='close', toAppend=[
+        Tag('button', cls="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored",
+            toAppend=[
+                Tag('i', cls='material-icons', tagText='close'),
+                ]
+            )
+        ]))
+    form = Tag('form', action="https://docs.google.com/a/tombertalan.com/forms/d/e/1FAIpQLSfnXirD8eFRUVXDcXNlYJTzRf4rjLtmG3b8qzwXjDGQU6UYOw/formResponse?embedded=true",
+               target="_self", method="POST", id="mG61Hd", width='100%')
+    modalContent.append(form)
+    form.append(textField('entry.2009303593', 'Name...'))
+    form.append(textField('entry.2049904920', 'Email...'))
+    form.append(Tag('br'))
+    form.append(textArea('entry.59900832', 'Message...', rows='8', style='width: 80%;'))
+    form.append(Tag('br'))
+    form.append(Tag('button', tagText='Send', type='submit',
+                    cls='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect',
+                    ))
+    
+    
+    body.append(Tag('script', tagText='''// Get the modal
+var modal = document.getElementById('contact-form-modal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("open-contact-form-modal-button");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}'''))
     
     grid.append(cardsCell)
     cardsCell.append(Div(cls='mdl-cell mdl-cell--12-col', toAppend=[Tag('h3', tagText='Projects')]))
@@ -69,6 +131,3 @@ def index(cards=[]):
     return html
    
     
-if __name__ == '__main__':
-    from utils import displayHtml
-    displayHtml(index(cards=[portfolioCard('Gunnar', 'Gunnar is a robot.', imgSrc='images/rover.jpg')]), fname='./.test.html')

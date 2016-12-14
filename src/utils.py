@@ -56,6 +56,8 @@ def Tag(*args, **kwargs):
     for k, v in kwargs.items():
         if k == 'cls':
             attribToAdd['class'] = kwargs.pop(k)
+        if k == 'for_':
+            attribToAdd['for'] = kwargs.pop(k)
         if '____' in k:
             newKey = k.replace('____', '-')
             attribToAdd[newKey] = kwargs.pop(k) 
@@ -80,10 +82,14 @@ def Div(**kwargs):
     return Tag('div', **kwargs)
 
 
-def writePage(html, fname):
+def writePage(html, fname, DEBUG=False):
+    if DEBUG:
+        print 'Writing', html, 'to', fname, '...',
     f = open(fname, 'w')
     f.write(tostring(html))
     f.close()
+    if DEBUG:
+        print 'done.'
 
 
 def showPage(fname, browser='google-chrome'):    
@@ -101,4 +107,21 @@ def first(l):
         return l[0]
     else:
         return None
+    
+def textField(name, label):
+    field = Div(cls='mdl-textfield mdl-js-textfield mdl-textfield--floating-label')
+    field.append(Tag('input', cls='mdl-textfield__input', type='text',
+                     name=name,
+                     id=name + '.id'))
+    field.append(Tag('label', cls='mdl-textfield__label', for_=name + '.id', tagText=label))
+    return field
+
+def textArea(name, label, rows='3', **kwargs):
+    rows = str(rows).strip()
+    field = Div(cls='mdl-textfield mdl-js-textfield', style='width: 100%;')
+    field.append(Tag('textarea', cls='mdl-textfield__input', type='text', rows=rows,
+                     name=name,
+                     id=name + '.id', **kwargs))
+    field.append(Tag('label', cls='mdl-textfield__label', for_=name + '.id', tagText=label))
+    return field
     

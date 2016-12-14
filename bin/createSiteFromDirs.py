@@ -115,5 +115,6 @@ for projectDir in projectDirs:
 # Generate, write, and display the home page. 
 homepageHtml = index.index(cards=cards)
 homepageFileLocation = join(wwwDir, 'index.html')
-utils.writePage(homepageHtml, homepageFileLocation)
-# utils.displayHtml(homepageHtml, fname=homepageFileLocation)
+utils.writePage(homepageHtml, homepageFileLocation, DEBUG=True)
+if True:
+    utils.displayHtml(homepageHtml, fname=homepageFileLocation)
