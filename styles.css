@@ -240,6 +240,7 @@ footer {
 .anim-card:hover {
 	-webkit-transform: scale(1.25, 1.25);
  	transform: scale(1.05, 1.05);
+ 	cursor:pointer;
 }
 
 .anim-card:hover::after {
