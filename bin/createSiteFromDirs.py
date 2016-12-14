@@ -9,7 +9,7 @@ import json
 
 from standalonePage import article
 import utils
-import index
+import mainPage
 from utils import writePage
 
 
@@ -99,7 +99,7 @@ for projectDir in projectDirs:
         breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
         pageHtml = article(
                            #utils.Tag('a', href='../index.html', tagText='Tom Bertalan'),
-                           None,
+                           'Tom Bertalan',
                            readmeHtml, breadcrumbs=breadcrumbs, sourceLink=repo, heading=False)
         utils.writePage(pageHtml, destinationFileLocation)
     else:
@@ -108,13 +108,13 @@ for projectDir in projectDirs:
     # Generate a card for this project to put on the home page.
     if starred:
         cards.reverse()
-    cards.append(index.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb))
+    cards.append(mainPage.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb))
     if starred:
         cards.reverse()
     
 # Generate, write, and display the home page. 
-homepageHtml = index.index(cards=cards)
+homepageHtml = mainPage.index(cards=cards)
 homepageFileLocation = join(wwwDir, 'index.html')
 utils.writePage(homepageHtml, homepageFileLocation, DEBUG=True)
-if True:
+if False:
     utils.displayHtml(homepageHtml, fname=homepageFileLocation)
