@@ -74,7 +74,13 @@ def index(cards=[]):
         Tag('center', toAppend=[
         Tag('button', id='open-contact-form-modal-button', tagText='Contact',
             cls='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect',
-            )
+            ),
+        Tag('a', href='resume.pdf', toAppend=[
+            Tag('button', id='resume-button', tagText='Download Resume',
+                cls='mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect',
+                ),
+                                              ]
+            ),
         ])
                           )
     
