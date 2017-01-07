@@ -19,10 +19,15 @@ def idSanitize(s):
 
 
 def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
-    out = Div(
-        cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card mdl-cell--12-col-phone mdl-cell--3-col-tablet',
-        onclick="location.href='%s'" % linkDest
-        )
+    if linkDest is not None:
+        out = Div(
+            cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card mdl-cell--12-col-phone mdl-cell--3-col-tablet',
+            onclick="location.href='%s'" % linkDest
+            )
+    else:
+        out = Div(
+            cls='mdl-cell mdl-card mdl-shadow--4dp portfolio-card mdl-cell--3-col anim-card mdl-cell--12-col-phone mdl-cell--3-col-tablet',
+            )
     if imgSrc is not None:
         out.append(Div(cls='mdl-card__media', toAppend=[
             Div(cls='card-img-heightcrop', style="background-image: url('%s');" % imgSrc),
