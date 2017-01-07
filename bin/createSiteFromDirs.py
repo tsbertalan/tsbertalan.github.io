@@ -41,7 +41,6 @@ for projectDir in projectDirs:
         config = json.load(open(join(docFolder, configFile), 'r'))
         if 'skip project' in config and config['skip project']:
             continue  # Skip this project if we're explicitly told to.
-        print 'docFolder is', docFolder
         baseProjectName = config.get('project name', basename(projectDir))
         hero = config.get('hero image', None)
         print 'Got hero image',  hero
@@ -58,6 +57,14 @@ for projectDir in projectDirs:
                     # Assume we've found a top-level markdown file.
                     print 'Found %s in directory %s.' % (basePath, projectDir)  
                     description = codecs.open(path, mode="r", encoding="utf-8").read()
+                    break
+        elif (
+              isinstance(description, str)
+              or
+              isinstance(description, unicode)
+              ) and '.md' in description:
+            print 'For project %s, got description:\n%s' % (projectDir, description)
+            description = codecs.open(join(projectDir, description), mode="r", encoding="utf-8").read()
         
     else:
         continue  # Skip this project if there's not /*doc*/ subfolder.
