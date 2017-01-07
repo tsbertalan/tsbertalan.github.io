@@ -18,7 +18,7 @@ def child(element, tag):
         return child 
             
 def tostring(element):
-    return etree.tostring(element, method='html', pretty_print=True)
+    return etree.tostring(element, method='html', pretty_print=True).replace('##AMPERSAND##', '&')
 
 def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
     parsed = etree.HTML(toparse)
