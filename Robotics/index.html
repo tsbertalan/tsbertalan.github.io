@@ -67,54 +67,20 @@
 <p>Gunnar is a differential-drive rover with LIDAR as its primary sense.
 It uses Robot Operating System (ROS) to provide messaging between components,
 and important algorithms such as particle filter
-simultaneous localization and mapping (SLAM). </p>
-<p>To make the SD card:</p>
-<ol>
-<li>
-<p>Download and extract Raspbian Jessie image (e.g.
-   <code>2016-05-27-raspbian-jessie.img</code>, which I torrented from raspberrypi.org;
-   see <code>/data/</code>).</p>
-</li>
-<li>
-<p>Create config script <code>makeconfig.mk</code>. Mine looks like this:</p>
-<pre><code>IMGPATH = /home/tsbertalan/workspace/gunnar/2016-05-27-raspbian-jessie.img
-MNTPOINT = /mnt/img
-USER = pi
-SDX = /dev/sdc
-</code></pre>
-<p>Here, the <code>MNTPOINT</code> is where the image will be mounted for modification,
-   and the <code>USER</code> is the username to be used on that system (I don't know why
-   it wouldn't be <code>pi</code>). THE <code>SDX</code> MUST BE THE SD CARD YOU WILL BE OVERWRITING.
-   If you don't get this right, you might OVERWRITE YOUR INTERNAL HARD DRIVE
-   with the Raspbian image.</p>
-</li>
-<li>
-<p>Mount image, alter it to contain our backdoor, and unmount (script
-   <code>mountAndAlterSD.sh</code>).</p>
-</li>
-<li>
-<p>Write image (make targets <code>flash</code> and <code>verify</code>). This takes about 3 minutes
-   on my machine, with a 32 GB Samsung</p>
-</li>
-<li>
-<p>Insert SD into Raspberri Pi. Boot and wait for the script to install things
-   and self-reboot. This sometimes takes more than an hour on my Pi 3B v1.2
-   with 62 Mbps wifi download speeds, mostly in the
-   "Unpacking libboost1.55-dev:armhf" stage. However, 20 minutes is a more
-   likely duration.
-   Monitor the process on the HDMI output--if there's an immediate kernel panic,
-   reflash the card.
-   Try using <code>tail -f /var/log/syslog | grep bootInstall</code> to monitor progress
-   or diagnose errors.</p>
-</li>
-<li>
-<p>If you're able to SSH in, test functionality by
-   <code>roslaunch gunnar gunnar_hardware.launch</code></p>
-</li>
-</ol>
+simultaneous localization and (grid) mapping (SLAM).</p>
+<p>Real-time motor speed control and Hall-effect quadrature integration
+is performed by an Arduino Uno. This accepts speed targets
+and reports encoder counts to a Raspberry Pi 3B over USB.</p>
+<p>The Pi runs ROS Indigo, with nodes for communication with the Arduino
+and for reading a serial bytestream encoding laser scans measured by
+a LIDAR unit extracted from a Neato XV-11 robotic vacuum cleaner.</p>
+<p>The Pi itself connects over OpenVPN to a roscore running on an Ubuntu
+workstation powered by an Intel i7-4770K CPU. This workstation runs
+ROS nodes for SLAM (via <a href="http://wiki.ros.org/slam_gmapping">gmapping</a>)
+and global/local path planning (via <a href="http://wiki.ros.org/move_base">move_base</a>).</p>
 <p>Here's a video of Gunnar autonomously navigating to user-selected waypoints,
 mapping along the way.
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/eSeLW9Hkjhc" frameborder="0" allowfullscreen></iframe></p>
+<iframe width="100%" height="400" src="https://www.youtube.com/embed/bdC6dycthQc" frameborder="0" allowfullscreen></iframe></p>
 </div>
 </div></main>
 </div></body>
