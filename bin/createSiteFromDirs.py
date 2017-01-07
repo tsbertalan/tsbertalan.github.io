@@ -26,6 +26,7 @@ projectDirs = listdirs(baseDir)
 projectDirs.sort()
 projectDirs = projectDirs[::-1]
 cards = []
+starredCards = []
 
 for projectDir in projectDirs:
         
@@ -106,12 +107,19 @@ for projectDir in projectDirs:
     else:
         linkDestination = None
         
+    card = mainPage.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb)
+    
     # Generate a card for this project to put on the home page.
     if starred:
-        cards.reverse()
-    cards.append(mainPage.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb))
-    if starred:
-        cards.reverse()
+        starredCards.append((starred, card))
+    else:
+        cards.append(card)
+        
+starredCards = [card for (starred, card) in sorted(starredCards)]
+
+starredCards.extend(cards)
+
+cards = starredCards
     
 # Generate, write, and display the home page. 
 homepageHtml = mainPage.index(cards=cards)
