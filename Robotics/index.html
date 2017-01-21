@@ -78,6 +78,37 @@ a LIDAR unit extracted from a Neato XV-11 robotic vacuum cleaner.</p>
 workstation powered by an Intel i7-4770K CPU. This workstation runs
 ROS nodes for SLAM (via <a href="http://wiki.ros.org/slam_gmapping">gmapping</a>)
 and global/local path planning (via <a href="http://wiki.ros.org/move_base">move_base</a>).</p>
+<p>Future goals for this project include:</p>
+<ol>
+<li>Use one of the pre-trained object identification networks such as Alex-Net
+   to label salient things (e.g. furniture).
+   This will allow the rover to perform useful tasks,
+   like reminding me where I left my couch.</li>
+<li>Experiment with a different motion model in the particle filter--train
+   a small neural network representation for the robot dynamics to update particles,
+   reviving old neural methods adaptive for process control.
+   <sup>
+   <a title="Rico-Martinez, Krischer, and Kevrekidis. (1992). Discrete- vs continuous-time nonlinear signal processing of Cu Electrodissolution Data." href="http://www.tandfonline.com/doi/abs/10.1080/00986449208936084">1</a>,
+   <a title="Farber, Lapedes, Rico-Martinez, &amp; Kevrekidis. (1993). Identification of Continuous-Time Dynamical Systems: Neural Network Based Algorithms and Parallel Implementation. Proceedings of the Sixth SIAM Conference on Parallel Processing for Scientific Computing." href="http://arxiv.org/abs/comp-gas/9305001">2</a>
+   </sup>
+</li>
+<li>Segment the grid map into rooms, likely by using one of several
+   existing map segmentation algorithms (e.g. decomposing the map into a Voronoi graph),
+   then allow destinations to be chosen from a list of rooms rather than
+   requiring goal pose selection on a map. Present the menu of rooms in a small
+   webapp, allowing me to send tiny cargo items around my apartment
+   without firing up Rviz.</li>
+<li>Integrate an accelerometer+gyroscope+magnetometer IMU, both for improved odometry,
+   and detecting abnormal tilt (like when we start to back up a wall).</li>
+<li>For safety, monitor motor current for spikes. In such a situation,
+   we should interrupt the normal planning behaivior to avoid breaking gear teeth.</li>
+<li>Build a charging dock, and choreograph an automated switchover to external power.
+   My power supplies do have enough inertia to handle an abrupt switch in power source
+   without killing the Raspberry Pi, but integrating a LiPo balance charger
+   will be nontrivial. Currently, I plan to use transistors soldered in parallel with
+   buttons on a commercial charger , as the balance chargers available on e.g. Sparkfun
+   don't handle four-cell batteries.</li>
+</ol>
 <p>Here's a video of Gunnar autonomously navigating to user-selected waypoints,
 mapping along the way.
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/bdC6dycthQc" frameborder="0" allowfullscreen></iframe></p>
