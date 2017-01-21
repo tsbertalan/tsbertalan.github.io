@@ -70,8 +70,7 @@ def index(cards=[]):
                                                                   '''))
     bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in data mining and dimensionality reduction for high-dimensional dynamical systems,
-    with applications in computational neuroscience.
-    I also work on robotic design and perception projects.
+    with applications in robotic perception and planning, and computational neuroscience.
                                                                   '''))
     
     # A menu.
