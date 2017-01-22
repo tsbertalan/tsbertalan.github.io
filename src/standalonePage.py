@@ -153,7 +153,15 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     if len(entries) > 0:
         for entry in entries:
             box = newBox()
-            box.append(Tag('h2', tagText=entry['title']))
+            title = Tag('h2', tagText=entry['title'])
+            if 'subtitle' in entry:
+                subtitle = Tag('p', tagText=entry['subtitle'])
+                header = Tag('header', cls='tomsb-entry-header')
+                header.append(title)
+                header.append(subtitle)
+                box.append(header)
+            else:
+                box.append(title)
             extendWithHTML(entry['content'], box)
         
 #     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
