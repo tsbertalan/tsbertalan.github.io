@@ -7,7 +7,7 @@ from subprocess import check_output, CalledProcessError
 import markdown
 import json
 
-from standalonePage import article
+from standalonePage import article, parseOrLoadMarkdown
 import utils
 import mainPage
 from utils import writePage
@@ -47,25 +47,14 @@ for projectDir in projectDirs:
         blurb = config.get('blurb', '')
         description = config.get('description', None)
         starred = config.get('starred', False)
-        if description == 'see README.md':
-            
-            for f in listdir(projectDir):
-                path = join(projectDir, f)
-                basePath = basename(path)
-                if basePath == 'README.md':
-                #if len(basePath) >= 2 and basePath[-2:].lower() = 'md':
-                    # Assume we've found a top-level markdown file.
-                    print 'Found %s in directory %s.' % (basePath, projectDir)  
-                    description = codecs.open(path, mode="r", encoding="utf-8").read()
-                    break
-        elif (
-              isinstance(description, str)
-              or
-              isinstance(description, unicode)
-              ) and '.md' in description:
-            print 'For project %s, got description:\n%s' % (projectDir, description)
-            description = codecs.open(join(projectDir, description), mode="r", encoding="utf-8").read()
+        description = parseOrLoadMarkdown(description, projectDir)
+        entries = config.get('entries', [])
+        for entry in entries:
+            entry['content'] = markdown.markdown(
+                parseOrLoadMarkdown(entry['content'], projectDir)
+                )
         
+
     else:
         continue  # Skip this project if there's not /*doc*/ subfolder.
 
@@ -103,13 +92,17 @@ for projectDir in projectDirs:
         # Generate HTML for the page contents.
         readmeHtml = markdown.markdown(description)
         
-        # Generate and write the full project page. 
+        # Generate and write the project page. 
         breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
         pageHtml = article(
-                           #utils.Tag('a', href='../index.html', tagText='Tom Bertalan'),
                            utils.Tag('a', tagText='Tom Bertalan', href='../index.html',
                                      cls='mdl-typography--headline', style='text-decoration:none; color:#444;'),
-                           readmeHtml, breadcrumbs=breadcrumbs, sourceLink=repo, heading=False)
+                           readmeHtml,
+                           heading=False,
+                           breadcrumbs=breadcrumbs,
+                           sourceLink=repo,
+                           entries=entries,
+                           )
         utils.writePage(pageHtml, destinationFileLocation)
     else:
         linkDestination = None

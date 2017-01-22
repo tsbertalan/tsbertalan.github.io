@@ -7,6 +7,11 @@ from page import Html
 from utils import Tag, child, Div, parseAnonymousHTML, tostring
 from lxml.etree import _Element
 
+from os import listdir
+from os.path import basename, join
+import codecs
+
+
 def articleStyle():
 # /**
 #  * Copyright 2015 Google Inc. All Rights Reserved.
@@ -74,8 +79,8 @@ def articleStyle():
 ''' 
 
 
-def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
-
+def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, entries=[]):
+    
     html = Html()
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), disp=True, parseTagText=False))
@@ -103,15 +108,19 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
     grid = Div(cls='demo-container mdl-grid')
     mainDiv.append(grid)
     
-    grid.append(Div(cls='mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone'))
+    def newBox():
+        grid.append(Div(cls='mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone'))    
+        col = Div(cls='demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col')
+        grid.append(col)
+        grid.append(Div(cls='mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone'))
+        return col
     
-    col = Div(cls='demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col')
-    grid.append(col)
 
-    # Construct breadcrumbs.    
+    # Construct breadcrumbs. 
+    mainBox = newBox()
     breadcrumbsDiv = Div(cls='demo-crumbs mdl-color-text--grey-500',
                    toAppend=breadcrumbs)
-    col.append(breadcrumbsDiv)
+    mainBox.append(breadcrumbsDiv)
     if breadcrumbs is not None:
         for crumb in breadcrumbs:
             assert isinstance(crumb, _Element)
@@ -127,16 +136,26 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
                            tagText='View project files.',
             cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
         breadcrumbsDiv.append(sourceButton)
-        
-    initialSpan = Tag('span')
-    col.append(initialSpan)
-    head, contents, tail = parseAnonymousHTML(content)
-    if head is not None:
-        initialSpan.tail = head
-    if tail is not None:
-        contents[-1].tail += tail
-    col.extend(contents)
     
+    def extendWithHTML(html, elementToExtend):    
+        initialSpan = Tag('span')
+        elementToExtend.append(initialSpan)
+        head, contents, tail = parseAnonymousHTML(html)
+        if head is not None:
+            initialSpan.tail = head
+        if tail is not None:
+            contents[-1].tail += tail
+        elementToExtend.extend(contents)
+        
+    extendWithHTML(content, mainBox)
+    
+    # If there are any journal entries to append, add them now.
+    if len(entries) > 0:
+        for entry in entries:
+            box = newBox()
+            box.append(Tag('h2', tagText=entry['title']))
+            extendWithHTML(entry['content'], box)
+        
 #     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
 #     mainDiv.append(footer)
 # 
@@ -151,6 +170,32 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None):
 #     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='User Agreement')]))
     
     return html
+
+
+def parseOrLoadMarkdown(path, projectDir):
+    
+    description = str(path)
+    
+    if description == 'see README.md':
+            
+        for f in listdir(projectDir):
+            description = join(projectDir, f)
+            basePath = basename(description)
+            if basePath == 'README.md':
+            #if len(basePath) >= 2 and basePath[-2:].lower() = 'md':
+                # Assume we've found a top-level markdown file.
+                print 'Found %s in directory %s.' % (basePath, projectDir)  
+                description = codecs.open(description, mode="r", encoding="utf-8").read()
+                break
+    elif (
+          isinstance(description, str)
+          or
+          isinstance(description, unicode)
+          ) and '.md' in description:
+        print 'For project %s, got markdown path:\n%s' % (projectDir, description)
+        description = codecs.open(join(projectDir, description), mode="r", encoding="utf-8").read()
+        
+    return description
 
     
 if __name__ == '__main__':
