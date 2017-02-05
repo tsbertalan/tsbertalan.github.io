@@ -177,10 +177,11 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
             titleText = entry.get('title', None)
             titlesDiv = Div(cls='entry-titles')
             expandID = 'expand_%d' % entryNum
-            expandButton = Tag('a', tagText='Show/Hide contents', href='javascript:;',
+            expandButton = Tag('a', tagText='Show/Hide', href='javascript:;',
                              onclick="show('%s')" % expandID,
                                 id='view-source',
-                               cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast",
+                                cls='mdl-button mdl-js-button mdl-js-ripple-effect',
+                                #cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--accent-contrast",
                              )
             expandStyles.append('''
                     div#%s{
