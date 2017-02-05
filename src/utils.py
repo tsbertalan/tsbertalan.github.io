@@ -1,5 +1,7 @@
 # import xml.etree.ElementTree as ET
 from lxml import etree
+from os.path import dirname, join, basename
+from shutil import copy
 
 def tab(text, tabulator='  '):
     return '\n'.join([
@@ -13,12 +15,15 @@ def getMatchingChildren(element, tag):
         if child.tag == tag:
             yield child
  
+ 
 def child(element, tag):
     for child in getMatchingChildren(element, tag):
         return child 
+     
             
 def tostring(element):
     return etree.tostring(element, method='html', pretty_print=True).replace('##AMPERSAND##', '&')
+
 
 def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
     parsed = etree.HTML(toparse)
@@ -33,6 +38,7 @@ def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
             print ','
         print ']', outTup[2]
     return outTup
+
 
 def Tag(*args, **kwargs):
     attribToAdd = {}
@@ -82,7 +88,7 @@ def Div(**kwargs):
     return Tag('div', **kwargs)
 
 
-def writePage(html, fname, DEBUG=False):
+def writePage(html, files, fname, fromPath, DEBUG=False):
     if DEBUG:
         print 'Writing', html, 'to', fname, '...',
     f = open(fname, 'w')
@@ -90,6 +96,20 @@ def writePage(html, fname, DEBUG=False):
     f.close()
     if DEBUG:
         print 'done.'
+
+    dn = dirname(fname)        
+    if DEBUG:
+        print 'Saving %d files from %s to %s.' % (len(files), fromPath, dn)
+        
+    for relpath in files:
+        fr = join(fromPath, relpath)
+        bn = basename(fr)
+        to = join(dn, bn)
+        if DEBUG:
+            print '    Copying from %s to %s.' % (fr, to)
+        copy(fr, to)
+        
+    
 
 
 def showPage(fname, browser='google-chrome'):    
@@ -101,13 +121,15 @@ def displayHtml(html, fname='/tmp/test.html', browser='google-chrome'):
     writePage(html, fname)
     if browser is not None:
         showPage(fname, browser)
+       
         
 def first(l):
     if len(l) > 0:
         return l[0]
     else:
         return None
-    
+
+
 def textField(name, label):
     field = Div(cls='mdl-textfield mdl-js-textfield mdl-textfield--floating-label')
     field.append(Tag('input', cls='mdl-textfield__input', type='text',
@@ -115,6 +137,7 @@ def textField(name, label):
                      id=name + '.id'))
     field.append(Tag('label', cls='mdl-textfield__label', for_=name + '.id', tagText=label))
     return field
+
 
 def textArea(name, label, rows='3', **kwargs):
     rows = str(rows).strip()

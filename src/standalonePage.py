@@ -150,19 +150,27 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     extendWithHTML(content, mainBox)
     
     # If there are any journal entries to append, add them now.
+    filePaths = []
     if len(entries) > 0:
         for entry in entries:
             box = newBox()
-            title = Tag('h2', tagText=entry['title'])
+            titleText = entry.get('title', None)
+            if titleText is not None:
+                title = Tag('h2', tagText=titleText)
             if 'subtitle' in entry:
                 subtitle = Tag('p', tagText=entry['subtitle'])
                 header = Tag('header', cls='tomsb-entry-header')
-                header.append(title)
+                if titleText is not None:
+                    header.append(title)
                 header.append(subtitle)
                 box.append(header)
             else:
-                box.append(title)
+                if titleText is not None:
+                    box.append(title)
             extendWithHTML(entry['content'], box)
+            entryFilePaths = entry.get('files', [])
+            filePaths.extend(entryFilePaths)
+                
         
 #     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
 #     mainDiv.append(footer)
@@ -177,7 +185,7 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
 #     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Privacy and terms')]))
 #     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='User Agreement')]))
     
-    return html
+    return html, filePaths
 
 
 def parseOrLoadMarkdown(path, projectDir):

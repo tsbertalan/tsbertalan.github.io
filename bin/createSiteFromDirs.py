@@ -94,7 +94,7 @@ for projectDir in projectDirs:
         
         # Generate and write the project page. 
         breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
-        pageHtml = article(
+        pageHtml, pageFiles = article(
                            utils.Tag('a', tagText='Tom Bertalan', href='../index.html',
                                      cls='mdl-typography--headline', style='text-decoration:none; color:#444;'),
                            readmeHtml,
@@ -103,7 +103,7 @@ for projectDir in projectDirs:
                            sourceLink=repo,
                            entries=entries,
                            )
-        utils.writePage(pageHtml, destinationFileLocation)
+        utils.writePage(pageHtml, pageFiles, destinationFileLocation, projectDir, DEBUG=True)
     else:
         linkDestination = None
         
@@ -124,6 +124,6 @@ cards = starredCards
 # Generate, write, and display the home page. 
 homepageHtml = mainPage.index(cards=cards)
 homepageFileLocation = join(wwwDir, 'index.html')
-utils.writePage(homepageHtml, homepageFileLocation, DEBUG=True)
+utils.writePage(homepageHtml, [], homepageFileLocation, None, DEBUG=True)
 if False:
     utils.displayHtml(homepageHtml, fname=homepageFileLocation)

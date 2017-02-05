@@ -1,4 +1,13 @@
 {
 "project name": "Gunnar",
-"project description": "Gunnar is a robot."
+"project description": "Gunnar is a robot.",
+"entries": [
+	{
+		"content": "file.md",
+		"files": [
+			"img1.jpg",
+			"script.js"
+		]
+	}
+]
 }
