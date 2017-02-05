@@ -83,7 +83,26 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     
     html = Html()
     head = child(html, 'head')
-    head.append(Tag('style', tagText=articleStyle(), disp=True, parseTagText=False))
+    head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
+    
+    # Add script for expanding entries.
+    head.append(Tag('script',
+                    tagText='''
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    ''',
+                    parseTagText=False,
+                    ))
+    
     body = child(html, 'body')
     
     container = Div(cls='demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100')
@@ -151,10 +170,24 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     
     # If there are any journal entries to append, add them now.
     filePaths = []
+    expandStyles = []
     if len(entries) > 0:
-        for entry in entries:
+        for entryNum, entry in enumerate(entries):
             box = newBox()
             titleText = entry.get('title', None)
+            titlesDiv = Div(cls='entry-titles')
+            expandID = 'expand_%d' % entryNum
+            expandButton = Tag('a', tagText='Show/Hide contents', href='javascript:;',
+                             onclick="show('%s')" % expandID,
+                                id='view-source',
+                               cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast",
+                             )
+            expandStyles.append('''
+                    div#%s{
+                        display:none;
+                    }''' % expandID)
+            titlesDiv.append(expandButton)
+            box.append(titlesDiv)
             if titleText is not None:
                 title = Tag('h2', tagText=titleText)
             if 'subtitle' in entry:
@@ -163,14 +196,22 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
                 if titleText is not None:
                     header.append(title)
                 header.append(subtitle)
-                box.append(header)
+                titlesDiv.append(header)
             else:
                 if titleText is not None:
-                    box.append(title)
-            extendWithHTML(entry['content'], box)
+                    titlesDiv.append(title)
+
+            contents = Div(id=expandID)
+            box.append(contents)
+            extendWithHTML(entry['content'], contents)
             entryFilePaths = entry.get('files', [])
             filePaths.extend(entryFilePaths)
-                
+            
+    # Append all generated expand/contract styles to the document HEAD. 
+    head.append(Tag('style',
+                    tagText='\n'.join(expandStyles),
+                    parseTagText=False,
+                    ))         
         
 #     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
 #     mainDiv.append(footer)
