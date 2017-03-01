@@ -194,7 +194,7 @@ footer {
 
 /* Modal Content */
 .modal-content {
-    border-radius: 15px;
+    border-radius: 2px;
     background-color: #fefefe;
     margin: auto;
     padding: 80px;
@@ -239,8 +239,9 @@ footer {
 
 .anim-card:hover {
 	-webkit-transform: scale(1.25, 1.25);
- 	transform: scale(1.025, 1.025);
+ 	transform: scale(1.5, 1.5);
  	cursor:pointer;
+    z-index:10;
 }
 
 .anim-card:hover::after {
