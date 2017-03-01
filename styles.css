@@ -238,8 +238,8 @@ footer {
 }
 
 .anim-card:hover {
-	-webkit-transform: scale(1.25, 1.25);
- 	transform: scale(1.5, 1.5);
+	-webkit-transform: scale(1.01, 1.01);
+ 	transform: scale(1.01, 1.01);
  	cursor:pointer;
     z-index:10;
 }
