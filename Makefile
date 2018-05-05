@@ -3,4 +3,4 @@ all:
 	cd bin && export PYTHONPATH=$PYTHONPATH:`pwd`/../src/ && python createSiteFromDirs.py
 
 view:
-	google-chrome index.html
+	xdg-open index.html
