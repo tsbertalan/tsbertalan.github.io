@@ -66,12 +66,18 @@ def index(cards=[]):
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
     bioCellSubcell.append(Tag('p', tagText='''
-    I am a fifth-year graduate student soon to receive my PhD from Princeton University's
-    department of Chemical and Biological Engineering, with a Graduate Certificate in Computational and Information Science.  
+    I am a Postdoctoral Associate in the Mechanical Engineering department
+    at the Massachusetts Institute of Technology.
+    I received my PhD from Princeton University's
+    department of Chemical and Biological Engineering, 
+    with a Graduate Certificate in Computational and Information Science.
                                                                   '''))
     bioCellSubcell.append(Tag('p', tagText='''
-    My research interests are in data mining and dimensionality reduction for high-dimensional dynamical systems,
-    with applications in robotic perception and planning, and computational neuroscience.
+    My research interests are in data mining, dimensionality reduction,
+    and system identification
+    for high-dimensional dynamical systems, 
+    with applications in robotic perception and planning, 
+    and computational neuroscience.
                                                                   '''))
     
     # A menu.
