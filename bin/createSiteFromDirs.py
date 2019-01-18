@@ -58,6 +58,10 @@ for projectDir in projectDirs:
     else:
         continue  # Skip this project if there's not /*doc*/ subfolder.
 
+    # Also skip if we explicitly note that we should.
+    if 'exclude_from_website' in config and config['exclude_from_website']:
+    	continue
+
     # Prepare a folder to put the output in.
     destinationFileLocation = join(wwwDir, baseProjectName, 'index.html')
     linkDestination = join(baseProjectName, 'index.html')
@@ -106,7 +110,7 @@ for projectDir in projectDirs:
         utils.writePage(pageHtml, pageFiles, destinationFileLocation, projectDir, DEBUG=True)
     else:
         linkDestination = None
-        
+
     card = mainPage.portfolioCard(baseProjectName, blurb, imgSrc=imgSrc, linkDest=linkDestination, imgAlt=blurb)
     
     # Generate a card for this project to put on the home page.
