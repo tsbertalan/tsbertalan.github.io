@@ -31,7 +31,7 @@ def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
             )
     if imgSrc is not None:
         out.append(Div(cls='mdl-card__media', toAppend=[
-            Div(cls='card-img-heightcrop', style="background-image: url('%s');" % imgSrc),
+            Div(cls='card-img-heightcrop', style="background-color:white; background-image: url('%s');" % imgSrc),
                                                         ]))
     out.append(Div(cls='mdl-card__title', toAppend=[
         Tag('h2', cls='mdl-card__title-text', tagText=title)
