@@ -1,0 +1,151 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style>
+                    div#expand_0{
+                        display:none;
+                    }</style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Gudrun</span><a href="http://github.com/tsbertalan/gudrun" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View project files.</a>
+</div>
+<span></span><h1>Gudrun</h1>
+<p>This robot will be a variant of the <a href="http://www.donkeycar.com/">Donkey car</a>, probably using the <a href="https://hobbyking.com/en_us/trooper-pro-4x4-1-10-brushless-sct-arr.html">recommended chassis</a>. 
+However, instead of controlling it with a Raspberry Pi, I'll use <a href="https://pcpartpicker.com/user/tsbertalan/saved/#view=dk9GXL">a computer I built last year</a> (mini-ITX, I think) for a different purpose. I might replace the motherboard with a slim-mini-ITX, a standard which includes a 19VDC power jack. 
+Otherwise I'd need something like <a href="https://www.amazon.com/dp/B005TWE6B8/?coliid=I3T66Y7O6B2HJK&amp;colid=3LRY6AZNFBVCM&amp;psc=0&amp;ref_=lv_ov_lig_dp_it">this</a> to provide motherboard power.</p>
+<p>Either way, I'll probably need to use a boost converter (which I already have), and I think it should draw about 130W max (according to the estimate from pcpartpicker on the page where you select a power supply). 
+<a href="https://hobbyking.com/en_us/multistar-high-capacity-4s-10000mah-multi-rotor-lipo-pack.html">This battery</a> which is currently in Gunnar should be able to handle 100 amps according to <a href="https://www.kritikalmass.net/battery-calculator/index.php">this calculator</a>, so I think this should be fine for about an hour of use--certainly a half-hour. </p>
+<p>In a later iteration, I might use the more power-efficient <a href="https://devtalk.nvidia.com/default/topic/1024102/jetson-tx2/jetson-tx2-power-consumption/">Nvidia TX2</a>, but, for this build, I want to minimize the specialness of the computer as much as possible, so that everything is just standard Ubuntu. (The TX2, like the Raspberry Pi, runs a custom linux with an ARM CPU, instead of a "normal" x86_64 CPU, meaning installing software is often harder.)</p>
+<p><a href="https://en.wikipedia.org/wiki/Gudrun">Gudrun</a> will be the successor to two previous builds of mine, <a href="https://github.com/tsbertalan/hogni">Hogni</a> and <a href="https://github.com/tsbertalan/gunnar">Gunnar</a>, all three of whom were mythologically siblings. (Also, note to self, if I want to continue this naming scheme, there's a <a href="https://en.wikipedia.org/wiki/Gudrun#Family_relations">good list at the bottom</a> of that article.)</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="entry-titles">
+<a href="javascript:;" id="view-source" onclick="show('expand_0')" class="mdl-button mdl-js-button mdl-js-ripple-effect">Show/Hide</a><header class="tomsb-entry-header"><h2>Simple ultrasound reactive control</h2>
+<p>26 February 2019</p></header>
+</div>
+<div id="expand_0">
+<span></span><h4>Ultrasound for reactive obstacle avoidance</h4>
+<p>I added two ultrasound sensors looking off to the left and right 
+on the front bumper. An arduino dumps these into a serial terminal at a minimum
+of about 5Hz, usually faster), and a ROS node reads these and puts them into two
+<a href="http://wiki.ros.org/sensor_msgs"><code>sensor_msgs</code></a><code>.msg.Range</code> topics.</p>
+<p>I implemented two behaviors--a back-up-and-turn, 
+where we try to go in the direction where there's more space,
+and a go-forward, where the steering fraction \(\in(-1,1)\)
+is computed like
+$$\tanh\left( (d_r - d_l) \cdot \lambda \right)$$
+and this noisy output is passed through a 10-entry rolling mean filter
+(using <a href="https://docs.python.org/2/library/collections.html#collections.deque"><code>collections.deque</code></a>!).</p>
+<p>The result is an illusion of path planning! But it's still really just reactive.</p>
+<p><img alt="first video" src="1_small.gif">
+<img alt="second video" src="2_small.gif"></p>
+<h4>In other news</h4>
+<p>I've tested the <a href="http://wiki.ros.org/openni_launch"><code>openni_*</code></a> ROS packages, and found that they produce a surfeit
+of depth-camera topics from my first-generation Kinect sensor (the power cable
+of which I lopped off and replaced with a barrel connector to my pre-ATX 12V rail).
+No accelerometer data, though--it would be nice not to have to add a separate IMU,
+and instead just use the one that's in the Kinect. 
+I think the <a href="http://wiki.ros.org/kinect_aux"><code>kinect_aux</code></a> package will get this for me.</p>
+<p>I hope I can fake "odometry" from this IMU data,
+and so obviate the need for separate wheel encoders.
+However, if I need them, my current plan is to glue half a dozen tiny magnets
+regularly spaced around the inside of the back wheels,
+and position a <a href="https://www.sparkfun.com/products/14709">Hall-effect sensor</a>
+nearby.
+But I'd rather not have to make another mini-project out of getting that little
+Arduino-project working properly, reading my poor-man's grey code.
+Integrating an IMU in (non-embedded) software would be easier.</p>
+<p>As for real planning, I still have some reading to do 
+to figure out what's available alreay-written
+for Ackermann-kinematics robots.
+I've seen <a href="http://wiki.ros.org/teb_local_planner">TEB local planner</a>
+used by others; I'm not sure that this would work with the same global planners
+used in the gmapping stack, since some maneuvers, like N-point turns,
+are fundamentally different between Ackermann and differential-drive kinematics.
+I'm not above writing my own planning software
+(actually, writing a quick and dirty pair of MPC-local + tree-based-global
+would be a worthwhile endeavor,
+and maybe not <em>too</em> much harder than getting existing packages installed,
+tuned, and working smoothly),
+but first I need at least write a motor controller
+that react to <a href="http://wiki.ros.org/ackermann_msgs"><code>ackermann_msgs</code></a><code>.msgs.AckermannDrive</code> messages properly.</p>
+<p>And, of course, getting SLAM working with the Kinect 
+is a whole separate miniproject.</p>
+</div>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
