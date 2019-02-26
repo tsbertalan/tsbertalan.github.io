@@ -84,6 +84,7 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     html = Html()
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
+    head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
     
     # Add script for expanding entries.
     head.append(Tag('script',

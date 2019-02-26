@@ -47,6 +47,7 @@ def index(cards=[]):
     
     head.append(Tag('title', tagText='Tom Bertalan'))
     head.append(Tag('link', rel='stylesheet', href='styles.css'))
+    head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
 
     layout = Div(cls='mdl-layout mdl-js-layout')
     body.append(layout)
