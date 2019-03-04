@@ -208,9 +208,15 @@ is a whole separate miniproject.</p>
 </li>
 </ol>
 <p><strong>Patrol.</strong> In addition to or in place of the previous goal, we'd explore as far as possible (e.g., a whole apartment), and then continuously revisit the areas we saw the least recently. A nice trick would be to do some sort of anomaly detection. Somehow featureize all the views of the apartment (probably just camera+pose) and then continuously do some unsupervised learning to detect when these features go away from the typical. Obviously, the border of the "typical" region in feature space will become better-characterized as we gather more data, and there will be lots of false positives at first (it's dark! this is unfamiliar! I'm afraid!).</p>
-<p><strong>Recharge.</strong> In addition to either or both of the previous, it would be great if Gudrun could recharge herself. I have had some thoughts on this, but put it on hold as overcomplicated and not necessary for now. Basically, though, my thoughts are divided between
-  1. loading onto the underdeck a pair of simple NiMH and Li-Ion (balancing) battery chargers designed for standalone use, and then using a complex arrangement of transistors, relays, and ADC voltage sensing to flip power over suddenly from battery to an external bumper; and
-  2. wrapping the batteries in some <a href="https://hobbyking.com/en_us/6s-li-ion-10a-pcm.html">battery management system</a>, (preferably with balancing capability), and trying to avoid letting the batteries ever get so low that they need a proper "charger". Basically, float-charging them at below nominal voltage. I have a couple of ~5V solar panels that might contribute here, especially if I do ...</p>
+<p><strong>Recharge.</strong> In addition to either or both of the previous, it would be great if Gudrun could recharge herself. I have had some thoughts on this, but put it on hold as overcomplicated and not necessary for now. Basically, though, my thoughts are divided between</p>
+<ol>
+<li>
+<p>loading onto the underdeck a pair of simple NiMH and Li-Ion (balancing) battery chargers designed for standalone use, and then using a complex arrangement of transistors, relays, and ADC voltage sensing to flip power over suddenly from battery to an external bumper; and</p>
+</li>
+<li>
+<p>wrapping the batteries in some <a href="https://hobbyking.com/en_us/6s-li-ion-10a-pcm.html">battery management system</a>, (preferably with balancing capability), and trying to avoid letting the batteries ever get so low that they need a proper "charger". Basically, float-charging them at below nominal voltage. I have a couple of ~5V solar panels that might contribute here, especially if I do ...</p>
+</li>
+</ol>
 <p><strong>Outdoor path following.</strong> Here, the more focused goals of above might be discarded in place of just being able to navigate reliably across campus. However, an issue with this is that the view distances are typically <em>much</em> longer than in indoor scenes, and so path planning is very different. However, in a way, there's more opportunity for creativity here, since it's less geometric and special-senor based, and more computer vision. Really, though, since this would involve significant changes to the above stack, it would almost be separate project. But, as the weather gets warmer, this might beckon more strongly...</p>
 </div>
 </div>
