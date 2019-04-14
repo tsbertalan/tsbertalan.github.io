@@ -88,6 +88,18 @@ def Div(**kwargs):
     return Tag('div', **kwargs)
 
 
+def sanitize(s, lower=True, upper=True, nums=True, extra=''):
+    alpha = 'abcdefghijklmnopqrstuvwxyz'
+    allowed = ''
+    if lower: allowed += alpha.lower()
+    if upper: allowed += alpha.upper()
+    if nums:  allowed += '1234567890'
+    allowed += extra
+    return ''.join(
+        c for c in s if c in allowed
+    )
+
+
 def writePage(html, files, fname, fromPath, DEBUG=False):
     if DEBUG:
         print 'Writing', html, 'to', fname, '...',

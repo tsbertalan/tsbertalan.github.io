@@ -1,0 +1,160 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <a href="index.html">Gudrun</a> &gt; <span>Architectural plan</span>
+</div>
+<span></span><h1>Architectural plan</h1>
+<span></span><p>I've done a fair bit of thinking on where I think I should go with this project, and so I'm gathering here my thoughts on what techniques I plan to use in each level of the stack.</p>
+
+<h4>Drivers</h4>
+
+<p>First, I need to be sure that I'm getting all the data I'll need for subsequent steps. This will be the easiest step, and is already mostly done. I want to be able to teleop the car using only these methods, and watching visualizations from these topics, before I proceed.</p>
+
+<ol>
+<li>Respond to <a href="http://docs.ros.org/api/ackermann_msgs/html/msg/AckermannDrive.html"><code>AckermannDrive</code> messages</a>, minimally responding to the <code>steering_angle</code> and <code>speed</code> fields. Since the <a href="https://www.pololu.com/product/1351">Pololu Micro Maestro</a> servo controller I'm using to communicate with the car's ESC actually supports ramps with specified speed, a possible stretch goal would be to do something intelligent with the <code>steering_angle_velocity</code>, <code>acceleration</code>, and <code>jerk</code> fields.
+   For now, it will be enough to call Pololu's provided <code>UscCmd</code> program with <code>os.system</code>  in our ROS node to set the speed and angle, but their serial protocol is <a href="https://www.pololu.com/docs/0J40/5.c">pretty well documented</a> (summarized for my use <a href="https://github.com/tsbertalan/gudrun/commit/d26840303cfa8fac44f7768aadbfb18fda8f496b">here</a>) so I could avoid the repeated subprocess by sending commands by serial directly.</li>
+<li>Use the <a href="http://wiki.ros.org/openni_camera"><code>openni_*</code></a> packages to publish RGBD information. (tested and working)</li>
+<li>Use <a href="http://wiki.ros.org/kinect_aux"><code>kinect_aux</code></a> to publish the Kinect's IMU information as a <code>sensor_msgs/Imu</code> topic. (not yet tested)</li>
+</ol>
+
+<h4>Perception, sensor fusion, and mapping</h4>
+
+<p>When I have some confidence that I as a human can drive the car using the same sensor data and command topics that I'll be providing to higher-level packages, I can turn to replacing my intuition-based sensor fusion to something more concrete.</p>
+
+<ol>
+<li>Use something to fake odometry from the Kinect's IMU data. I think that this may be possible via one of the nodes in <a href="http://docs.ros.org/melodic/api/robot_localization/html/index.html#"><code>robot_localization</code></a>. This is the part I'm most uncertain about. However, since this is superficially a pretty simple task (some interesting notes <a href="http://www.seattlerobotics.org/encoder/200610/Article3/IMU%20Odometry,%20by%20David%20Anderson.htm">here</a>; it might be worthwhile to include our actual motor commands in this reckoning, but for that I'll have to sit down with pencil and paper and work out some (E/U)KF scheme), I might just write my own code to make a best-effort IMU odometer. I've seen gmapping fix some pretty egregious wheel-encoder odometry errors in the past, so I think this will be just <em>fiiiine</em>.</li>
+<li>There seem to be many libraries available that will perform SLAM on RGBD or 3D point cloud data. However, after searching for a couple hours, I'm actually having difficulty finding one that will install on ROS Melodic. So, I think I'll take the simpler approach of throwing away most of the RGBD data and instead using one slice as a laserscan via the melodic-available <a href="http://wiki.ros.org/depthimage_to_laserscan"><code>depthimage_to_laserscan</code></a>.
+   So, I'll probably  just use this and gmapping. KISS.</li>
+</ol>
+
+<h4>Speed control</h4>
+
+<p>I have some doubts here. In <a href="http://tomsb.net/Gunnar/">previous work</a>, I had a tight control loop running on an Arduino to maintain commanded motor speeds. Here, I don't have wheel encoders, so the best I might be able to do is have a loose loop between my (likely very poor) odometry from the perception phase to my motor command interface in the driver phase.</p>
+
+<p>The more I think about this, the more I think that adding some sort of wheel encoders would greatly simplify many other parts of the design. Maybe I should do that Hall-effect sensor side project after all.</p>
+
+<h4>Planning</h4>
+
+<p>Once I can watch the map being generated as I teleop around, I can set up a medium-level planning stack.</p>
+
+<ol>
+<li>
+<a href="http://wiki.ros.org/teb_local_planner"><code>teb_local_planner</code></a> seems to be the way to go for what they call a local planner. However, the videos there suggest that this planner is capable of fairly advanced maneuvering, with multi-point turns, and it seems that it does consider multiple topologically distinct local plans. </li>
+<li>However, TEB does require a <code>nav_msgs/Path</code> global plan, which can be create simply with <a href="http://wiki.ros.org/global_planner?distro=melodic#Published_Topics"><code>global_planner</code></a> (that is, A* or Djikstra, or some clever smoothed, interpolated combination) from the standard <a href="http://wiki.ros.org/navigation">navigation stack</a>.</li>
+</ol>
+
+<h4>Behaviors!</h4>
+
+<p>This is the more fun, conceptual part. As suggested by the TEB docs, I'll need to disable some of the low-leve behaviors that come with the navigation stack (like the spin and clear). Witness instead the simple <a href="https://github.com/tsbertalan/gudrun/blob/a8cc65c6957c3498b119dbe4b59c7455c75a2977/src/gudrun_motor/ultrasound_bump_drive.py#L53"><code>Behavior</code> superclass</a> I made, without much thought, for the little bump-drive script I made last week. But, really, this section is more about high-level behaviors. I have a few ideas, some of which require more hardware/software additions than others:</p>
+
+<p><strong>Wander around, and identify and catalog objects.</strong> Fairly easy:</p>
+
+<ol>
+<li>
+<p>Set random navigation objectives (perhaps with some <a href="http://wiki.ros.org/frontier_exploration">frontier exploration</a> strategy, though that's pretty optional).</p>
+</li>
+<li>
+<p>Wander around, take photographs annotated with current poses (and therefore, ideally, the photographed objects position--the RGBD might help a lot with this).</p>
+</li>
+<li>
+<p>Pass them to some pre-trained object recognition neural network (I have a <a href="https://coral.withgoogle.com/">Google Edge TPU</a> I want to try to use for this), and note any high-confidence hits.</p>
+</li>
+<li>
+<p>Assemble a database from these and make a nice frontend for querying it. Maybe a visual menu, and and for each item, there'd be a "take me there" button. The robot would drive to the remembered pose (including orientation), and then (stretch goal!), use a pair of servos to direct a laser pointer at the remembered position of the object (or even redetect it live and point to the object's updated location).</p>
+</li>
+</ol>
+
+<p><strong>Patrol.</strong> In addition to or in place of the previous goal, we'd explore as far as possible (e.g., a whole apartment), and then continuously revisit the areas we saw the least recently. A nice trick would be to do some sort of anomaly detection. Somehow featureize all the views of the apartment (probably just camera+pose) and then continuously do some unsupervised learning to detect when these features go away from the typical. Obviously, the border of the "typical" region in feature space will become better-characterized as we gather more data, and there will be lots of false positives at first (it's dark! this is unfamiliar! I'm afraid!).</p>
+
+<p><strong>Recharge.</strong> In addition to either or both of the previous, it would be great if Gudrun could recharge herself. I have had some thoughts on this, but put it on hold as overcomplicated and not necessary for now. Basically, though, my thoughts are divided between</p>
+
+<ol>
+<li>
+<p>loading onto the underdeck a pair of simple NiMH and Li-Ion (balancing) battery chargers designed for standalone use, and then using a complex arrangement of transistors, relays, and ADC voltage sensing to flip power over suddenly from battery to an external bumper; and</p>
+</li>
+<li>
+<p>wrapping the batteries in some <a href="https://hobbyking.com/en_us/6s-li-ion-10a-pcm.html">battery management system</a>, (preferably with balancing capability), and trying to avoid letting the batteries ever get so low that they need a proper "charger". Basically, float-charging them at below nominal voltage. I have a couple of ~5V solar panels that might contribute here, especially if I do ...</p>
+</li>
+</ol>
+
+<p><strong>Outdoor path following.</strong> Here, the more focused goals of above might be discarded in place of just being able to navigate reliably across campus. However, an issue with this is that the view distances are typically <em>much</em> longer than in indoor scenes, and so path planning is very different. However, in a way, there's more opportunity for creativity here, since it's less geometric and special-senor based, and more computer vision. Really, though, since this would involve significant changes to the above stack, it would almost be separate project. But, as the weather gets warmer, this might beckon more strongly...</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>

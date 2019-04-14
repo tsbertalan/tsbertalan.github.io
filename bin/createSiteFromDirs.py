@@ -2,12 +2,15 @@
 from os import listdir, mkdir
 from os.path import basename, join, isdir, dirname
 import codecs
-from shutil import copy
+from shutil import copy as shcopy
+def copy(f, t):
+    print('$ cp %s %s' % (f, t))
+    shcopy(f, t)
 from subprocess import check_output, CalledProcessError
 import markdown
 import json
 
-from standalonePage import article, parseOrLoadMarkdown
+from standalonePage import article, parseOrLoadMarkdown, markdown_to_html
 import utils
 import mainPage
 from utils import writePage
@@ -37,23 +40,19 @@ for projectDir in projectDirs:
         configFile = utils.first([f for f in listdir(docFolder) if f == 'www.json'])
         if configFile is None:
             continue  # Skip this project if there's no www.json file.
-        print 'Loading', configFile, 'for project', basename(projectDir)
         config = json.load(open(join(docFolder, configFile), 'r'))
         if 'skip project' in config and config['skip project']:
             continue  # Skip this project if we're explicitly told to.
         baseProjectName = config.get('project name', basename(projectDir))
         hero = config.get('hero image', None)
-        print 'Got hero image',  hero
+        print('Got hero image:', hero)
         blurb = config.get('blurb', '')
         description = config.get('description', None)
         starred = config.get('starred', False)
         description = parseOrLoadMarkdown(description, projectDir)
         entries = config.get('entries', [])
         for entry in entries:
-            entry['content'] = markdown.markdown(
-                parseOrLoadMarkdown(entry['content'], projectDir)
-                )
-        
+            entry['content'] = parseOrLoadMarkdown(entry['content'], projectDir)
 
     else:
         continue  # Skip this project if there's not /*doc*/ subfolder.
@@ -65,14 +64,12 @@ for projectDir in projectDirs:
     # Prepare a folder to put the output in.
     destinationFileLocation = join(wwwDir, baseProjectName, 'index.html')
     linkDestination = join(baseProjectName, 'index.html')
-    print 'Link destination is', linkDestination
     try:
         mkdir(dirname(destinationFileLocation))
     except OSError:
         pass
 
     # Copy hero image to output folder.        
-    print 'hero is', hero
     if hero is None:
         imgSrc = None
     else:
@@ -80,7 +77,6 @@ for projectDir in projectDirs:
         fr = join(projectDir, hero)
         imgCpLoc = join(dirname(destinationFileLocation), basename(hero))
         to = imgCpLoc
-        print 'Copying from %s to %s.' % (fr, to)
         copy(fr, to)
         
     if description is not None:    
@@ -94,20 +90,52 @@ for projectDir in projectDirs:
             pass
             
         # Generate HTML for the page contents.
-        readmeHtml = markdown.markdown(description)
+        readmeHtml = markdown_to_html(description)
+
+        # Assign urls to the entry pages.
+        for k, entry in enumerate(entries):
+            entry['url'] = (
+                # 'entry_%d-' % k
+                # +
+                utils.sanitize(entry['title'].replace(' ', '_'), extra='_')
+                +'.html'
+            )
+            entry['save_path'] = join(wwwDir, baseProjectName, entry['url'])
         
         # Generate and write the project page. 
-        breadcrumbs = [utils.Tag('a', href='../index.html', tagText='Home'), utils.Tag('span', tagText=baseProjectName, parseTagText=False)]
+        breadcrumbs = [
+            utils.Tag('a', href='../index.html', tagText='Home'), 
+            utils.Tag('span', tagText=baseProjectName, parseTagText=False)
+        ]
+
+        home_title_link = utils.Tag(
+            'a', tagText='Tom Bertalan', href='../index.html',
+            cls='mdl-typography--headline', style='text-decoration:none; color:#444;'
+        )
+
         pageHtml, pageFiles = article(
-                           utils.Tag('a', tagText='Tom Bertalan', href='../index.html',
-                                     cls='mdl-typography--headline', style='text-decoration:none; color:#444;'),
-                           readmeHtml,
-                           heading=False,
-                           breadcrumbs=breadcrumbs,
-                           sourceLink=repo,
-                           entries=entries,
-                           )
-        utils.writePage(pageHtml, pageFiles, destinationFileLocation, projectDir, DEBUG=True)
+            home_title_link,
+            readmeHtml,
+            breadcrumbs=breadcrumbs,
+            sourceLink=repo,
+            entries=entries,
+        )
+        utils.writePage(pageHtml, pageFiles, destinationFileLocation, projectDir, DEBUG=False)
+
+        # Write the entries to their own pages.
+        for k, entry in enumerate(entries):
+            articleHtml, _unused = article(
+                home_title_link,
+                markdown_to_html(entry['content']),
+                heading=entry['title'],
+                breadcrumbs=[
+                    utils.Tag('a', href='../index.html', tagText='Home'), 
+                    utils.Tag('a', tagText=baseProjectName, parseTagText=False, href='index.html'),
+                    utils.Tag('span', tagText=entry['title'], parseTagText=False),
+                ]
+            )
+            utils.writePage(articleHtml, [], entry['save_path'], projectDir, DEBUG=False)
+
     else:
         linkDestination = None
 
@@ -128,6 +156,6 @@ cards = starredCards
 # Generate, write, and display the home page. 
 homepageHtml = mainPage.index(cards=cards)
 homepageFileLocation = join(wwwDir, 'index.html')
-utils.writePage(homepageHtml, [], homepageFileLocation, None, DEBUG=True)
+utils.writePage(homepageHtml, [], homepageFileLocation, None, DEBUG=False)
 if False:
     utils.displayHtml(homepageHtml, fname=homepageFileLocation)

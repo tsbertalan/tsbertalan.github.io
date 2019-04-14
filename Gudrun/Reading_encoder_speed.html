@@ -1,0 +1,146 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <a href="index.html">Gudrun</a> &gt; <span>Reading encoder speed</span>
+</div>
+<span></span><h1>Reading encoder speed</h1>
+<span></span><p>After my old encoder (salvaged from a stripped-out <a href="https://www.pololu.com/product/3207">Pololu gearmotor</a>) flew apart under centrifugal strain when I accidentally set the motors to full-speed with my bad ESC code, I made a replacement using <a href="https://www.amazon.com/dp/B07K8WHKWX">this kit, also from Pololu</a>.</p>
+
+<p>Since the shaft of the motor was a little too big for the toroidal magnet, I <em>gently</em> drilled it out a bit. But then the hole was a little too large. Hoping for the best (so far, my luck seems to be holding), I simply super-glued it to the shaft.</p>
+
+<p>The next problem was mounting the Hall-effect sensor carrier board near enough to magnet to pick it up. I had already discarded the idea of mounting it under the magnet, as designed (I guess I might have just gotten lucky with the mounting orientation), since I wanted to keep this thing as disassembleable as possible. I also didn't want to create a frame and glue the board in place like I did the first time, but have to carefully adjust the gap while the glue dried.</p>
+
+<p>Instead, I settled on a design I'm somewhat proud of, that has two adjustable spring-driven height screws. The white plastic pieces, like the struts I cut to replace the car's shocks, are from the housing of a discarded miniblind that I salvaged. A dremel-like cutter, a cordless drill, some glue, and some assorted small pieces of mounting hardware like this are so far an able replacement for a 3D printer for me. In the first design, I warmed the miniblind-plastic with a lighter and then bent it into the U-shape for the bracket, but this tended to weaken it at the corners (and was also a permanent attachment to the motor). Here, I can remove the two side bolts and detach all of the assembly except for the magnet and the two glued-on white side posts.</p>
+
+<p><img width="100%" src="encoder_adjustable.jpg"></p>
+
+<p>I verified that the sensor board was in fact producing a reasonable square wave as the motor spun, and on both channels.</p>
+
+<p><img width="100%" src="oscilloscope-crop.jpg"></p>
+
+<p>I then wrote some <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/encoder/encoder.ino">fairly simple firmware</a> to watch for these rising and falling edges with interrupts, and then either increment or decrement a counter depending on the state of the two square waves, and their previous state. I could have done this with a bunch of if statements, and it would likely be just as efficient as compilation, but I liked the elegance of doing a little simple bitwise math here, with <code>symbol = b + (a &lt;&lt; 1)</code>.</p>
+
+<div class="codehilite"><pre><span></span><span class="k">volatile</span> <span class="kt">long</span> <span class="n">count</span><span class="p">;</span>
+<span class="k">volatile</span> <span class="n">byte</span> <span class="n">last_symbol</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_A</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_B</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="c1">// Current byte     -&gt;       0b00, 0b01, 0b10, 0b11</span>
+<span class="c1">// Previous byte:</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">fwd_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b10</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b01</span><span class="p">};</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">rev_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b01</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b10</span><span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">isr</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">);</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">);</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">fwd_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">rev_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">last_symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="p">;</span>   
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">millis</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>That is, there are two distinct sequences of two-bit symbols for foward or reverse motion, and we can read these symbols into a single byte (a smaller type would also do, but apparently <a href="https://en.wikipedia.org/wiki/Units_of_information#Obsolete_and_unusual_units">semi-nibbles</a> aren't a standard compiler-recognized type). Since we can also index with these, I make two tiny look-up-tables for what byte we would be coming from, given the current byte as index, in the two hypothetical situations where we're going forward or reverse. If neither matches (probably damaged hardware, or a bad gap size between magnet and sensor, interference by the <code>Serial</code> call, or something like that), we do nothing.</p>
+
+<p>I then dumped this count periodically to serial. For this, I just used <code>Serial.prinln</code>. For the various Arduino data interfaces in this project, I seem to use a different ad-hoc protocol each time, sometimes with good efficiency (sending structs as byte sequences), sometimes reliability (requiring valid checksum after the . data). This way has neither of these properties. Eventually, I should unify all these in a tiny protocol, which could probably sit in a single short header file, and accompanying Python module. But whatever, this is good enough for now.</p>
+
+<p>In the <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/listen_to_encoder.py">receiving Python code</a>, I continuously append read <code>count</code> values and corresponding times-of-reception into two <code>collections.deque</code> objects, to keep a rotating buffer, and then use <code>counts_per_second, unused_intercept = np.polyfit(self.last_times, self.last_counts, 1)</code> to fit a line to these, whose slope is the desired speed. The size of the two <code>deque</code>s therefore implicitly smooths the incoming data. I then do some unit conversions to get meters-per-second, and send this off to a <code>Float32</code> ROS topic.</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>

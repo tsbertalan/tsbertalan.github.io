@@ -79,7 +79,7 @@ def articleStyle():
 ''' 
 
 
-def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, entries=[]):
+def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, entries=[]):
     
     html = Html()
     head = child(html, 'head')
@@ -168,46 +168,30 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
         if tail is not None:
             contents[-1].tail += tail
         elementToExtend.extend(contents)
-        
+       
+    # For main pages, we don't want the heading, since they're often README.md files,
+    # which have their own title heading. For entries, though, it's desirable.
+    if heading:
+        extendWithHTML('<h1>%s</h1>' % heading, mainBox)
+
+    # Add the content into the mainbox.
     extendWithHTML(content, mainBox)
-    
+
+    # If we have entries to show, list them here.
+    if len(entries) > 0:
+        entry_list = '<h2>Journal Entries</h2><ul>\n'
+        for entry in entries:
+            entry_list += '<li><a href="%s" title="%s">%s</a></li>\n' % (
+                entry['url'], entry['subtitle'], entry['title'],
+            )
+        entry_list += '</ul>'
+        extendWithHTML(entry_list, mainBox)
+
     # If there are any journal entries to append, add them now.
     filePaths = []
     expandStyles = []
     if len(entries) > 0:
         for entryNum, entry in enumerate(entries):
-            box = newBox()
-            titleText = entry.get('title', None)
-            titlesDiv = Div(cls='entry-titles')
-            expandID = 'expand_%d' % entryNum
-            expandButton = Tag('a', tagText='Show/Hide', href='javascript:;',
-                             onclick="show('%s')" % expandID,
-                                id='view-source',
-                                cls='mdl-button mdl-js-button mdl-js-ripple-effect',
-                                #cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-color-text--accent-contrast",
-                             )
-            expandStyles.append('''
-                    div#%s{
-                        display:none;
-                    }''' % expandID)
-            titlesDiv.append(expandButton)
-            box.append(titlesDiv)
-            if titleText is not None:
-                title = Tag('h2', tagText=titleText)
-            if 'subtitle' in entry:
-                subtitle = Tag('p', tagText=entry['subtitle'])
-                header = Tag('header', cls='tomsb-entry-header')
-                if titleText is not None:
-                    header.append(title)
-                header.append(subtitle)
-                titlesDiv.append(header)
-            else:
-                if titleText is not None:
-                    titlesDiv.append(title)
-
-            contents = Div(id=expandID)
-            box.append(contents)
-            extendWithHTML(entry['content'], contents)
             entryFilePaths = entry.get('files', [])
             filePaths.extend(entryFilePaths)
             
@@ -216,19 +200,6 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
                     tagText='\n'.join(expandStyles),
                     parseTagText=False,
                     ))         
-        
-#     footer = Tag('footer', cls='demo-footer mdl-mini-footer')
-#     mainDiv.append(footer)
-# 
-#     lsec = Div(cls='mdl-mini-footer--left-section')
-#     footer.append(lsec)
-#     
-#     ul = Tag('ul', cls='mdl-mini-footer--link-list') 
-#     lsec.append(ul)
-# 
-#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Help')]))
-#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='Privacy and terms')]))
-#     ul.append(Tag('li', toAppend=[Tag('a', href='#', tagText='User Agreement')]))
     
     return html, filePaths
 
@@ -248,9 +219,7 @@ def parseOrLoadMarkdown(path, projectDir):
             description = join(projectDir, f)
             basePath = basename(description)
             if basePath == 'README.md':
-            #if len(basePath) >= 2 and basePath[-2:].lower() = 'md':
                 # Assume we've found a top-level markdown file.
-                print 'Found %s in directory %s.' % (basePath, projectDir)  
                 description = codecs.open(description, mode="r", encoding="utf-8").read()
                 break
     elif (
@@ -258,18 +227,10 @@ def parseOrLoadMarkdown(path, projectDir):
           or
           isinstance(description, unicode)
           ) and '.md' in description:
-        print 'For project %s, got markdown path:\n%s' % (projectDir, description)
         description = codecs.open(join(projectDir, description), mode="r", encoding="utf-8").read()
 
     html = markdown_to_html(description)
 
-    if 'volatile long' in description:
-        print('========')
-        print(description)
-        print('--------')
-        print(html)
-        print('========')
-        
     return html
 
     
