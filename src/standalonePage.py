@@ -85,8 +85,8 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
     head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
-    head.append(Tag('link', rel='stylesheet', href='styles.css'))
-    head.append(Tag('link', rel='stylesheet', href='colorful.css'))
+    head.append(Tag('link', rel='stylesheet', href='../styles.css'))
+    head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
     
     # Add script for expanding entries.
     head.append(Tag('script',
