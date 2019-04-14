@@ -52,7 +52,9 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="styles.css" rel="stylesheet">
+<link href="colorful.css" rel="stylesheet">
+<script>
                     function show(toExpand)
                     {
                     if(
@@ -77,19 +79,26 @@
 <a href="../index.html">Home</a> &gt; <span>Boston AV Group Robocar</span><a href="http://github.com/tsbertalan/robocar" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View project files.</a>
 </div>
 <span></span><h1>robocar</h1>
+
 <p>DIY Robocar with RaspberryPi and Pi Camera</p>
+
 <h2>Hardware</h2>
+
 <ul>
 <li>Raspberry Pi 3 Model B/B+</li>
 <li>Adafruit DC &amp; Stepper Motor HAT for Raspberry Pi</li>
 </ul>
+
 <h2>Software</h2>
+
 <ul>
 <li><a href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian Stretch</a></li>
 <li><a href="http://wiki.ros.org/kinetic">ROS Kinetic</a></li>
 <li><a href="https://github.com/adafruit/Adafruit-Motor-HAT-Python-Library.git">Adafruit drivers</a></li>
 </ul>
+
 <h2>Function: Teleops</h2>
+
 <p>Using an XBox game controller to control robocar. XBox Controller configuration:
 <em> Right trigger (axes 5): forward
 </em> Left trigger (axes 2): reverse/brake
@@ -97,14 +106,18 @@
 <code>catkin_make
 source devel/setup.bash
 roslaunch launch/dbw.launch</code></p>
+
 <h2>Function: Preset Drive Commands (Blind)</h2>
+
 <p>Using pre-saved drive command (throttle,steer,duration) to drive robocar.
 <code>catkin_make
 source devel/setup.bash
 roslaunch launch/blindmove.launch</code>
 Note: Edit <code>src/blindmove/launch/drivecommands.csv</code> with one drive command per line in the following format:
 * <code>throttle</code>(-1.0:1.0), <code>steer</code>(-1.0:1.0), <code>duration</code>(sec)</p>
+
 <h2>Function: Camera Control Driving</h2>
+
 <p>Using camera input to calculate drive commands.
 <code>catkin_make
 source devel/setup.bash

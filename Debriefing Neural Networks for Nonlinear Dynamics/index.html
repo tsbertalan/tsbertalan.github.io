@@ -52,7 +52,9 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="styles.css" rel="stylesheet">
+<link href="colorful.css" rel="stylesheet">
+<script>
                     function show(toExpand)
                     {
                     if(
@@ -77,14 +79,17 @@
 <a href="../index.html">Home</a> &gt; <span>Debriefing Neural Networks for Nonlinear Dynamics</span><a href="http://github.com/tsbertalan/annForTrajectories" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View project files.</a>
 </div>
 <span></span><h1>Debriefing Neural Networks for Nonlinear Dynamics</h1>
+
 <p>This is a new collaborative project between Princeton University and
 the Technical University of Munich.</p>
+
 <p>In the early 1990s,
 before the modern advent of easy general-purpose GPU computing
 and the attendant boom in deep learning as the dominant paradigm
 in machine learning,
 smaller artifical neural networks (ANNs)
 still enjoyed some use in process control.</p>
+
 <p>Various methods have been employed to use ANNs to represent
 the dynamical system underlying corpi of timeseries data,
 coupled with several dimensionality reduction techniques
@@ -96,9 +101,11 @@ and are cheap to evaluate, allowing for use in real-time control.
 Being data-driven, they are also easy to apply,
 with little modification,
 to several different systems of interest.</p>
+
 <p>This project aims to revive such techniques
 using modern deep learning frameworks
 such as Keras, Theano, and Tenserflow.</p>
+
 <p>More importantly, we aim to transfer manifold learning techniques
 developed in other projects for application in several places in this endeavor.
 In addition to using these techniques as an alternative
@@ -108,6 +115,7 @@ our manifold learning techniques can be used
 for the simplification of generated networks,
 and as an analysis technique for ganing insight
 into how the network learns specific dynamic features.</p>
+
 <p>This final point could lead to future applications
 to biological neural networks,
 accelerating work on the seemingly contradictory

@@ -52,7 +52,9 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="styles.css" rel="stylesheet">
+<link href="colorful.css" rel="stylesheet">
+<script>
                     function show(toExpand)
                     {
                     if(
@@ -77,20 +79,25 @@
 <a href="../index.html">Home</a> &gt; <span>Next Task Decider</span>
 </div>
 <span></span><h1>Next Task Decider</h1>
+
 <p>At the moment, I use <a href="todoist.com">Todoist</a> to manage my task list.</p>
+
 <p>Task are divided into projects,
 and hierarchically organized within each project.
 Within this hierarchy, I assume a total ordering,
 s.t. the first unfinished task with no uncompleted child tasks
 (and other conditions as well) is the next action for that project.</p>
+
 <p>Working within this framework allows me to focus on a smaller
 part of each project at any given time, minimizing time taken to reorient
 when switching tasks. </p>
+
 <p>This project aimed to codify these rules in a small Python-based website,
 with the aim of automating as many parts of the process as possible.
 The availability of a RESTful API was a strong factor in my choice of Todoist
 over other task management software,
 and their API has been thoroughly unsurprising, in the best sense of the word.</p>
+
 <p>This project is for personal use, with no plan to change that.
 It grows organically as I find I need new features. <tt>:-)</tt></p>
 </div>

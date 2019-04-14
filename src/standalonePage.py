@@ -85,6 +85,8 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
     head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
+    head.append(Tag('link', rel='stylesheet', href='styles.css'))
+    head.append(Tag('link', rel='stylesheet', href='colorful.css'))
     
     # Add script for expanding entries.
     head.append(Tag('script',
@@ -231,6 +233,11 @@ def article(title, content, heading=True, breadcrumbs=None, sourceLink=None, ent
     return html, filePaths
 
 
+def markdown_to_html(md):
+    import markdown
+    return markdown.markdown(md, extensions=['codehilite',])
+
+
 def parseOrLoadMarkdown(path, projectDir):
     
     description = str(path)
@@ -253,8 +260,17 @@ def parseOrLoadMarkdown(path, projectDir):
           ) and '.md' in description:
         print 'For project %s, got markdown path:\n%s' % (projectDir, description)
         description = codecs.open(join(projectDir, description), mode="r", encoding="utf-8").read()
+
+    html = markdown_to_html(description)
+
+    if 'volatile long' in description:
+        print('========')
+        print(description)
+        print('--------')
+        print(html)
+        print('========')
         
-    return description
+    return html
 
     
 if __name__ == '__main__':

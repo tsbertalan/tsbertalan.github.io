@@ -52,7 +52,9 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="styles.css" rel="stylesheet">
+<link href="colorful.css" rel="stylesheet">
+<script>
                     function show(toExpand)
                     {
                     if(
@@ -77,16 +79,20 @@
 <a href="../index.html">Home</a> &gt; <span>Equal Space</span><a href="http://github.com/tsbertalan/equalSpace" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View project files.</a>
 </div>
 <span></span><h1>Equal Space</h1>
+
 <p>This project is in preparation for publication to PNAS.</p>
+
 <p><a href="http://dx.doi.org/10.1016/j.acha.2015.06.008">Previous Work</a> in our lab
 uses nonlinear dimensionality reduction techniques to embed the states
 of a high-dimensional dynamical system in a submanifold of lower dimension,
 providing insight on the true coarse dynamics of the system.</p>
+
 <p>The technique treats each state in a simulation or measured timeseries
 (or corpus of such timseries)
 as a high-dimensional point. The resulting cloud of points is then amenable
 to various dimensionality reduction techniques--we choose to use
 <em>diffusion maps</em> for its ability to uncover nonlinear embedded manifolds.</p>
+
 <p>This new project uses datasets of a similar form--trajectory matrices.
 However, instead of using rows of the matrix as high-dimensional points,
 we use columns or patches of the matrix.
@@ -95,6 +101,7 @@ This technique is applicable to simulatios of many coupled agents
 or method-of-lines discretized partial differential equations.
 Rows of the trajectory matrices are indexed by timestep, whlie columns are
 indexed by agent ID or PDE discretization cell.</p>
+
 <p>In the simpler case where columns are used, this method
 for processing a trajectory uncovers thie underlying continuum of types of dynamics.
 For PDEs in space and time, this continuum is often isomorphic
@@ -106,6 +113,7 @@ we uncover an effective space for the agents, which may include
 (3) initial conditions,
 or
 (4) steady states.</p>
+
 <p>This project was conceived in support of my primary thesis topic,
 in which heterogeneous parameters for a population of agents are used
 as abscissae for describing system state as a sum of smooth basis functions.
