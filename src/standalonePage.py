@@ -79,7 +79,7 @@ def articleStyle():
 ''' 
 
 
-def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, entries=[]):
+def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, entries=[], sourceLinkText='Project Files'):
     
     html = Html()
     head = child(html, 'head')
@@ -155,7 +155,7 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
         
     if sourceLink is not None:
         sourceButton = Tag('a', href=sourceLink, id='view-source',
-                           tagText='View project files.',
+                           tagText=sourceLinkText,
             cls="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast")
         breadcrumbsDiv.append(sourceButton)
     
@@ -179,12 +179,20 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
 
     # If we have entries to show, list them here.
     if len(entries) > 0:
-        entry_list = '<h2>Journal Entries</h2><ul>\n'
+        entry_list = '<h2>Journal Entries</h2>'
+        # entry_list += '<ul>'
         for entry in entries:
-            entry_list += '<li><a href="%s" title="%s">%s</a></li>\n' % (
+            # entry_list += '<li>'
+            entry_list += '<p>'
+            entry_list += '<a href="%s" title="%s">%s</a>' % (
                 entry['url'], entry['subtitle'], entry['title'],
             )
-        entry_list += '</ul>'
+            st = entry.get('subtitle', None)
+            if st:
+                entry_list += ' <small><i>%s</i></small>' % st
+            # entry_list += '</li>'
+            entry_list += '</p>'
+        # entry_list += '</ul>'
         extendWithHTML(entry_list, mainBox)
 
     # If there are any journal entries to append, add them now.

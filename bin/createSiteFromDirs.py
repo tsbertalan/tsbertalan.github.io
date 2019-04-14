@@ -2,10 +2,7 @@
 from os import listdir, mkdir
 from os.path import basename, join, isdir, dirname
 import codecs
-from shutil import copy as shcopy
-def copy(f, t):
-    print('$ cp %s %s' % (f, t))
-    shcopy(f, t)
+from shutil import copy
 from subprocess import check_output, CalledProcessError
 import markdown
 import json
@@ -45,7 +42,6 @@ for projectDir in projectDirs:
             continue  # Skip this project if we're explicitly told to.
         baseProjectName = config.get('project name', basename(projectDir))
         hero = config.get('hero image', None)
-        print('Got hero image:', hero)
         blurb = config.get('blurb', '')
         description = config.get('description', None)
         starred = config.get('starred', False)
@@ -132,7 +128,9 @@ for projectDir in projectDirs:
                     utils.Tag('a', href='../index.html', tagText='Home'), 
                     utils.Tag('a', tagText=baseProjectName, parseTagText=False, href='index.html'),
                     utils.Tag('span', tagText=entry['title'], parseTagText=False),
-                ]
+                ],
+                sourceLink=entry.get("sourceLink", None),
+                sourceLinkText=entry.get("sourceLinkText", '')
             )
             utils.writePage(articleHtml, [], entry['save_path'], projectDir, DEBUG=False)
 
