@@ -1,6 +1,6 @@
 all:
 	cp ../Job\ Search/Resume/resume_TomBertalan.pdf ./
-	cd bin && export PYTHONPATH=$PYTHONPATH:`pwd`/../src/ && python createSiteFromDirs.py
+	bash make.sh
 
 view:
 	xdg-open index.html
