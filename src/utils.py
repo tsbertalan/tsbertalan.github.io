@@ -11,6 +11,7 @@ def tab(text, tabulator='  '):
 
 
 def getMatchingChildren(element, tag):
+    assert element is not None, 'Was an empty document used?'
     for child in element:
         if child.tag == tag:
             yield child
