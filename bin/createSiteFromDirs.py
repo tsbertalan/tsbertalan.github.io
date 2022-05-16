@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from os import listdir, mkdir
-from os.path import basename, join, isdir, dirname
+from os import listdir, mkdir, makedirs
+from os.path import basename, join, isdir, dirname, exists
 import codecs
 from shutil import copy
 from subprocess import check_output, CalledProcessError
@@ -11,6 +11,20 @@ from standalonePage import article, parseOrLoadMarkdown, markdown_to_html
 import utils
 import mainPage
 from utils import writePage
+from warnings import warn
+
+
+def mkdir_p(path):
+    # https://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
+    import errno, os
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >= 2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        # possibly handle other errno cases here, otherwise finally:
+        else:
+            raise
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
@@ -47,6 +61,7 @@ for projectDir in projectDirs:
         starred = config.get('starred', False)
         description = parseOrLoadMarkdown(description, projectDir)
         entries = config.get('entries', [])
+        extra_files = config.get('extra files', [])
         for entry in entries:
             entry['content'] = parseOrLoadMarkdown(entry['content'], projectDir)
 
@@ -73,7 +88,10 @@ for projectDir in projectDirs:
         fr = join(projectDir, hero)
         imgCpLoc = join(dirname(destinationFileLocation), basename(hero))
         to = imgCpLoc
-        copy(fr, to)
+        try:
+            copy(fr, to)
+        except IOError:
+            warn('Failed copy from %s to %s.' % (fr, to))
         
     if description is not None:    
         # Try to construct a github link.
@@ -119,6 +137,7 @@ for projectDir in projectDirs:
         utils.writePage(pageHtml, pageFiles, destinationFileLocation, projectDir, DEBUG=False)
 
         # Write the entries to their own pages.
+        to_copy = list(extra_files)
         for k, entry in enumerate(entries):
             articleHtml, _unused = article(
                 home_title_link,
@@ -133,6 +152,28 @@ for projectDir in projectDirs:
                 sourceLinkText=entry.get("sourceLinkText", '')
             )
             utils.writePage(articleHtml, [], entry['save_path'], projectDir, DEBUG=False)
+
+            to_copy.extend(entry.get('files', []))
+
+        # Copy any specified files to a subdir relative to the project.
+        for file_path in to_copy:
+            if file_path.startswith('/'):
+                # Don't allow absolute paths.
+                warn('Skipping copy for absolute path: %s' % file_path)
+            else:
+                src = join(projectDir, file_path)
+                if not exists(src):
+                    warn("Couldn't find file to copy: %s" % file_path)
+                else:
+                    dest = join(wwwDir, baseProjectName, file_path)
+                    dest_dir = dirname(dest)
+                    try:
+                        mkdir_p(dest_dir)
+                    except OSError:
+                        pass
+                    copy(src, dest)
+                    print('Putting file in %s.' % dest)
+
 
     else:
         linkDestination = None

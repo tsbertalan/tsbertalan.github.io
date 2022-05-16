@@ -80,19 +80,17 @@
 </div>
 <span></span><h1>Gudrun</h1>
 
-<p><a href="headshot.jpg"><img src="headshot.jpg" width="24%"></a>
-<img src="1_small.gif" width="24%">
-<img src="2_small.gif" width="24%">
-<a href="https://youtu.be/KhBlflgKe1Q?t=81"><img src="teb_demo.gif" width="24%"></a></p>
+<p><a href="doc/headshot.jpg"><img src="doc/headshot.jpg" width="24%"></a>
+<img src="doc/entries/1_small.gif" width="24%">
+<img src="doc/entries/2_small.gif" width="24%">
+<a href="https://youtu.be/KhBlflgKe1Q?t=81"><img src="doc/entries/teb_demo.gif" width="24%"></a></p>
 
-<p>This robot will be a variant of the <a href="http://www.donkeycar.com/">Donkey car</a>, probably using the <a href="https://hobbyking.com/en_us/trooper-pro-4x4-1-10-brushless-sct-arr.html">recommended chassis</a>. 
-However, instead of controlling it with a Raspberry Pi, I'll use <a href="https://pcpartpicker.com/user/tsbertalan/saved/#view=dk9GXL">a computer I built last year</a> (mini-ITX, I think) for a different purpose. I might replace the motherboard with a slim-mini-ITX, a standard which includes a 19VDC power jack. 
-Otherwise I'd need something like <a href="https://www.amazon.com/dp/B005TWE6B8/?coliid=I3T66Y7O6B2HJK&amp;colid=3LRY6AZNFBVCM&amp;psc=0&amp;ref_=lv_ov_lig_dp_it">this</a> to provide motherboard power.</p>
+<p>This robot can be thought of as a variant of the <a href="http://www.donkeycar.com/">Donkey car</a>, using one of the <a href="https://hobbyking.com/en_us/trooper-pro-4x4-1-10-brushless-sct-arr.html">recommended chassis</a>. 
+However, instead of controlling it with a Raspberry Pi, I use <a href="https://pcpartpicker.com/user/tsbertalan/saved/#view=dk9GXL">a mini-ITX computer I built for a previous project</a>. In future work, it might be nice to replace the motherboard with a slim-mini-ITX, a standard which includes a 19VDC power jack. I use something like <a href="https://www.amazon.com/dp/B005TWE6B8/?coliid=I3T66Y7O6B2HJK&amp;colid=3LRY6AZNFBVCM&amp;psc=0&amp;ref_=lv_ov_lig_dp_it">this</a> to provide motherboard power from a ~16V DC source, with a 12V regulator between.</p>
 
-<p>Either way, I'll probably need to use a boost converter (which I already have), and I think it should draw about 130W max (according to the estimate from pcpartpicker on the page where you select a power supply). 
-<a href="https://hobbyking.com/en_us/multistar-high-capacity-4s-10000mah-multi-rotor-lipo-pack.html">This battery</a> which is currently in Gunnar should be able to handle 100 amps according to <a href="https://www.kritikalmass.net/battery-calculator/index.php">this calculator</a>, so I think this should be fine for about an hour of use--certainly a half-hour. </p>
+<p><a href="https://hobbyking.com/en_us/multistar-high-capacity-4s-10000mah-multi-rotor-lipo-pack.html">I use this battery</a> which can source 100 amps according to <a href="https://www.kritikalmass.net/battery-calculator/index.php">this calculator</a>, and appears to be fine for about an hour of use powering all sensors, SLAM, and the drive motor.</p>
 
-<p>In a later iteration, I might use the more power-efficient <a href="https://devtalk.nvidia.com/default/topic/1024102/jetson-tx2/jetson-tx2-power-consumption/">Nvidia TX2</a>, but, for this build, I want to minimize the specialness of the computer as much as possible, so that everything is just standard Ubuntu. (The TX2, like the Raspberry Pi, runs a custom linux with an ARM CPU, instead of a "normal" x86_64 CPU, meaning installing software is often harder.)</p>
+<p>In a later iteration, I might use the more power-efficient <a href="https://devtalk.nvidia.com/default/topic/1024102/jetson-tx2/jetson-tx2-power-consumption/">Nvidia TX2</a>, but, for this build, I want to minimize the specialness of the computer as much as possible, so that everything is just standard Ubuntu. (The TX2, like the Raspberry Pi, runs linux with an ARM CPU, instead of a "normal" x86_64 CPU, meaning installing software is often harder.)</p>
 
 <p><a href="https://en.wikipedia.org/wiki/Gudrun">Gudrun</a> will be the successor to two previous builds of mine, <a href="https://github.com/tsbertalan/hogni">Hogni</a> and <a href="https://github.com/tsbertalan/gunnar">Gunnar</a>, all three of whom were mythologically siblings. (Also, note to self, if I want to continue this naming scheme, there's a <a href="https://en.wikipedia.org/wiki/Gudrun#Family_relations">good list at the bottom</a> of that article.)</p>
 <span></span><h2>Journal Entries</h2>
@@ -102,6 +100,7 @@ Otherwise I'd need something like <a href="https://www.amazon.com/dp/B005TWE6B8/
 <p><a href="Timedelasticband_path_planning.html" title="3 April 2019">Timed-elastic-band path planning</a> <small><i>3 April 2019</i></small></p>
 <p><a href="Reading_encoder_speed.html" title="8 April 2019">Reading encoder speed</a> <small><i>8 April 2019</i></small></p>
 <p><a href="Fusing_Adafruit_9DoF_data_with_imu_filter_madgwick.html" title="14 April 2019">Fusing Adafruit 9DoF data with imu_filter_madgwick</a> <small><i>14 April 2019</i></small></p>
+<p><a href="Using_Intel_RealSense_for_mapping.html" title="27 August 2019">Using Intel RealSense for mapping</a> <small><i>27 August 2019</i></small></p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>

@@ -89,7 +89,7 @@
 
 <p>I then loaded this data into a <a href="https://github.com/tsbertalan/gudrun/blob/82daeba2927c37f7dfff13ec2c8df2948180a413/src/gudrun_motor/speed_record_data/Speed%20Record%20Data.ipynb">Jupyter notebook</a>. It quickly became clear that I could split up my experiments by looking for big spikes in the \(\Delta t\) between ultrasound measurements.</p>
 
-<p>And then, for each experiment, there were some clear outliers--caused, I imagine, by the ultrasound picking up some spurious echoes. I rejected these in my regression by using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RANSACRegressor.html">Scikit-learn's RANSAC linear regressor</a>, and tuning the <code>residual_threshold</code> parameter to reject what, to my eye, seemed appropriate for rejection in some spot checks.</p>
+<p>And then, for each experiment, there were some clear outliers--caused, I imagine, by the ultrasound picking up some spurious echoes. I rejected these in my regression by using <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RANSACRegressor.html">Scikit-learn's</a> [[RANSAC|RANSAC]] linear regressor, and tuning the <code>residual_threshold</code> parameter to reject what, to my eye, seemed appropriate for rejection in some spot checks.</p>
 
 <p><img src="sample_experiment.png" width="100%/"></p>
 
