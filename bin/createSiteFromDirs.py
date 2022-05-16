@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+from __future__ import print_function
 from os import listdir, mkdir, makedirs
 from os.path import basename, join, isdir, dirname, exists
 import codecs
@@ -28,6 +29,7 @@ def mkdir_p(path):
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
+archiveDir = '/home/tsbertalan/Documents/Projects/Archived'
 wwwDir = '../'
 
 def listdirs(folder):
@@ -35,8 +37,11 @@ def listdirs(folder):
         d for d in (join(folder, d1) for d1 in listdir(folder))
         if isdir(d)
     ]
+
     
 projectDirs = listdirs(baseDir)
+if exists(archiveDir):
+    projectDirs.extend(listdirs(archiveDir))
 projectDirs.sort()
 projectDirs = projectDirs[::-1]
 cards = []
@@ -52,8 +57,11 @@ for projectDir in projectDirs:
         if configFile is None:
             continue  # Skip this project if there's no www.json file.
         config = json.load(open(join(docFolder, configFile), 'r'))
+        config['archived'] = archiveDir in projectDir  # For future use.
         if 'skip project' in config and config['skip project']:
             continue  # Skip this project if we're explicitly told to.
+        else:
+            print('Adding project to site:', projectDir)
         baseProjectName = config.get('project name', basename(projectDir))
         hero = config.get('hero image', None)
         blurb = config.get('blurb', '')
