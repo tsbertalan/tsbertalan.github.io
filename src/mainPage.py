@@ -68,15 +68,17 @@ def index(cards=[]):
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
     bioCellSubcell.append(Tag('p', tagText='''
-    I am a Postdoctoral Associate in the Mechanical Engineering department
-    at the Massachusetts Institute of Technology.
+    I am a Postdoctoral Fellow in the Chemical and Biomolecular Engineering department
+    at Johns Hopkins University.
     I received my PhD from Princeton University's
     department of Chemical and Biological Engineering, 
     with a Graduate Certificate in Computational and Information Science.
+
+    Before working at JHU, I was a Postdoctoral Associate in the MAE department at MIT.
                                                                   '''))
     bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in data mining, dimensionality reduction,
-    and system identification
+    and system identification (using neural networks)
     for high-dimensional dynamical systems, 
     with applications in robotic perception and planning, 
     and computational neuroscience.
