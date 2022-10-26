@@ -52,7 +52,8 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
 <link href="../colorful.css" rel="stylesheet">
 <script>
                     function show(toExpand)
@@ -80,28 +81,39 @@
 </div>
 <span></span><h1>Next Task Decider</h1>
 
-<p>At the moment, I use <a href="todoist.com">Todoist</a> to manage my task list.</p>
+<p>I've used a few different tools to manage my tasks, going back to at least Google Tasks in 2010. For a long time, I used <a href="todoist.com">Todoist</a>, which had a decent API and was willing to call a custom webhook whenever things changed. The availability of a RESTful API was a strong factor in my choice of Todoist over other task management software, and the API was nice enough. However, eventually, I decided more control and, critically, I didn't want to have to go over the web for everything, so I exported everything to plain markdown files and started writing a local daemon instead of webhooks.</p>
 
-<p>Task are divided into projects,
-and hierarchically organized within each project.
-Within this hierarchy, I assume a total ordering,
-s.t. the first unfinished task with no uncompleted child tasks
-(and other conditions as well) is the next action for that project.</p>
+<p>The new philosophy is that these files can be anywhere within my expansive (synced and backed-up) home directory, and all my tools should be fast enough at walking these files (and watching for file changes) that it can act like a database. This seems to work so far. I'm using <a href="obsidian.md">Obsidian</a> as a nice interface to all these files, but writing my own things in a combination of Python and various system calls (either Windows or Linux) to do more custom things with the whole tree.</p>
 
-<p>Working within this framework allows me to focus on a smaller
-part of each project at any given time, minimizing time taken to reorient
-when switching tasks. </p>
+<p>Task are divided into projects, and hierarchically organized within each project. In an observation that seemed important at the time, but that I'm increasingly thinking is not the most critical detail; within this hierarchy, I assume a total ordering, s.t. the first unfinished task with no uncompleted child tasks (and other conditions as well) is the next action for that project. After a few false starts and rewrites, I found a way to generate a graph from a hierarchical tasklist like</p>
 
-<p>This project aimed to codify these rules in a small Python-based website,
-with the aim of automating as many parts of the process as possible.
-The availability of a RESTful API was a strong factor in my choice of Todoist
-over other task management software,
-and their API has been thoroughly unsurprising, in the best sense of the word.</p>
+<pre class="codehilite"><code class="language-markdown">- [x] 1
+- [ ] 2
+    - [ ] 2b
+    - [ ] 2c
+- [ ] 3</code></pre>
 
-<p>This project is for personal use, with no plan to change that.
-It grows organically as I find I need new features. <tt>:-)</tt></p>
+<p>such that <code>nx.topological_sort</code> </p>
 
-<p>Look at <a href="./bin/toggl/toggl_target/README.md">this toggl predictor</a>--they claim to be predicting work time for some work task.</p>
+<pre class="codehilite"><code class="language-python">for node in nx.topological_sort(copied_graph):
+    # ... do stuff</code></pre>
+
+<p>gives me exactly the ordering I want--the correct dependency sort order that surfaces just the leaf I want.</p>
+
+<div class="mermaid">
+graph TD
+3 --&gt; 2c
+2c --&gt; 2b
+2b --&gt; 2
+3 --&gt; 2
+2 --&gt; 1
+</div>
+
+<p>In theory, working within this framework will allow me to focus on a smaller part of each project at any given time, minimizing time taken to reorient when switching tasks. </p>
+
+<p>This project is for personal use, with no plan to change that. It grows organically as I find I need new features.</p>
+
+<script>mermaid.initialize({startOnLoad:true});</script>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>

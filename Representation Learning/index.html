@@ -1,0 +1,99 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Representation Learning</span>
+</div>
+<span></span><h1>Representation Learning</h1>
+
+<p>This is a broad category of work. For now, all I'll put here is our "Mahalanobis Autoencoder" project, which is one approach for doing something like Mahalanobis-distance diffusion maps in a neural network.</p>
+
+<p>This was published in PNAS as "<a href="https://www.pnas.org/doi/10.1073/pnas.2014627117">Local conformal autoencoder for standardized data coordinates</a>". My main contribution was an application to localization from WIFI signal strengths (show below). This was done in simulation, but, because of the way the embedding is constructed <em>specifically</em> to keep locally accurate metric information ("a one-meter circle remains a one-meter circle, and not an ellipse"), it should be robust to local variation in the propagation of the signal strength in real uses.</p>
+
+<p><a href="wifi.png"><img src="wifi.png" width="100%"></a></p>
+
+<p>Abstract:</p>
+
+<blockquote>
+<p>We propose a local conformal autoencoder (LOCA) for standardized data coordinates. LOCA is a deep learning-based method for obtaining standardized data coordinates from scientific measurements. Data observations are modeled as samples from an unknown, nonlinear deformation of an underlying Riemannian manifold, which is parametrized by a few normalized, latent variables. We assume a repeated measurement sampling strategy, common in scientific measurements, and present a method for learning an embedding in R<sup>d</sup> that is isometric to the latent variables of the manifold. The coordinates recovered by our method are invariant to diffeomorphisms of the manifold, making it possible to match between different instrumental observations of the same phenomenon. Our embedding is obtained using LOCA, which is an algorithm that learns to rectify deformations by using a local z-scoring procedure, while preserving relevant geometric information. We demonstrate the isometric embedding properties of LOCA in various model settings and observe that it exhibits promising interpolation and extrapolation capabilities, superior to the current state of the art. Finally, we demonstrate LOCAs efficacy in single-site Wi-Fi localization data and for the reconstruction of three-dimensional curved surfaces from two-dimensional projections.</p>
+</blockquote>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>

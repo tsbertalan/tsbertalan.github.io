@@ -29,7 +29,8 @@ def mkdir_p(path):
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
-archiveDir = '/home/tsbertalan/Documents/Projects/Archived'
+archiveDir = '/home/tsbertalan/Documents/ArchivedProjects'
+dirs = baseDir, archiveDir, '/home/tsbertalan/Documents/DelayedProjects'
 wwwDir = '../'
 
 def listdirs(folder):
@@ -38,26 +39,31 @@ def listdirs(folder):
         if isdir(d)
     ]
 
-    
-projectDirs = listdirs(baseDir)
-if exists(archiveDir):
-    projectDirs.extend(listdirs(archiveDir))
+
+projectDirs = []
+for search_dir in dirs:    
+    if exists(search_dir):
+        projectDirs.extend(listdirs(search_dir))
 projectDirs.sort()
 projectDirs = projectDirs[::-1]
 cards = []
 starredCards = []
 
 for projectDir in projectDirs:
+
         
     # Try to find a www.json file.
     docFolder = utils.first([f for f in listdirs(projectDir) if 'doc' in basename(f).lower()])
     imgSrc = 'images/1px.png'
+
+    
+
     if docFolder is not None:
         configFile = utils.first([f for f in listdir(docFolder) if f == 'www.json'])
         if configFile is None:
             continue  # Skip this project if there's no www.json file.
         config = json.load(open(join(docFolder, configFile), 'r'))
-        config['archived'] = archiveDir in projectDir  # For future use.
+        config['archived'] = baseDir not in projectDir  # For future use.
         if 'skip project' in config and config['skip project']:
             continue  # Skip this project if we're explicitly told to.
         else:

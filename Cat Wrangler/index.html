@@ -1,0 +1,123 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
+<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<link href="../colorful.css" rel="stylesheet">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Cat Wrangler</span>
+</div>
+<span></span><h1>Cat Wrangler</h1>
+
+<p><em>[[2020-06-14]] to [[2021-07-21]]</em></p>
+
+<p>When traveling, I really want to be able to check on the cats to see if they're up and about. (In fact, the device made here turned out to be really useful on on trip, when one of the two got himself trapped behind the dryer. We were able to discover this by remote inspection, and tell a friend to free him.)</p>
+
+<p>So, some time in June 2020, I decided I wanted to make a little rover drive around the house and check on things. And also to be a pretty simple project to show a friend the basics of such things.</p>
+
+<p>I started with an chassis left over from the <a href="../Boston%20AV%20Group%20Robocar/index.html">robocar course</a> I helped teach a few years before, but it would still take major custom fabrication to create a reliable charging dock.</p>
+
+<p>Then, about a  year later, my iRobot Braava mop stopped working, so I broke it open.</p>
+
+<p><img src="F4807EFF-FAD5-4E25-9E7D-6737DA70C805.jpg" width="100%"></p>
+
+<p>After poking around a bit I decided there was nothing I could easily do to make it work as designed, I decided this would be a perfect chassis for such a project, since the mechanics of charging were already solved.</p>
+
+<p>I determined that the battery management circuitry prevented me from easily using the original packs (they needed some kind of wakeup signal to start providing power), so I instead used an alternative min-UPS board from Amazon with a couple 18650 cells. I pulled out all the circuitry in the charging dock and instead put a little low-voltage power supply; enough to charge the UPS.</p>
+
+<p>I then put a motor control board and a camera on an Raspberry Pi and a little Flask interface that I can connect to over my VPN from anywhere.</p>
+
+<p>The two orange tape marks help me line up on the charger. The little red light gets much brighter when it starts charging.</p>
+
+<p><img src="docs/twocatsandafish.png" width="100%"></p>
+
+<p>In future work, I'd like to</p>
+
+<ul>
+<li>[ ] Use the encoders on the wheels (pictured below) to get reliable speed control, for repeatable maneuvers.<ul>
+<li>These encoders work fine--put 5 volts across the red and black (IIRC) lines, and saw two square waves on a scope with two other lines.</li>
+<li>It would definitely be straightforward to write some interrupt code to integrate that motion to get a live speed readout I could use in a PID loop while driving.</li>
+<li>I got a picture of said scope output, but unfortunately it's not in my folder for the project.</li>
+</ul>
+</li>
+<li>[ ] Add some automatic behaviors, such as return-to-base (a much bigger project, and maybe not one for an RPI). Something like <a href="../Gudrun/index.html">this</a>.</li>
+</ul>
+
+<p><img src="F7436BF0-143F-4740-9D77-8214AD029CD3.jpeg" width="100%"></p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
