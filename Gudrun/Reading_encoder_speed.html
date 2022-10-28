@@ -52,8 +52,9 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../styles.css" rel="stylesheet">
-<link href="../colorful.css" rel="stylesheet">
+<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../colorful.css" rel="stylesheet">
+<link href="../styles.css" rel="stylesheet">
+<link href="../pygments.css" rel="stylesheet">
 <link href="../colorful.css" rel="stylesheet">
 <script>
                     function show(toExpand)
@@ -96,43 +97,44 @@
 
 <p>I then wrote some <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/encoder/encoder.ino">fairly simple firmware</a> to watch for these rising and falling edges with interrupts, and then either increment or decrement a counter depending on the state of the two square waves, and their previous state. I could have done this with a bunch of if statements, and it would likely be just as efficient as compilation, but I liked the elegance of doing a little simple bitwise math here, with <code>symbol = b + (a &lt;&lt; 1)</code>.</p>
 
-<pre class="codehilite"><code class="language-c++">volatile long count;
-volatile byte last_symbol, symbol, a, b;
+<div class="codehilite"><pre><span></span><span class="k">volatile</span> <span class="kt">long</span> <span class="n">count</span><span class="p">;</span>
+<span class="k">volatile</span> <span class="n">byte</span> <span class="n">last_symbol</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
 
-const int PIN_A = 2;
-const int PIN_B = 3;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_A</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_B</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
 
-// Current byte     -&gt;       0b00, 0b01, 0b10, 0b11
-// Previous byte:
-const byte fwd_sources[4] = {0b10, 0b00, 0b11, 0b01};
-const byte rev_sources[4] = {0b01, 0b11, 0b00, 0b10};
+<span class="c1">// Current byte     -&gt;       0b00, 0b01, 0b10, 0b11</span>
+<span class="c1">// Previous byte:</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">fwd_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b10</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b01</span><span class="p">};</span>
+<span class="k">const</span> <span class="n">byte</span> <span class="n">rev_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b01</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b10</span><span class="p">};</span>
 
-void isr() {
-    a = digitalRead(PIN_A);
-    b = digitalRead(PIN_B);
-    symbol = b + (a &lt;&lt; 1);
-    if(fwd_sources[symbol] == last_symbol) {
-        count++;
-    }
-    if(rev_sources[symbol] == last_symbol) {
-        count--;
-    }
-    last_symbol = symbol;   
-}
+<span class="kt">void</span> <span class="nf">isr</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">);</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">);</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">fwd_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">rev_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">count</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">last_symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="p">;</span>   
+<span class="p">}</span>
 
-void setup() {
-    Serial.begin(115200);
-    pinMode(PIN_A, INPUT_PULLUP);
-    pinMode(PIN_B, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(PIN_A), isr, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(PIN_B), isr, CHANGE);
-    count = 0;
-}
-void loop() {
-    if ( millis() % 10 == 0) {
-        Serial.println(count);
-    }
-}</code></pre>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="n">millis</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
 <p>That is, there are two distinct sequences of two-bit symbols for foward or reverse motion, and we can read these symbols into a single byte (a smaller type would also do, but apparently <a href="https://en.wikipedia.org/wiki/Units_of_information#Obsolete_and_unusual_units">semi-nibbles</a> aren't a standard compiler-recognized type). Since we can also index with these, I make two tiny look-up-tables for what byte we would be coming from, given the current byte as index, in the two hypothetical situations where we're going forward or reverse. If neither matches (probably damaged hardware, or a bad gap size between magnet and sensor, interference by the <code>Serial</code> call, or something like that), we do nothing.</p>
 

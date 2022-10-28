@@ -86,8 +86,9 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
     head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
     head.append(Tag('script', type="text/javascript", async='1', src="../mermaid.min.js"))
-    head.append(Tag('link', rel='stylesheet', href='../styles.css'))
     head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
+    head.append(Tag('link', rel='stylesheet', href='../styles.css'))
+    head.append(Tag('link', rel='stylesheet', href='../pygments.css'))
     head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
     
     # Add script for expanding entries.
@@ -216,7 +217,13 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
 
 def markdown_to_html(md):
     import markdown
-    return markdown.markdown(md, extensions=['codehilite', 'md_mermaid', 'fenced_code'])
+    from markdown.extensions.codehilite import CodeHiliteExtension
+    return markdown.markdown(md, extensions=[
+        #'codehilite',
+        CodeHiliteExtension(use_pygments=True),
+        'md_mermaid',
+        'fenced_code',
+    ])
 
 
 def parseOrLoadMarkdown(path, projectDir):
