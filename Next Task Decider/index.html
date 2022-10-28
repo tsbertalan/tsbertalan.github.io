@@ -93,25 +93,94 @@
     - [ ] 2c
 - [ ] 3</code></pre>
 
-<p>such that <code>nx.topological_sort</code> </p>
+<p>such that <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.dag.topological_sort.html"><code>nx.topological_sort</code></a> </p>
 
-<pre class="codehilite"><code class="language-python">for node in nx.topological_sort(copied_graph):
-    # ... do stuff</code></pre>
+<pre class="codehilite"><code class="language-python">def get_next(markdown_str):
+    partially_ordered_tree = get_tree(markdown_str)
+    fully_ordered_dag = create_ordered_dag(partially_ordered_tree)
+    for node in nx.topological_sort(fully_ordered_dag):
+        if not done(node):
+            return node</code></pre>
 
 <p>gives me exactly the ordering I want--the correct dependency sort order that surfaces just the leaf I want.</p>
 
+<p>I start with the <code>partially_ordered_tree</code> given by a simple parse of the markdown with whatever library.</p>
+
 <div class="mermaid">
 graph TD
-3 --&gt; 2c
-2c --&gt; 2b
+style 1 fill:#ddd,stroke:#555
+style root fill:#f8f8f8,stroke:#ccc
+style 2 fill:#f8f8f8,stroke:#ccc
+style 3 fill:#f8f8f8,stroke:#ccc
+style 2b fill:#f8f8f8,stroke:#ccc
+style 2c fill:#f8f8f8,stroke:#ccc
+root
+1 --&gt; root
+2 --&gt; root
 2b --&gt; 2
-3 --&gt; 2
-2 --&gt; 1
+2c --&gt; 2
+3 --&gt; root
 </div>
 
-<p>In theory, working within this framework will allow me to focus on a smaller part of each project at any given time, minimizing time taken to reorient when switching tasks. </p>
+<p>I copy graph this to start making modifications, and then, for each sibship in the original graph (you can't modify the graph while you're iterating over it, hence the copy), I draw an edge. Specifically, I draw an arrow from the deepest child of the upper node (including itself, and ordering sub-sibships last-to-first) to the deepest child of the lower node (including itself, ordering sub-shibships first-to-last).</p>
 
-<p>This project is for personal use, with no plan to change that. It grows organically as I find I need new features.</p>
+<div class="mermaid">
+graph TD
+style 1 fill:#ddd,stroke:#555
+style root fill:#f8f8f8,stroke:#ccc
+style 2 fill:#f8f8f8,stroke:#ccc
+style 3 fill:#f8f8f8,stroke:#ccc
+style 2b fill:#f8f8f8,stroke:#ccc
+style 2c fill:#f8f8f8,stroke:#ccc
+root
+1 --&gt; root
+2 --&gt; root
+1 --&gt; 2b
+2b --&gt; 2
+2c --&gt; 2
+3 --&gt; root
+</div>
+
+<div class="mermaid">
+graph TD
+style 1 fill:#ddd,stroke:#555
+style root fill:#f8f8f8,stroke:#ccc
+style 2 fill:#f8f8f8,stroke:#ccc
+style 3 fill:#f8f8f8,stroke:#ccc
+style 2b fill:#f8f8f8,stroke:#ccc
+style 2c fill:#f8f8f8,stroke:#ccc
+root
+1 --&gt; root
+2 --&gt; root
+1 --&gt; 2b
+2b --&gt; 2
+2c --&gt; 2
+2b --&gt; 2c
+3 --&gt; root
+</div>
+
+<div class="mermaid">
+graph TD
+style 1 fill:#ddd,stroke:#555
+style root fill:#f8f8f8,stroke:#ccc
+style 2 fill:#f8f8f8,stroke:#ccc
+style 3 fill:#f8f8f8,stroke:#ccc
+style 2b fill:#f8f8f8,stroke:#ccc
+style 2c fill:#f8f8f8,stroke:#ccc
+root
+1 --&gt; root
+2 --&gt; root
+1 --&gt; 2b
+2b --&gt; 2
+2c --&gt; 2
+2b --&gt; 2c
+2c --&gt; 3
+3 --&gt; root
+</div>
+
+<p>In theory, working within this framework will allow me to focus on a smaller part of each project at any given time, minimizing time taken to reorient when switching tasks. In practice, however, it seems that this tree analysis, while necessary, is the smallest part of deciding "what to do next". I have additional rules for transcluding in subtrees if a node is a link to another markdown file and nothing else. However, even allowing that this does some condensation work for us, really the my whole home dir still shouldn't be considered as one big tree with an unambiguous <code>next</code> task, but as a forest. Each has its own <code>next</code>, but ordering these is situationally-dependent.</p>
+
+<p>I'm still considering the right abstraction for ordering those <code>next</code>s contextually.</p>
 
 <script>mermaid.initialize({startOnLoad:true});</script>
 </div>
