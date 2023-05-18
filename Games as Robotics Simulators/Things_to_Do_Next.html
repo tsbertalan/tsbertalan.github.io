@@ -86,14 +86,18 @@
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
 <div class="demo-crumbs mdl-color-text--grey-500">
-<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>Things to Do Next</span>
+<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>Things to Do Next</span><a href="https://github.com/tsbertalan/FarmAutomation/tree/9a76ea859f3cdc7fd1207798fc1565d3ea5718fb" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Code as of 18 May</a>
 </div>
 <span></span><h1>Things to Do Next</h1>
 <span></span><p>Next things I need to do--I'll report here as I work on them:</p>
-<h5>Get Data out of the Game Engine</h5>
+<h5>Get data out of the game engine</h5>
 <ul class="task-list">
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Decide on which metrics we want to publish, and find them as properties of the undocumented <code>Vehicle</code> object.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Decide on which metrics we want to publish, and find them as properties of the undocumented <code>Vehicle</code> object. See my existing file <code>TelemRecSpec.lua</code>, which is able to print much of this for all loaded vehicles at once.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Write a singleton data-aggregator that all vehicles reference. It will periodically dump data (probably on some background thread) to either file or socket.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Find an efficient way to get that data into a running Python process. Probably dumping to/reading from a file isn't going to cut it.</li>
 </ul>
 <p>(That which is really important for my initial plans is bolded below.)</p>
 <p>For ego-data,</p>
@@ -113,43 +117,82 @@
 <li>... or, on script startup, the whole map so that we can use our pose to infer local ground plane.</li>
 <li>Nearby static obstacles' bounding boxes.</li>
 </ol>
-<h5>Get Control Input into the Game Engine</h5>
+<h5>Get control input into the game engine</h5>
 <ul class="task-list">
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Make a non-Lua interface to accept throttle/brake (no gears) and steering (angle or, better, torque).</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Clarify the mapping between these inputs and the ego-data that we read.</li>
 </ul>
-<p>To start with, this can be a socket or just a simple file that I'll read repeatedly. Eventually, it will be a ROS twist, or Ackerman steering command.</p>
-<p>For the clarification part, one issue I see is that there are multiple possible ways to provide input. A human playing with keyboard can go from nothing <span class="keys"><kbd class="key-w">W</kbd></span> (resp., <span class="keys"><kbd class="key-s">S</kbd></span>) to instantaneously turn on forward (reverse) drive torque at some set level.</p>
+<p>To start with, this can be a socket or just a simple file that I'll read repeatedly. Eventually, it will be a ROS twist, or Ackerman steering command. Probably this will integrate with the data-aggregator object mentioned above.</p>
+<p>For the clarification part, one issue I see is that there are multiple possible ways to provide input. A human playing with keyboard can go from nothing <span class="keys"><kbd class="key-w">W</kbd></span> (resp., ++s+) to instantaneously turn on forward (reverse) drive torque at some set level (or set the rate of torque increase/decrease to something fixed?). Alternately, if they use a pedal input or controller ... something else happens (not sure; I don't have those).</p>
+<p>For steering, using keys <span class="keys"><kbd class="key-a">A</kbd></span> and <span class="keys"><kbd class="key-d">D</kbd></span> probably starts the steering column moving at a set rate, while using a wheel or controller probably directly updates a steering set point.</p>
+<p>On the other hand, if a computer is doing the driving, I see in the code two different ways for steering to be actuated:</p>
 <ol>
-<li>steering "times" (which I think are effectively steering angle set point, under the assumption that steering changes at a constant rate until that time is reached); and</li>
-<li>specified-curvature paths, where the </li>
+<li>Steering "times" (which I think are effectively steering angle set point, under the assumption that steering changes at a constant rate until that time is reached). I think this is used by more "realistic" controllers like Courseplay or Autodrive.</li>
+<li>Specified-curvature paths, where the steering angle is (I think) immediately realized. I think this is used for on-rails controllers like the built-in road traffic.</li>
 </ol>
-<h5>Improve Point Clouds</h5>
+<h5>Train a dynamics model</h5>
+<p>Once I have ego-motion data coming out (and forcing information like ground plane and control inputs), I can start to </p>
+<ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Train a neural dynamics model.</li>
+</ul>
+<p>Given </p>
+<ol>
+<li>pose $\mathbf{x}$  (translational and rotational),</li>
+<li>pose rate $\dot{\mathbf{x}}$</li>
+<li>fixed pose-observer function $g$, and</li>
+<li>forcing inputs $\mathbf{u}$ (both controls and external forces--ultimately, all contacts, but, for now, just the relative orientation of and distance from local ground plane)</li>
+</ol>
+<p>this will be a network $F$ that will generate dynamics like this:</p>
+<p>$\frac{\mathrm{d} \mathbf{x}} {\mathrm{d} t} = \dot{\mathbf{x}}$
+$\frac{\mathrm{d}^2 \mathbf{x}}{\mathrm{d} t^2} = F(\dot{\mathbf{x}}, g(\mathbf{x}), \mathbf{u})$</p>
+<p>That is, the network outputs the accelerations only, <em>not</em> whole whole second-order ODE.</p>
+<p>Another important restriction is $g$, which I'll be constructing to ensure that we do <em>not</em> have free access to the absolute system state. Our dynamics must be invariant to pose. I'll let some selected information through, like the angle from the gravity vector (that is, the pitch and roll, really).</p>
+<p>This will be trained as a <a href="https://arxiv.org/abs/1806.07366">Neural ODE</a>, though probably with simple discretize-then-optimize differentiation rather than full adjoint backprop.
+- [ ] Skim [[Constrained Optimization and Optimal Control for Partial Differential Equations - Discretization of Optimal Control Problems.pdf]]</p>
+<h5>Try doing some MPC with our dynamics model</h5>
+<ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Try low-level MPC with the neural dynamics predictor.
+On an empty plain (no obstacles), generate some random but reasonably-feasible paths $\hat{\mathbf{x}}(t)$ (like some gentle arcs or forward-only Dubins curves), and then (at each timestep) find the optimal control trajectory $\mathbf{u}(t)$ such that, if we integrate the joint first-order ODE $(\dot{\mathbf{x}}, F)$, the resulting predicted trajectory is as close as possible to $\hat{\mathbf{x}}(t)$ pointwise.</li>
+</ul>
+<h5>Improve point clouds</h5>
 <ul class="task-list">
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 <li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Follow notes from [[FS22 2023-05-16]] to select a better depth network.</p>
-</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Follow notes from [[FS22 2023-05-16]] to select a better depth network.</li>
+</ul>
+<h5>Redo some of the above prototyping with ROS</h5>
+<ul class="task-list">
 <li class="task-list-item">
-<p><label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</p>
-</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use a Lua mod (see other entries) to</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish topics from the simulator</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish acceleration and orientation data as an IMU topic</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Maybe publish some sparse ray tracings as ultrasound topics.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Accept control commands</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Accept control commands as listened-to topics.</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use a standard global planner to find coarse paths around RTAB-Map's obstacles.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Either use an off-the-shelf MPC controller or write my own. Using off-the-shelf C++ ones mostly hinges on how difficult it ends up being to compile their code against Torch and so call my trained model from C++.<ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> <a href="https://github.com/rst-tu-dortmund/mpc_local_planner">This one</a> includes only <a href="https://github.com/rst-tu-dortmund/mpc_local_planner/tree/master/mpc_local_planner/include/mpc_local_planner/systems">carlike and differential-drive</a> dynamics models, but adding more seems straightforward, and the MPC part of the code code is simple to read.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> ACADO is probably the standard, and I think you can give it a general <a href="https://docs.ros.org/en/kinetic/api/acado/html/classDifferentialEquation.html"><code>DifferentialEquation</code></a> to use.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
