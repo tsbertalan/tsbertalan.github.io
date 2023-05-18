@@ -53,14 +53,14 @@
     float: right;
 }
 </style>
-<script type="text/x-mathjax-config">
+<script>
   MathJax = {
     tex: {
-      inlineMath: [['$', '$'], ["\(", "\)"]],
+      inlineMath: [['$', '$']],
       processEscapes: true,
     }
   }
-                    </script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" for="1"></script><script type="text/javascript" src="../mermaid.min.js" for="1"></script><link rel="stylesheet" href="../colorful.css">
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../pygments.css">
 <link rel="stylesheet" href="../colorful.css">
@@ -97,7 +97,11 @@
 
 <p>Kuramoto ODE:</p>
 
-<p>$\dot{\theta}<em>i = \frac{K}{N} \sum</em>{j} \mathbf{A}_{i,j} \sin(\theta_j - \theta_i)$</p>
+<p>$\dot{\theta}_i = \frac{K}{N} \sum_{j} \mathbf{A}_{i,j} \sin(\theta_j - \theta_i)$</p>
+
+<p>Maybe with the dumb slash-paren format?</p>
+
+<p>( \sin(\theta) )</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>
