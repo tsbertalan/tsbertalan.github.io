@@ -86,14 +86,14 @@
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
 <div class="demo-crumbs mdl-color-text--grey-500">
-<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>More Lua Work</span>
+<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>Things to Do Next</span>
 </div>
-<span></span><h1>More Lua Work</h1>
+<span></span><h1>Things to Do Next</h1>
 <span></span><p>Next things I need to do--I'll report here as I work on them:</p>
 <h5>Get Data out of the Game Engine</h5>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Decide on which metrics we want to publish, and find them as properties of the undocumented <code>Vehicle</code> object.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Decide on which metrics we want to publish, and find them as properties of the undocumented <code>Vehicle</code> object.</li>
 </ul>
 <p>(That which is really important for my initial plans is bolded below.)</p>
 <p>For ego-data,</p>
@@ -116,12 +116,12 @@
 <h5>Get Control Input into the Game Engine</h5>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Make a non-Lua interface to accept throttle/brake (no gears) and steering (angle or, better, torque).</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Make a non-Lua interface to accept throttle/brake (no gears) and steering (angle or, better, torque).</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Clarify the mapping between these inputs and the ego-data that we read.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Clarify the mapping between these inputs and the ego-data that we read.</li>
 </ul>
 <p>To start with, this can be a socket or just a simple file that I'll read repeatedly. Eventually, it will be a ROS twist, or Ackerman steering command.</p>
-<p>For the clarification part, one issue I see is that there are multiple possible ways to provide input. A human playing with keyboard can go from <span class="keys"><kbd class="key-w">W</kbd></span> (resp., <span class="keys"><kbd class="key-s">S</kbd></span>) to instantaneously turn on forward (reverse) drive torque at some set level.</p>
+<p>For the clarification part, one issue I see is that there are multiple possible ways to provide input. A human playing with keyboard can go from nothing <span class="keys"><kbd class="key-w">W</kbd></span> (resp., <span class="keys"><kbd class="key-s">S</kbd></span>) to instantaneously turn on forward (reverse) drive torque at some set level.</p>
 <ol>
 <li>steering "times" (which I think are effectively steering angle set point, under the assumption that steering changes at a constant rate until that time is reached); and</li>
 <li>specified-curvature paths, where the </li>
@@ -129,27 +129,27 @@
 <h5>Improve Point Clouds</h5>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 <li class="task-list-item">
-<p><input type="checkbox" disabled> Follow notes from [[FS22 2023-05-16]] to select a better depth network.</p>
+<p><label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Follow notes from [[FS22 2023-05-16]] to select a better depth network.</p>
 </li>
 <li class="task-list-item">
-<p><input type="checkbox" disabled> Set up ROS2 on this machine; maybe in a container.</p>
+<p><label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</p>
 </li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Use a Lua mod (see other entries) to</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use a Lua mod (see other entries) to</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Publish acceleration and orientation data as an IMU topic</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish acceleration and orientation data as an IMU topic</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Maybe publish some sparse ray tracings as ultrasound topics.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Maybe publish some sparse ray tracings as ultrasound topics.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Accept control commands</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Accept control commands</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
 </ul>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

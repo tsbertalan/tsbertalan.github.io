@@ -239,6 +239,7 @@ def markdown_to_html(md):
     import markdown
     from markdown.extensions.codehilite import CodeHiliteExtension
     import pymdownx.emoji
+    import pymdownx.tasklist
 
     # My own crude re-escaping of double backslashes, so my latex arrays look the same as they do in typora.
     if r'\\' in md:
@@ -247,7 +248,8 @@ def markdown_to_html(md):
         #'codehilite',
         CodeHiliteExtension(use_pygments=True),
         # 'markdown_checklist.extension',
-        'pymdownx.tasklist',
+        # 'pymdownx.tasklist',
+        pymdownx.tasklist.makeExtension(custom_checkbox=True),
         'md_mermaid',
         'fenced_code',
         NoItalUnderscExtension(),

@@ -96,16 +96,16 @@
 <p>A few major contributors to the speed improvements since my first attempts (see <a href="https://www.youtube.com/playlist?list=PLK-JvNE4ewRrrJNaqkiZPIMvaOxRqJYrx">this video playlist</a>):</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use an image capture library that can keep data on GPU.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use an image capture library that can keep data on GPU.</li>
 <li>At first, I thought I'd have to use PyCuda and some opengl calls to do this myself, but now I <em>think</em> that <a href="https://pypi.org/project/d3dshot/">d3dshot is doing this if you ask for <code>output="pytorch_gpu"</code>,</a> or, even better (we need floats for the next step), <code>"pytorch_float_gpu"</code>.</li>
 <li>
 <a href="https://pypi.org/project/dxcam/">dxcam claims to offer "seamless integration with ... PyTorch"</a>, and has more recent releases than d3dshot, but, in practice, d3dshot was faster. &#129335;&#8205;&#9794;  </li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Still, dxcam further claims to be capable of 240 Hz, so maybe I was using it wrong.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Still, dxcam further claims to be capable of 240 Hz, so maybe I was using it wrong.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Don't use Huggingface's provided pipelines, which will convert images to NumPy internally to do pre-processing like scaling. Instead, I recreated their preprocessing operations with torch operations on GPU ... as they actually <a href="https://huggingface.co/docs/transformers/tasks/monocular_depth_estimation#depth-estimation-inference-by-hand">suggest</a> (minus the GPU discussion).</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Don't use Huggingface's provided pipelines, which will convert images to NumPy internally to do pre-processing like scaling. Instead, I recreated their preprocessing operations with torch operations on GPU ... as they actually <a href="https://huggingface.co/docs/transformers/tasks/monocular_depth_estimation#depth-estimation-inference-by-hand">suggest</a> (minus the GPU discussion).</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use some profiling to see what steps are really the slow ones! <img src="Screenshot%202023-05-16%20191128.png" style="height: 210px">
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use some profiling to see what steps are really the slow ones! <img src="Screenshot%202023-05-16%20191128.png" style="height: 210px">
 </li>
 </ul>
 <h5>Camera Parameters</h5>
@@ -131,7 +131,7 @@
 <p>So, the best I can do is precompute $\hat{\mathbf{R}}^{-1} \cdot \mathbf{K}^{-1} \cdot [\vec{u}; 1]$ for now, until I</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Redefine camera extrinsics so that translation comes before rotation in backprojection.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Redefine camera extrinsics so that translation comes before rotation in backprojection.</li>
 </ul>
 <p>With this definition, I tried setting up some scenes with visually identifyable geometry so I could twiddle the parameters until they looked sorta right. E.g., the <a href="https://www.tesla.com/ownersmanual/modelx/en_us/GUID-91E5877F-3CD2-4B3B-B2B8-B5DB4A6C0A05.html">Tesla model X</a> is about 5 meters long, 1.7 high, and 2 wide without mirrors:</p>
 <p><img src="Screenshot%202023-05-16%20191214.png" alt="Screenshot 2023-05-16 191214" style="height: 210px"> <img src="Screenshot%202023-05-16%20191140.png" alt="Screenshot 2023-05-16 191140" style="height: 210px"></p>
@@ -141,7 +141,7 @@
 <p>However, I do think the next step here is to</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 </ul>
 <p>instead of eyeballing it. (This needs to be redone per vehicle since each requires a different crop of the whole view to exclude dashboard, since the segmentation models don't reliably detect it.)</p>
 <p>However, even at this stage,and even with all the very slow plotting driving the FPS down, the results are good enough ...</p>
@@ -150,21 +150,21 @@
 <p>... that I could imagine doing the following with them:</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Set up ROS2 on this machine; maybe in a container.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use a Lua mod (see other entries) to</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use a Lua mod (see other entries) to</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Publish acceleration and orientation data as an IMU topic</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Publish acceleration and orientation data as an IMU topic</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Maybe publish some sparse ray tracings as ultrasound topics.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Maybe publish some sparse ray tracings as ultrasound topics.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Accept control commands</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Accept control commands</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
 </ul>
 <p><em>(I checked all these off since I'm migrating them to the next journal entry [[FS22 2023-05-18]].)</em></p>
 <p>It might also be worth trying to find a monocular depth network that gives better predictions (<a href="https://huggingface.co/docs/transformers/model_doc/dpt">DPT</a> sounds good -- I might be able to use one trunk network to get both depth and segmentation). Alternatively (and this would take a bunch of time), I could use those sparse raytraces to make my own  sparsely-supervised fine-tuning dataset. At the very least, this might help to make the errors less biased (I think the GLPN tends to underestimate).</p>
