@@ -238,6 +238,7 @@ class NoItalUnderscExtension(Extension):
 def markdown_to_html(md):
     import markdown
     from markdown.extensions.codehilite import CodeHiliteExtension
+    import pymdownx.emoji
 
     # My own crude re-escaping of double backslashes, so my latex arrays look the same as they do in typora.
     if r'\\' in md:
@@ -252,6 +253,12 @@ def markdown_to_html(md):
         NoItalUnderscExtension(),
         # 'mdx_math',
         # 'pymdownx.arithmatex',
+        pymdownx.emoji.makeExtension(
+            emoji_generator=pymdownx.emoji.to_alt,
+            # emoji_index=pymdownx.emoji.emojione,  # Doesn't work with :man_shrugging:, THE MOST IMPORTANT EMOJI
+            # emoji_index=pymdownx.emoji.twemoji,
+            emoji_index=pymdownx.emoji.gemoji,
+        ),
     ])
 
 
