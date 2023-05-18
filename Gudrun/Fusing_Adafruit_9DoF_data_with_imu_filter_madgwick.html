@@ -90,51 +90,28 @@
 </div>
 <span></span><h1>Fusing Adafruit 9DoF data with imu_filter_madgwick</h1>
 <span></span><p><img src="imu_rot.gif" width="100%"></p>
-
 <p>In order to improve upon the visual-only odometry from RTAB-Map, I want to use <code>robot_localization</code> to fuse in accelerometer, gyroscope, wheel encoder/steering angle, and maybe magnetometer information. Step one in this is getting reliable accelerometer/gyroscope data from an IMU. I've had a <a href="https://www.adafruit.com/product/1714">Adafruit 9DoF IMU</a> on hand for a few years, without really making use of it. So, I soldered it to an Arduino Pro Micro, and bolted the breadboard holding both to the car's frame, in an orientation that was easy to express with a manually-constructed <code>static_transform_publisher</code> (visible in the gif above) (due to my sloppy construction, this might not be exactly ground-truth accurate, but it's Good Enough).</p>
-
 <p><a href="imu_package.jpg"><img src="imu_package.jpg" width="100%/"></a></p>
-
 <p>As an aide, these Pro Micros are quickly becoming a favorite of mine for making little USB peripherals. You can get them for about $8 each in packs of three; unlike Pro Minis, they have onboard USB; and they're faster than Nanos (Micro:Nano::Leonardo::Uno). Using a <a href="https://github.com/tsbertalan/gudrun/blob/master/src/gudrun_sensors/upload_with_specified_vid_pid.py">fairly ugly hack</a> of modifying the boards.txt file before flashing, and restoring the original afterwards, I can modify the vendor and product ID of the devices, and then <a href="https://github.com/tsbertalan/gudrun/blob/master/src/gudrun_sensors/get_usb_device_by_ID.py">search for the corresponding USB device later</a> when I want to connect it. So, I have now three of these little self-contained USB devices (IMU, encoders, and ESC interface) connected to the main board by six-inch cables (both ends for the IMU are visible in the above photo), and all can be unambiguously identified on every boot, though the <code>/dev/ttyAM*</code> order might change.</p>
-
 <p>I then started experimenting with some firmware (sorry, "sketches"). After experimenting a bit, I became dissatisfied with the <a href="https://github.com/adafruit/Adafruit_9DOF/blob/master/Adafruit_9DOF.cpp#L317">provided (stateless) sensor fusion code</a>. I may have just been using it wrong, but this code fuses the orientation into "Euler angles", without specifying what convention this used, or in what frame these angles were written, and didn't make any use of the on-board magnetometer.</p>
-
 <p>However, what is clear according to <a href="http://www.ros.org/reps/rep-0145.html">REP-145</a> is the "sensor frame" for the linear acceleration and angular velocity. Linear acceleration is a translation-like quantity, and so simple to transform. Angular velocity, despite the name, is <em>not</em>  a rotation-like quantity. "The rotational velocity is right handed with respect to the body axes, and independent of the orientation of the device." In fact, this is just what is already reported by the <a href="https://github.com/adafruit/Adafruit_LSM303DLHC/blob/master/Adafruit_LSM303_U.cpp#L180">accelerometer's</a> and <a href="https://github.com/adafruit/Adafruit_L3GD20_U/blob/master/Adafruit_L3GD20_U.cpp#L253">gyroscope's</a> respective <code>getEvent</code> methods.</p>
-
 <p>For that matter, this is also true of the <a href="https://github.com/adafruit/Adafruit_LSM303DLHC/blob/master/Adafruit_LSM303_U.cpp#L435">magnetometer</a>, though I've decided not to use it for the time being. To use it properly, I'd need to do some calibration to remove the influence of the motor's magnetism, which I don't want to do right now. (See below.)</p>
-
 <p>So, I wrote firmware that packaged up the accelerometer, gyroscope, and magnetometer into a 9-float struct, preceded that by an <code>S</code> byte, used <code>serial.write</code> to put that onto the USB, and then used an <code>E</code> byte to mark the end of the packet. I read this into Python on the PC side using <code>floats = struct.unpack('&lt;fffffffff', bytes)</code>, did some unit conversions, and populated my ROS messages with this data.</p>
-
 <p>To keep my options open, I also wrote code to publish the firmware-fused orientation, using <code>tf.transformations.quaternion_from_euler</code> to convert it to the quaternion expected for <code>Imu.orientation.[x,y,z,w]</code>. However, <code>quaternion_from_euler</code> rightly has a second argument for specifiying which of the 24 valid Euler conventions the input uses, and I don't know what to tell it. So, I suspect the generated quaternion might be garbage, but haven't checked. What I <em>have</em>  checked is the publish rate with and without this option enabled, and it seems that this brings us from 260 Hz down to about 150 Hz. So, it's disabled for now.</p>
-
 <p>I monitored the data from this pipeline-so-far in rqt, and found that, at rest, the three gyro components were nonzero. So, I subtracted their unadjusted quiescent levels before publishing. Without this, there was steady and visible heading-drift over time.</p>
-
 <p>Amazingly, after tuning the gyro offsets, I tried simply breathing on the chip, and this warming was enough to cause a sudden drift.</p>
-
 <p><img width="100%" src="breathed_on_gyro.png"></p>
-
 <p>Note of course that the vertical scale here is still quite small. (The horizontal axis in all these rqt plots is time in seconds.) It takes about four minutes to come back to its previous temperature, judging by the time it takes for the slope to return to its previous value. Interestingly, when I made the above plot, the slope before breathing was, due to my calibrations, nearly level on this 0.15 vertical scale. As I write this later in the evening, it's neutral slope is decreasing. At first, I thought this was due to the cooling of the evening, and that of course a temperature calibration curve should be written for this (which is what the the extra DoF in the Adafruit 10 DoF would be for). </p>
-
 <p><img width="100%" src="breathed%203.png"></p>
-
 <p>However, after I let it run over night, it seemed more that the varying slopes (in the orientation channel, at least) were just due to the regular, very slow rotation (with a period of about 1.4 hours).</p>
-
 <p><img width="100%" src="long%20drift.png"></p>
-
 <p>A better test then would be to record not the fused heading <code>/imu/data/orientation/z</code>, but the raw gyroscope data. Maybe later I'll try recording that over a 24 hour period. I'd plot, say, the absolute value of the gyro readings on a log scale.</p>
-
 <p><img width="100%" src="breathed_2.png"></p>
-
 <p>This quiescent drift would certainly go away if we incorporated a magnetometer, as I did temporarily for the following plot.</p>
-
 <p><img width="100%" src="return%20after%20breathing%20with%20mag.png"></p>
-
 <p>Here, I breathed on the sensor at about t=40 seconds, and it promptly returned to its previous orientation (and I expect it will hold this position as long as the magnetic field nearby holds steady).</p>
-
 <p><img width="100%" src="gyro%20no%20drift%20with%20mag.png"></p>
-
 <p>But that ostensibly "global" orientation is likely not one in which North is correct, since a big portion of the sensed magnetic field is due to the nearby permanent magnet in the car's motor. So, I'll need to calibrate that away before setting <code>use_mag=True</code> in the <code>imu_filter_madgwick</code> settings.</p>
-
 <p>Now, I need to transform the wheel speed/turning angle into something like a <code>Twist</code> odometry message, and get all this data into <code>robot_localization</code>.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

@@ -90,35 +90,21 @@
 </div>
 <span></span><h1>Timed-elastic-band path planning</h1>
 <span></span><p>I managed to get TEB local planner working on Gudrun, though, as expected, the visual-only odometry makes the whole stack brittle. But what really matters is that we now have some sort of autonomous waypoint-following. <a href="https://youtu.be/KhBlflgKe1Q">Full video here</a>.</p>
-
 <p>Code as of this writing is at <a href="https://github.com/tsbertalan/gudrun/commit/caddca1ca670a086d93dbaf3a1567bc4891dde9b">commit caddca1</a>.</p>
-
 <p><img alt="teb_demo" src="teb_demo.gif"></p>
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/KhBlflgKe1Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <p>This uses a fairly simple TF tree, half of which is internal transforms used by the Kinect.</p>
-
 <p><a href="frames.png"><img src="frames.png" width="100%"></a></p>
-
 <p>The rqt_graph is a little more complicated, but only superficially so.</p>
-
 <p><a href="rosgraph.svg"><img src="rosgraph.svg" width="100%"></a></p>
-
 <p>We have a chain of input from left to right--sensing (<code>/camera</code> and <code>/listen_to_encoder</code>), perception (<code>/rtabmap</code>), planning (<code>/move_base</code>, in particular <code>/move_base/TebLocalPlannerROS</code>), and finally actuation (<code>/ackermann_motor_controller</code>).</p>
-
 <p>The planning process goes roughly like this: </p>
-
 <p>RTAB-map collects the RGBD data from the Kinect 1 sensor (generated using OpenNI), and performs SLAM with this data. Odometry at the moment is purely visual--no information is incorporated from the Kinect's onboard accelerometer, or from the wheel encoders. RTAB-map classifies the points it finds into obstacles and ground (based, I believe, on the angle of the local tangent vector from vertical). The obstacle points are projected down into a 2D occupancy grid.</p>
-
 <p><code>/move_base</code> subscribes to this grid topic, and then uses a heuristic planner (think A*) to generate a rough "global" path through this grid to the goal.</p>
-
 <p>The TEB ("timed elastic band") looks a short distance along this global plan, and then creates a more kinematically realistic local plan that approximates this snippet of the global plan. This is done through a few iterations of an optimizer, which considers many objectives together. The resulting local plans obey, among other things, the minimum turning radius parameter for the robot, which is crucial for Ackermann steering. So, these plans often include multi-point turn maneuvers.</p>
-
 <p>One of the objectives the TEB planner seeks to satisfy is a lack of collisions! The naive way to compute these is to check whether our bounding box would include any of points in the occupancy grid. Instead, the points nearest to the trajectory are coalesced into local clusters, and these are fit with polygonal shapes using a [[RANSAC|RANSAC]] (outlier-rejecting) regressor. This results in a much smaller, presumably geometrically analytical, set of conditions to check for collisions.</p>
-
 <p>Finally, we take the <code>/cmd_vel</code> topic emitted by <code>/move_base</code> (this should be just the first control action along the TEB local path calculated at this moment), transform it into equivalent Ackermann steering angle and rear axle velocity, and pass this on to our speed/steering controller. This uses the handy <a href="https://pypi.org/project/simple-pid/">simple-pid Python package</a> to keep to an assigned speed set point, though we restrict the controller output to be positive (and only give it absolute speed feedback), and instead switch the sign of the throttle according to the requested drive direction. If I had access to both channels from the encoder disk magnet, I could additionally report instantaneous direction of movement as well as magnitude, and the controller could handle the whole thing. But, anyway, this basically how it works in a real car (you can't just go instantly from forward to reverse, though braking (negative "throttle" with positive velocity) is a thing).</p>
-
 <p>I think I'll need to improve the odometry before I build too much more on this somewhat shaky base, but before I do that, I'll have to try it outside at least once!</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

@@ -90,21 +90,13 @@
 </div>
 <span></span><h1>Reading encoder speed</h1>
 <span></span><p>After my old encoder (salvaged from a stripped-out <a href="https://www.pololu.com/product/3207">Pololu gearmotor</a>) flew apart under centrifugal strain when I accidentally set the motors to full-speed with my bad ESC code, I made a replacement using <a href="https://www.amazon.com/dp/B07K8WHKWX">this kit, also from Pololu</a>.</p>
-
 <p>Since the shaft of the motor was a little too big for the toroidal magnet, I <em>gently</em> drilled it out a bit. But then the hole was a little too large. Hoping for the best (so far, my luck seems to be holding), I simply super-glued it to the shaft.</p>
-
 <p>The next problem was mounting the Hall-effect sensor carrier board near enough to magnet to pick it up. I had already discarded the idea of mounting it under the magnet, as designed (I guess I might have just gotten lucky with the mounting orientation), since I wanted to keep this thing as disassembleable as possible. I also didn't want to create a frame and glue the board in place like I did the first time, but have to carefully adjust the gap while the glue dried.</p>
-
 <p>Instead, I settled on a design I'm somewhat proud of, that has two adjustable spring-driven height screws. The white plastic pieces, like the struts I cut to replace the car's shocks, are from the housing of a discarded miniblind that I salvaged. A dremel-like cutter, a cordless drill, some glue, and some assorted small pieces of mounting hardware like this are so far an able replacement for a 3D printer for me. In the first design, I warmed the miniblind-plastic with a lighter and then bent it into the U-shape for the bracket, but this tended to weaken it at the corners (and was also a permanent attachment to the motor). Here, I can remove the two side bolts and detach all of the assembly except for the magnet and the two glued-on white side posts.</p>
-
 <p><img width="100%" src="encoder_adjustable.jpg"></p>
-
 <p>I verified that the sensor board was in fact producing a reasonable square wave as the motor spun, and on both channels.</p>
-
 <p><img width="100%" src="oscilloscope-crop.jpg"></p>
-
 <p>I then wrote some <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/encoder/encoder.ino">fairly simple firmware</a> to watch for these rising and falling edges with interrupts, and then either increment or decrement a counter depending on the state of the two square waves, and their previous state. I could have done this with a bunch of if statements, and it would likely be just as efficient as compilation, but I liked the elegance of doing a little simple bitwise math here, with <code>symbol = b + (a &lt;&lt; 1)</code>.</p>
-
 <div class="codehilite"><pre><span></span><span class="k">volatile</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
 <span class="k">volatile</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">last_symbol</span><span class="p">,</span><span class="w"> </span><span class="n">symbol</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 
@@ -144,10 +136,9 @@
 <span class="p">}</span>
 </pre></div>
 
+
 <p>That is, there are two distinct sequences of two-bit symbols for foward or reverse motion, and we can read these symbols into a single byte (a smaller type would also do, but apparently <a href="https://en.wikipedia.org/wiki/Units_of_information#Obsolete_and_unusual_units">semi-nibbles</a> aren't a standard compiler-recognized type). Since we can also index with these, I make two tiny look-up-tables for what byte we would be coming from, given the current byte as index, in the two hypothetical situations where we're going forward or reverse. If neither matches (probably damaged hardware, or a bad gap size between magnet and sensor, interference by the <code>Serial</code> call, or something like that), we do nothing.</p>
-
 <p>I then dumped this count periodically to serial. For this, I just used <code>Serial.prinln</code>. For the various Arduino data interfaces in this project, I seem to use a different ad-hoc protocol each time, sometimes with good efficiency (sending structs as byte sequences), sometimes reliability (requiring valid checksum after the . data). This way has neither of these properties. Eventually, I should unify all these in a tiny protocol, which could probably sit in a single short header file, and accompanying Python module. But whatever, this is good enough for now.</p>
-
 <p>In the <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/listen_to_encoder.py">receiving Python code</a>, I continuously append read <code>count</code> values and corresponding times-of-reception into two <code>collections.deque</code> objects, to keep a rotating buffer, and then use <code>counts_per_second, unused_intercept = np.polyfit(self.last_times, self.last_counts, 1)</code> to fit a line to these, whose slope is the desired speed. The size of the two <code>deque</code>s therefore implicitly smooths the incoming data. I then do some unit conversions to get meters-per-second, and send this off to a <code>Float32</code> ROS topic.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

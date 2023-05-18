@@ -90,111 +90,82 @@
 </div>
 <span></span><h1>GPU Perf+Segmented Point Clouds</h1>
 <span></span><h5>Performance</h5>
-
 <p>Went through the pipeline and made sure everything stays on the GPU until visualization time. Video <a href="https://youtu.be/LDE2x235soo">here</a>.</p>
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LDE2x235soo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 <p>A few major contributors to the speed improvements since my first attempts (see <a href="https://www.youtube.com/playlist?list=PLK-JvNE4ewRrrJNaqkiZPIMvaOxRqJYrx">this video playlist</a>):</p>
-
-<ul class="checklist">
-<li>
+<ul class="task-list">
+<li class="task-list-item">
 <input type="checkbox" disabled checked> Use an image capture library that can keep data on GPU.</li>
 <li>At first, I thought I'd have to use PyCuda and some opengl calls to do this myself, but now I <em>think</em> that <a href="https://pypi.org/project/d3dshot/">d3dshot is doing this if you ask for <code>output="pytorch_gpu"</code>,</a> or, even better (we need floats for the next step), <code>"pytorch_float_gpu"</code>.</li>
 <li>
 <a href="https://pypi.org/project/dxcam/">dxcam claims to offer "seamless integration with ... PyTorch"</a>, and has more recent releases than d3dshot, but, in practice, d3dshot was faster. :man_shrugging:</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Still, dxcam further claims to be capable of 240 Hz, so maybe I was using it wrong.</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled checked> Don't use Huggingface's provided pipelines, which will convert images to NumPy internally to do pre-processing like scaling. Instead, I recreated their preprocessing operations with torch operations on GPU ... as they actually <a href="https://huggingface.co/docs/transformers/tasks/monocular_depth_estimation#depth-estimation-inference-by-hand">suggest</a> (minus the GPU discussion).</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled checked> Use some profiling to see what steps are really the slow ones! <img src="Screenshot%202023-05-16%20191128.png" style="height: 220px">
 </li>
 </ul>
-
 <h5>Camera Parameters</h5>
-
 <p>I then spent some time playing with camera parameters (focal lengths, sensor center definition, and extrinsic of rotation and translation) to backproject the depth data, colored by semantic segmentation, the camera's frame in physical 3D coordinates. (<a href="https://www.youtube.com/watch?v=8VyPjRhbJlo&amp;t=5200s">video</a>)</p>
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/8VyPjRhbJlo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 <p>For my reference, the relevant equations are</p>
-
 <p>$\vec x = [\mathbf{R} | \vec T] \cdot \mathbf{K}^{-1} \cdot [\vec{u}; 1] d$</p>
-
 <p>where</p>
-
 <ol>
 <li>$\vec x$ is the camera's 3d position;</li>
 <li>the extrinsic parameters are</li>
-<li>$\mathbf{R} = \left[ \begin{array}{ccc} c_z c_y,&amp; c_z s_y s_x - s_z c_x, &amp;c_z s_y c_x + s_z s_x \ s_z c_y,&amp;s_z s_y s_x + c_z c_x,&amp; s_z, s_y, c_x - c_z s_x \ -s_y,&amp;c_y s_x,&amp;c_y c_x \end{array} \right]$ , the $3\times3$  rotation defined by sines $s_i$ and cosines $c_i$ of the $i=x,y,z$ Euler angles,</li>
+<li>$\mathbf{R} = \begin{bmatrix} c_z c_y,&amp; c_z s_y s_x - s_z c_x, &amp;c_z s_y c_x + s_z s_x \\ s_z c_y,&amp;s_z s_y s_x + c_z c_x,&amp; s_z, s_y, c_x - c_z s_x \\ -s_y,&amp;c_y s_x,&amp;c_y c_x \end{bmatrix} $ , the $3\times3$  rotation defined by sines $s_i$ and cosines $c_i$ of the $i=x,y,z$ Euler angles,</li>
 <li>and $\vec T$, the $3\times 1$ translation of the camera;</li>
-<li>$\mathbf{K} = \left[ \begin{array}{ccc} \ell_u, &amp; 0, &amp; u_0 \ 0, &amp; \ell_v, &amp; v_0 \ 0,&amp;0,&amp;1 \end{array} \right]$ is the (intrinsic) camera matrix;</li>
+<li>$\mathbf{K} =  \begin{bmatrix} \ell_u, &amp; 0, &amp; u_0 \\ 0, &amp; \ell_v, &amp; v_0 \\ 0,&amp;0,&amp;1 \end{bmatrix} $ is the (intrinsic) camera matrix;</li>
 <li>$\vec u$ is the $2\times1$ images space coordinates (defined as going from 0 to 1, from top left to bottom right);</li>
 <li>and $d$ is the scalar depth (this equation is defined per pixel).</li>
 </ol>
-
 <p>So, I can precompute $[\mathbf{R} | \vec T] \cdot \mathbf{K}^{-1} \cdot [\vec{u}; 1]$ and, at runtime, just multiply pointwise by $d$, right?</p>
-
 <p>Unfortunately, I'm a doofus, and I instead wrote</p>
-
 <p>$\hat{\vec{T}} + \hat{\mathbf{R}}^{-1} \cdot \mathbf{K}^{-1} \cdot [\vec{u}; 1] d$</p>
-
 <p>That is, I backproject, unrotate, and then translate instead of backproject, translate, and then rotate.</p>
-
 <p>So, the best I can do is precompute $\hat{\mathbf{R}}^{-1} \cdot \mathbf{K}^{-1} \cdot [\vec{u}; 1]$ for now, until I</p>
-
-<ul class="checklist">
-<li>
+<ul class="task-list">
+<li class="task-list-item">
 <input type="checkbox" disabled> Redefine camera extrinsics so that translation comes before rotation in backprojection.</li>
 </ul>
-
 <p>With this definition, I tried setting up some scenes with visually identifyable geometry so I could twiddle the parameters until they looked sorta right. E.g., the <a href="https://www.tesla.com/ownersmanual/modelx/en_us/GUID-91E5877F-3CD2-4B3B-B2B8-B5DB4A6C0A05.html">Tesla model X</a> is about 5 meters long, 1.7 high, and 2 wide without mirrors:</p>
-
 <p><img src="Screenshot%202023-05-16%20191214.png" alt="Screenshot 2023-05-16 191214" style="height: 220px"> <img src="Screenshot%202023-05-16%20191140.png" alt="Screenshot 2023-05-16 191140" style="height: 220px"></p>
-
 <p>Definitions aside, one thing I found helpful was to realize that there's a relationship</p>
-
 <p>$\ell_i = \frac{\Delta_i}{2 \tan (\alpha_i / 2)}$</p>
-
 <p>between the focal length $\ell_i$ in direction $i=u,v$ and (1) the corresponding sensor dimension $\Delta_i$ and (2) field of view $\alpha_i$. Since $\alpha_i=\pi/3$ is one of the few things I actually do know from the game, I can enter this, and then adjust $\Delta_i$ instead of $\ell_i$, which seems to be less sensitive in hand-tuning.</p>
-
 <p>However, I do think the next step here is to</p>
-
-<ul class="checklist">
-<li>
+<ul class="task-list">
+<li class="task-list-item">
 <input type="checkbox" disabled> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 </ul>
-
 <p>instead of eyeballing it. (This needs to be redone per vehicle since each requires a different crop of the whole view to exclude dashboard, since the segmentation models don't reliably detect it.)</p>
-
 <p>However, even at this stage,and even with all the very slow plotting driving the FPS down, the results are good enough ...</p>
-
 <p><img src="Screenshot%202023-05-16%20191241.png" style="height: 220px"> <img src="Screenshot%202023-05-16%20191223.png" style="height: 220px"></p>
-
 <p>... that I could imagine doing the following with them:</p>
-
-<ul class="checklist">
-<li>
+<ul class="task-list">
+<li class="task-list-item">
 <input type="checkbox" disabled> Set up ROS2 on this machine; maybe in a container.</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Use a Lua mod (see other entries) to</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Publish acceleration and orientation data as an IMU topic</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Maybe publish some sparse ray tracings as ultrasound topics.</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Accept control commands</li>
-<li>
+<li class="task-list-item">
 <input type="checkbox" disabled> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
 </ul>
-
 <p>It might also be worth trying to find a monocular depth network that gives better predictions (<a href="https://huggingface.co/docs/transformers/model_doc/dpt">DPT</a> sounds good?). Alternatively (and this would take a bunch of time), I could use those sparse raytraces to make my own  sparsely-supervised fine-tuning dataset. At the very least, this might help to make the errors less biased (I think the GLPN tends to underestimate).</p>
-
 <p>It could be useful to make use of successive frames, but I can't find any easily available pre-trained nets that do this. <a href="https://github.com/facebookresearch/consistent_depth">This Facebook repo</a> uses single-frame neural depth as the prior for a more conventional SfM method. That might not be too hard to get going, but it seems superficially to be equivalent to just giving the bad point cloud to RTAB-Map with appropriate uncertainties.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

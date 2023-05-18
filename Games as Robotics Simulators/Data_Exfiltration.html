@@ -90,7 +90,6 @@
 </div>
 <span></span><h1>Data Exfiltration</h1>
 <span></span><p>Thanks to the Lua extension in VSC from user sumneko, I can F12 my way to the superclass constructor <code>AIDriveStrategyFieldWorkCourse.new</code>. Thanks to Copilot, I can speak Lua well enough to</p>
-
 <div class="codehilite"><pre><span></span><span class="kr">function</span> <span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">customMt</span><span class="p">)</span>
    <span class="c1">-- We'll save telemetry data to a file as we drive:</span>
     <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="s2">"telemetry.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span>
@@ -113,8 +112,8 @@
 <span class="kr">end</span>
 </pre></div>
 
-<p>And voila, I have a CSV file.</p>
 
+<p>And voila, I have a CSV file.</p>
 <p><img src="telemetry_2023-04-19-16-39.csv.png" width="100%">
 That was all <em>so</em> much easier than in GTAV with C++ compilation cycles and those terrible (but brilliant) ScriptHookV memory hacks to get data out and commands in.</p>
 </div>
