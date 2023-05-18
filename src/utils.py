@@ -1,5 +1,5 @@
 # import xml.etree.ElementTree as ET
-from lxml import etree
+from lxml import etree, html as lxml_html
 from os.path import dirname, join, basename
 from shutil import copy
 
@@ -41,6 +41,21 @@ def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
     return outTup
 
 
+def add_mathjax(head):
+
+    # MathJax needs special help to do inline mode??
+    head.append(Tag('script',
+                    tagText='''
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  ''', parseTagText=False))
+    head.append(Tag('script', type="text/javascript", id="MathJax-script", async_=None, src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))
+
+
 def Tag(*args, **kwargs):
     attribToAdd = {}
     
@@ -59,6 +74,8 @@ def Tag(*args, **kwargs):
     disp = False
     if 'disp' in kwargs:
         disp = kwargs.pop('disp')
+
+    boolean_elems = []
     
     for k, v in list(kwargs.items()):
         if k == 'cls':
@@ -66,12 +83,13 @@ def Tag(*args, **kwargs):
         if k == 'for_':
             attribToAdd['for'] = kwargs.pop(k)
         if k == 'async_':
-            attribToAdd['for'] = kwargs.pop(k)
+            attribToAdd['async'] = kwargs.pop(k)
         if '____' in k:
             newKey = k.replace('____', '-')
             attribToAdd[newKey] = kwargs.pop(k) 
-    tag = etree.Element(*args, **kwargs)
-    tag.attrib.update(attribToAdd)
+    tag = lxml_html.Element(*args, **kwargs)
+    for k, v in attribToAdd.items():
+        tag.set(k, v)
     
     if tagText is not None:
         if not parseTagText:

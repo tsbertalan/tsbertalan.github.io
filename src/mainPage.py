@@ -5,7 +5,7 @@
 '''
 
 from page import Html
-from utils import child, Tag, Div, parseAnonymousHTML, textArea, textField
+from utils import child, Tag, Div, parseAnonymousHTML, textArea, textField, add_mathjax
 import datetime
 
 def idSanitize(s):
@@ -39,7 +39,6 @@ def portfolioCard(title, supportingText, linkDest=None, imgSrc=None, imgAlt=''):
     out.append(Div(cls='mdl-card__supporting-text', tagText=supportingText))
     return out
 
-
 def index(cards=[]):
     html = Html(lang='en')
     head = child(html, 'head')
@@ -48,21 +47,9 @@ def index(cards=[]):
     head.append(Tag('title', tagText='Tom Bertalan'))
     head.append(Tag('link', rel='stylesheet', href='styles.css'))
     head.append(Tag('link', rel='stylesheet', href='colorful.css'))
+
+    add_mathjax(head)
     
-    # MathJax needs special help to do inline mode??
-    head.append(Tag('script',
-                    type="text/x-mathjax-config",
-                    tagText='''
-  MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ["\\(", "\\)"]],
-      processEscapes: true,
-    }
-  }
-                    ''',
-                    parseTagText=False,
-                    ))
-    head.append(Tag('script', type="text/javascript", async_='1', src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))
 
     layout = Div(cls='mdl-layout mdl-js-layout')
     body.append(layout)

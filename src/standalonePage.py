@@ -4,7 +4,7 @@ Created on Dec 8, 2016
 @author: tsbertalan
 '''
 from page import Html
-from utils import Tag, child, Div, parseAnonymousHTML, tostring
+from utils import Tag, child, Div, parseAnonymousHTML, tostring, add_mathjax
 from lxml.etree import _Element
 
 from os import listdir
@@ -84,23 +84,8 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
     html = Html()
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
-    
-    # MathJax needs special help to do inline mode??
-    head.append(Tag('script',
-                    type="text/x-mathjax-config",
-                    tagText='''
-  MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ["\\(", "\\)"]],
-      processEscapes: true,
-    }
-  }
-                    ''',
-                    parseTagText=False,
-                    ))
-
-    head.append(Tag('script', type="text/javascript", async_='1', src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))
-    head.append(Tag('script', type="text/javascript", async_='1', src="../mermaid.min.js"))
+    add_mathjax(head)
+    head.append(Tag('script', type="text/javascript", async_=None, src="../mermaid.min.js"))
     head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
     head.append(Tag('link', rel='stylesheet', href='../styles.css'))
     head.append(Tag('link', rel='stylesheet', href='../pygments.css'))
@@ -231,6 +216,22 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
     
     return html, filePaths
 
+from markdown.inlinepatterns import InlineProcessor
+from markdown.extensions import Extension
+import xml.etree.ElementTree as etree
+
+
+class NoItalUndersclineProcessor(InlineProcessor):
+    def handleMatch(self, m, data):
+        # Do nothing.
+        return None, None, None
+
+class NoItalUnderscExtension(Extension):
+    def extendMarkdown(self, md):
+        USC_PATTERN = r'_(.*?)'  # like abcd_
+        # Replace the existing underscore patterns with our No-Op.
+        md.inlinePatterns.register(NoItalUndersclineProcessor(USC_PATTERN, md), 'strong2', 175)
+        md.inlinePatterns.register(NoItalUndersclineProcessor(USC_PATTERN, md), 'emphasis2', 175)
 
 def markdown_to_html(md):
     import markdown
@@ -241,6 +242,7 @@ def markdown_to_html(md):
         'markdown_checklist.extension',
         'md_mermaid',
         'fenced_code',
+        NoItalUnderscExtension(),
     ])
 
 
