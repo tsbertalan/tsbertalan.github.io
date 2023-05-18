@@ -88,7 +88,7 @@ for projectDir in projectDirs:
         for entry in entries:
             if not isinstance(entry, dict):
                 raise ValueError('Each entry must be a dict with at least a "content" key.')
-            entry['content'] = parseOrLoadMarkdown(entry['content'], projectDir)
+            entry['html'] = parseOrLoadMarkdown(entry['content'], projectDir)
 
     else:
         continue  # Skip this project if there's not /*doc*/ subfolder.
@@ -167,7 +167,7 @@ for projectDir in projectDirs:
         for k, entry in enumerate(entries):
             articleHtml, _unused = article(
                 home_title_link,
-                markdown_to_html(entry['content']),
+                entry['html'],
                 heading=entry['title'],
                 breadcrumbs=[
                     utils.Tag('a', href='../index.html', tagText='Home'), 

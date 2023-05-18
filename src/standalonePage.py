@@ -226,6 +226,7 @@ class NoItalUndersclineProcessor(InlineProcessor):
         # Do nothing.
         return None, None, None
 
+
 class NoItalUnderscExtension(Extension):
     def extendMarkdown(self, md):
         USC_PATTERN = r'_(.*?)'  # like abcd_
@@ -233,16 +234,24 @@ class NoItalUnderscExtension(Extension):
         md.inlinePatterns.register(NoItalUndersclineProcessor(USC_PATTERN, md), 'strong2', 175)
         md.inlinePatterns.register(NoItalUndersclineProcessor(USC_PATTERN, md), 'emphasis2', 175)
 
+
 def markdown_to_html(md):
     import markdown
     from markdown.extensions.codehilite import CodeHiliteExtension
+
+    # My own crude re-escaping of double backslashes, so my latex arrays look the same as they do in typora.
+    if r'\\' in md:
+        md = md.replace(r'\\', r'\\\\')
     return markdown.markdown(md, extensions=[
         #'codehilite',
         CodeHiliteExtension(use_pygments=True),
-        'markdown_checklist.extension',
+        # 'markdown_checklist.extension',
+        'pymdownx.tasklist',
         'md_mermaid',
         'fenced_code',
         NoItalUnderscExtension(),
+        # 'mdx_math',
+        # 'pymdownx.arithmatex',
     ])
 
 

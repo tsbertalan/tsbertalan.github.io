@@ -143,8 +143,6 @@ def writePage(html, files, fname, fromPath, DEBUG=False):
             print('    Copying from %s to %s.' % (fr, to))
         copy(fr, to)
         
-    
-
 
 def showPage(fname, browser='google-chrome'):    
     from os import system
