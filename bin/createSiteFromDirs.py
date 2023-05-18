@@ -1,12 +1,21 @@
 #!/usr/bin/env python2
 from __future__ import print_function
 from os import listdir, mkdir, makedirs
-from os.path import basename, join, isdir, dirname, exists
+from os.path import basename, join, isdir, dirname, exists, realpath
 import codecs
-from shutil import copy
+from shutil import copy, SameFileError
 from subprocess import check_output, CalledProcessError
 import markdown
 import json
+
+import sys
+HERE = realpath(dirname(__file__))
+sys.path.append(join(HERE, '..', 'src'))
+
+# Change working directory to just above the script's directory.
+from os import chdir
+chdir(join(HERE, '..'))
+
 
 from standalonePage import article, parseOrLoadMarkdown, markdown_to_html
 import utils
@@ -29,9 +38,9 @@ def mkdir_p(path):
 
 
 baseDir = '/home/tsbertalan/Documents/Projects'
-archiveDir = '/home/tsbertalan/Documents/ArchivedProjects'
-dirs = baseDir, archiveDir, '/home/tsbertalan/Documents/DelayedProjects'
-wwwDir = '../'
+archiveDir = '/home/tsbertalan/Documents/Archived Projects'
+dirs = baseDir, archiveDir, '/home/tsbertalan/Documents/Delayed Projects'
+wwwDir = join(HERE, '..')
 
 def listdirs(folder):
     return [
@@ -77,6 +86,8 @@ for projectDir in projectDirs:
         entries = config.get('entries', [])
         extra_files = config.get('extra files', [])
         for entry in entries:
+            if not isinstance(entry, dict):
+                raise ValueError('Each entry must be a dict with at least a "content" key.')
             entry['content'] = parseOrLoadMarkdown(entry['content'], projectDir)
 
     else:
@@ -90,9 +101,9 @@ for projectDir in projectDirs:
     destinationFileLocation = join(wwwDir, baseProjectName, 'index.html')
     linkDestination = join(baseProjectName, 'index.html')
     try:
-        mkdir(dirname(destinationFileLocation))
-    except OSError:
-        pass
+        makedirs(dirname(destinationFileLocation), exist_ok=True)
+    except OSError as e:
+        print(f'Failed to make directory {dirname(destinationFileLocation)}: {e}')
 
     # Copy hero image to output folder.        
     if hero is None:
@@ -111,7 +122,8 @@ for projectDir in projectDirs:
         # Try to construct a github link.
         repo = None
         try:
-            remotes = [l for l in check_output(["git", "remote", "-v"], cwd=projectDir).split('\n') if 'github' in l and 'bertalan' in l]
+            cmd_output = check_output(["git", "remote", "-v"], cwd=projectDir).decode('utf-8').split('\n')
+            remotes = [l for l in cmd_output if 'github' in l and 'bertalan' in l]
             if len(remotes) > 0:
                 repo = 'http://github.com/' + remotes[0].split()[1][15:][:-4]
         except CalledProcessError:
@@ -185,8 +197,12 @@ for projectDir in projectDirs:
                         mkdir_p(dest_dir)
                     except OSError:
                         pass
-                    copy(src, dest)
-                    print('Putting file in %s.' % dest)
+                    try:
+                        copy(src, dest)
+                        print('Putting file in %s.' % dest)
+                    except SameFileError as e:
+                        print('Skipping same-file copy of %s to %s.' % (src, dest))
+                    
 
 
     else:
@@ -200,7 +216,7 @@ for projectDir in projectDirs:
     else:
         cards.append(card)
         
-starredCards = [card for (starred, card) in sorted(starredCards)]
+starredCards = [card for (starred, card) in sorted(starredCards, key=lambda starnumber_card: starnumber_card[0])]
 
 starredCards.extend(cards)
 

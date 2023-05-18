@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-source ${HOME}/.virtualenvs/tomsbdotnet/bin/activate
+HERE=$(dirname $0)
+source ${HOME}/.virtualenvs/tomsbdotnetPy3/bin/activate
 cd bin
 export PYTHONPATH=`pwd`/../src/
 python createSiteFromDirs.py

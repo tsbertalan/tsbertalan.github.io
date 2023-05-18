@@ -84,12 +84,29 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
     html = Html()
     head = child(html, 'head')
     head.append(Tag('style', tagText=articleStyle(), parseTagText=False))
-    head.append(Tag('script', type="text/javascript", async='1', src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"))
-    head.append(Tag('script', type="text/javascript", async='1', src="../mermaid.min.js"))
+    
+    # MathJax needs special help to do inline mode??
+    head.append(Tag('script',
+                    type="text/x-mathjax-config",
+                    tagText='''
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      processEscapes: true,
+    }
+  }
+                    ''',
+                    parseTagText=False,
+                    ))
+
+    head.append(Tag('script', type="text/javascript", async_='1', src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"))
+    head.append(Tag('script', type="text/javascript", async_='1', src="../mermaid.min.js"))
     head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
     head.append(Tag('link', rel='stylesheet', href='../styles.css'))
     head.append(Tag('link', rel='stylesheet', href='../pygments.css'))
     head.append(Tag('link', rel='stylesheet', href='../colorful.css'))
+
+
     
     # Add script for expanding entries.
     head.append(Tag('script',
@@ -221,6 +238,7 @@ def markdown_to_html(md):
     return markdown.markdown(md, extensions=[
         #'codehilite',
         CodeHiliteExtension(use_pygments=True),
+        'markdown_checklist.extension',
         'md_mermaid',
         'fenced_code',
     ])

@@ -1,4 +1,5 @@
-markdown
+markdown<3.2
 pygments
 md-mermaid
 lxml
+markdown-checklist

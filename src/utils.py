@@ -23,7 +23,7 @@ def child(element, tag):
      
             
 def tostring(element):
-    return etree.tostring(element, method='html', pretty_print=True).replace('##AMPERSAND##', '&')
+    return etree.tostring(element, method='html', pretty_print=True).decode('utf-8').replace('##AMPERSAND##', '&')
 
 
 def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
@@ -33,11 +33,11 @@ def parseAnonymousHTML(toparse, disp=False, keepEnclosingP=False):
         out = out[0]
     outTup = out.text, [c for c in out], out.tail
     if disp:
-        print 'Returning', outTup[0], '['
+        print('Returning', outTup[0], '[')
         for c in outTup[1]:
-            print tostring(c)
-            print ','
-        print ']', outTup[2]
+            print(tostring(c))
+            print(',')
+        print(']', outTup[2])
     return outTup
 
 
@@ -60,10 +60,12 @@ def Tag(*args, **kwargs):
     if 'disp' in kwargs:
         disp = kwargs.pop('disp')
     
-    for k, v in kwargs.items():
+    for k, v in list(kwargs.items()):
         if k == 'cls':
             attribToAdd['class'] = kwargs.pop(k)
         if k == 'for_':
+            attribToAdd['for'] = kwargs.pop(k)
+        if k == 'async_':
             attribToAdd['for'] = kwargs.pop(k)
         if '____' in k:
             newKey = k.replace('____', '-')
@@ -103,23 +105,24 @@ def sanitize(s, lower=True, upper=True, nums=True, extra=''):
 
 def writePage(html, files, fname, fromPath, DEBUG=False):
     if DEBUG:
-        print 'Writing', html, 'to', fname, '...',
+        print('Writing', html, 'to', fname, '...', end=' ')
     f = open(fname, 'w')
+    f.write('<!DOCTYPE html>\n')
     f.write(tostring(html))
     f.close()
     if DEBUG:
-        print 'done.'
+        print('done.')
 
     dn = dirname(fname)        
     if DEBUG:
-        print 'Saving %d files from %s to %s.' % (len(files), fromPath, dn)
+        print('Saving %d files from %s to %s.' % (len(files), fromPath, dn))
         
     for relpath in files:
         fr = join(fromPath, relpath)
         bn = basename(fr)
         to = join(dn, bn)
         if DEBUG:
-            print '    Copying from %s to %s.' % (fr, to)
+            print('    Copying from %s to %s.' % (fr, to))
         copy(fr, to)
         
     
