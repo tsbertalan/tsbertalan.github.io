@@ -71,6 +71,7 @@ for projectDir in projectDirs:
         configFile = utils.first([f for f in listdir(docFolder) if f == 'www.json'])
         if configFile is None:
             continue  # Skip this project if there's no www.json file.
+        print('Generating files for docFolder', docFolder)
         config = json.load(open(join(docFolder, configFile), 'r'))
         config['archived'] = baseDir not in projectDir  # For future use.
         if 'skip project' in config and config['skip project']:
