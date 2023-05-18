@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css" rel="stylesheet">
-<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script><meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 .demo-ribbon {
   width: 100%;
@@ -52,10 +53,17 @@
     float: right;
 }
 </style>
-<script async="1" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script><script async="1" src="../mermaid.min.js" type="text/javascript"></script><link href="../colorful.css" rel="stylesheet">
-<link href="../styles.css" rel="stylesheet">
-<link href="../pygments.css" rel="stylesheet">
-<link href="../colorful.css" rel="stylesheet">
+<script type="text/x-mathjax-config">
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\(", "\)"]],
+      processEscapes: true,
+    }
+  }
+                    </script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" for="1"></script><script type="text/javascript" src="../mermaid.min.js" for="1"></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
 <script>
                     function show(toExpand)
                     {
@@ -97,42 +105,42 @@
 
 <p>I then wrote some <a href="https://github.com/tsbertalan/gudrun/blob/b4e12fda30f60cfaba28d79f4093eb3874b4b65c/src/gudrun_motor/encoder/encoder.ino">fairly simple firmware</a> to watch for these rising and falling edges with interrupts, and then either increment or decrement a counter depending on the state of the two square waves, and their previous state. I could have done this with a bunch of if statements, and it would likely be just as efficient as compilation, but I liked the elegance of doing a little simple bitwise math here, with <code>symbol = b + (a &lt;&lt; 1)</code>.</p>
 
-<div class="codehilite"><pre><span></span><span class="k">volatile</span> <span class="kt">long</span> <span class="n">count</span><span class="p">;</span>
-<span class="k">volatile</span> <span class="n">byte</span> <span class="n">last_symbol</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+<div class="codehilite"><pre><span></span><span class="k">volatile</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+<span class="k">volatile</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">last_symbol</span><span class="p">,</span><span class="w"> </span><span class="n">symbol</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 
-<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_A</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">PIN_B</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PIN_A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PIN_B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 
 <span class="c1">// Current byte     -&gt;       0b00, 0b01, 0b10, 0b11</span>
 <span class="c1">// Previous byte:</span>
-<span class="k">const</span> <span class="n">byte</span> <span class="n">fwd_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b10</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b01</span><span class="p">};</span>
-<span class="k">const</span> <span class="n">byte</span> <span class="n">rev_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="n">b01</span><span class="p">,</span> <span class="mi">0</span><span class="n">b11</span><span class="p">,</span> <span class="mi">0</span><span class="n">b00</span><span class="p">,</span> <span class="mi">0</span><span class="n">b10</span><span class="p">};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">fwd_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mb">0b10</span><span class="p">,</span><span class="w"> </span><span class="mb">0b00</span><span class="p">,</span><span class="w"> </span><span class="mb">0b11</span><span class="p">,</span><span class="w"> </span><span class="mb">0b01</span><span class="p">};</span>
+<span class="k">const</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">rev_sources</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mb">0b01</span><span class="p">,</span><span class="w"> </span><span class="mb">0b11</span><span class="p">,</span><span class="w"> </span><span class="mb">0b00</span><span class="p">,</span><span class="w"> </span><span class="mb">0b10</span><span class="p">};</span>
 
-<span class="kt">void</span> <span class="nf">isr</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">);</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">);</span>
-    <span class="n">symbol</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">fwd_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">rev_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_symbol</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">count</span><span class="o">--</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">last_symbol</span> <span class="o">=</span> <span class="n">symbol</span><span class="p">;</span>   
+<span class="kt">void</span><span class="w"> </span><span class="nf">isr</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">);</span>
+<span class="w">    </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">);</span>
+<span class="w">    </span><span class="n">symbol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">fwd_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">last_symbol</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">rev_sources</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">last_symbol</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">count</span><span class="o">--</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">last_symbol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">symbol</span><span class="p">;</span><span class="w">   </span>
 <span class="p">}</span>
 
-<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
-    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
-    <span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
-    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
-    <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">),</span> <span class="n">isr</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pinMode</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span>
+<span class="w">    </span><span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_A</span><span class="p">),</span><span class="w"> </span><span class="n">isr</span><span class="p">,</span><span class="w"> </span><span class="n">CHANGE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">PIN_B</span><span class="p">),</span><span class="w"> </span><span class="n">isr</span><span class="p">,</span><span class="w"> </span><span class="n">CHANGE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">millis</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
-    <span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 

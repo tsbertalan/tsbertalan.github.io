@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script type="text/x-mathjax-config">
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\(", "\)"]],
+      processEscapes: true,
+    }
+  }
+                    </script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" for="1"></script><script type="text/javascript" src="../mermaid.min.js" for="1"></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>Data Exfiltration</span>
+</div>
+<span></span><h1>Data Exfiltration</h1>
+<span></span><p>Thanks to the Lua extension in VSC from user sumneko, I can F12 my way to the superclass constructor <code>AIDriveStrategyFieldWorkCourse.new</code>. Thanks to Copilot, I can speak Lua well enough to</p>
+
+<div class="codehilite"><pre><span></span><span class="kr">function</span> <span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">customMt</span><span class="p">)</span>
+   <span class="c1">-- We'll save telemetry data to a file as we drive:</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="s2">"telemetry.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span>
+
+    <span class="c1">-- Write the column headers: dt, vX, vY, vZ, gx, gz, moveForwards, maxSpeed</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'Opening telemetry file with columns: dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">"dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1">-- ...</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">:</span><span class="nf">getDriveData</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">vX</span><span class="p">,</span> <span class="n">vY</span><span class="p">,</span> <span class="n">vZ</span><span class="p">)</span>
+    <span class="c1">-- ... generate gx, gz here ...</span>
+    <span class="c1">-- Save the data to the telemtry file.</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span>
+        <span class="s2">"%f,%f,%f,%f,%f,%f,%s,%f</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> 
+        <span class="n">dt</span><span class="p">,</span> <span class="n">vX</span><span class="p">,</span> <span class="n">vY</span><span class="p">,</span> <span class="n">vZ</span><span class="p">,</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">moveForwards</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">maxSpeed</span>
+    <span class="p">))</span>
+    <span class="c1">-- ...</span>
+<span class="kr">end</span>
+</pre></div>
+
+<p>And voila, I have a CSV file.</p>
+
+<p><img src="telemetry_2023-04-19-16-39.csv.png" width="100%">
+That was all <em>so</em> much easier than in GTAV with C++ compilation cycles and those terrible (but brilliant) ScriptHookV memory hacks to get data out and commands in.</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
