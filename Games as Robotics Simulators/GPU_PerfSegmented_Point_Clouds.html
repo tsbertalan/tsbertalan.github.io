@@ -105,7 +105,7 @@
 <li class="task-list-item">
 <input type="checkbox" disabled checked> Don't use Huggingface's provided pipelines, which will convert images to NumPy internally to do pre-processing like scaling. Instead, I recreated their preprocessing operations with torch operations on GPU ... as they actually <a href="https://huggingface.co/docs/transformers/tasks/monocular_depth_estimation#depth-estimation-inference-by-hand">suggest</a> (minus the GPU discussion).</li>
 <li class="task-list-item">
-<input type="checkbox" disabled checked> Use some profiling to see what steps are really the slow ones! <img src="Screenshot%202023-05-16%20191128.png" style="height: 220px">
+<input type="checkbox" disabled checked> Use some profiling to see what steps are really the slow ones! <img src="Screenshot%202023-05-16%20191128.png" style="height: 210px">
 </li>
 </ul>
 <h5>Camera Parameters</h5>
@@ -134,38 +134,40 @@
 <input type="checkbox" disabled> Redefine camera extrinsics so that translation comes before rotation in backprojection.</li>
 </ul>
 <p>With this definition, I tried setting up some scenes with visually identifyable geometry so I could twiddle the parameters until they looked sorta right. E.g., the <a href="https://www.tesla.com/ownersmanual/modelx/en_us/GUID-91E5877F-3CD2-4B3B-B2B8-B5DB4A6C0A05.html">Tesla model X</a> is about 5 meters long, 1.7 high, and 2 wide without mirrors:</p>
-<p><img src="Screenshot%202023-05-16%20191214.png" alt="Screenshot 2023-05-16 191214" style="height: 220px"> <img src="Screenshot%202023-05-16%20191140.png" alt="Screenshot 2023-05-16 191140" style="height: 220px"></p>
+<p><img src="Screenshot%202023-05-16%20191214.png" alt="Screenshot 2023-05-16 191214" style="height: 210px"> <img src="Screenshot%202023-05-16%20191140.png" alt="Screenshot 2023-05-16 191140" style="height: 210px"></p>
 <p>Definitions aside, one thing I found helpful was to realize that there's a relationship</p>
 <p>$\ell_i = \frac{\Delta_i}{2 \tan (\alpha_i / 2)}$</p>
 <p>between the focal length $\ell_i$ in direction $i=u,v$ and (1) the corresponding sensor dimension $\Delta_i$ and (2) field of view $\alpha_i$. Since $\alpha_i=\pi/3$ is one of the few things I actually do know from the game, I can enter this, and then adjust $\Delta_i$ instead of $\ell_i$, which seems to be less sensitive in hand-tuning.</p>
 <p>However, I do think the next step here is to</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
+<input type="checkbox" disabled checked> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 </ul>
 <p>instead of eyeballing it. (This needs to be redone per vehicle since each requires a different crop of the whole view to exclude dashboard, since the segmentation models don't reliably detect it.)</p>
 <p>However, even at this stage,and even with all the very slow plotting driving the FPS down, the results are good enough ...</p>
-<p><img src="Screenshot%202023-05-16%20191241.png" style="height: 220px"> <img src="Screenshot%202023-05-16%20191223.png" style="height: 220px"></p>
+<p><img src="Screenshot%202023-05-16%20191241.png" style="height: 210px"> <img src="Screenshot%202023-05-16%20191237.png" style="height: 210px"></p>
+<p><img alt="Screenshot 2023-05-16 191237.png" src="Screenshot%202023-05-16%20191237.png"></p>
 <p>... that I could imagine doing the following with them:</p>
 <ul class="task-list">
 <li class="task-list-item">
-<input type="checkbox" disabled> Set up ROS2 on this machine; maybe in a container.</li>
+<input type="checkbox" disabled checked> Set up ROS2 on this machine; maybe in a container.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
+<input type="checkbox" disabled checked> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
+<input type="checkbox" disabled checked> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Use a Lua mod (see other entries) to</li>
+<input type="checkbox" disabled checked> Use a Lua mod (see other entries) to</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Publish acceleration and orientation data as an IMU topic</li>
+<input type="checkbox" disabled checked> Publish acceleration and orientation data as an IMU topic</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Maybe publish some sparse ray tracings as ultrasound topics.</li>
+<input type="checkbox" disabled checked> Maybe publish some sparse ray tracings as ultrasound topics.</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Accept control commands</li>
+<input type="checkbox" disabled checked> Accept control commands</li>
 <li class="task-list-item">
-<input type="checkbox" disabled> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
+<input type="checkbox" disabled checked> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
 </ul>
-<p>It might also be worth trying to find a monocular depth network that gives better predictions (<a href="https://huggingface.co/docs/transformers/model_doc/dpt">DPT</a> sounds good?). Alternatively (and this would take a bunch of time), I could use those sparse raytraces to make my own  sparsely-supervised fine-tuning dataset. At the very least, this might help to make the errors less biased (I think the GLPN tends to underestimate).</p>
+<p><em>(I checked all these off since I'm migrating them to the next journal entry [[FS22 2023-05-18]].)</em></p>
+<p>It might also be worth trying to find a monocular depth network that gives better predictions (<a href="https://huggingface.co/docs/transformers/model_doc/dpt">DPT</a> sounds good -- I might be able to use one trunk network to get both depth and segmentation). Alternatively (and this would take a bunch of time), I could use those sparse raytraces to make my own  sparsely-supervised fine-tuning dataset. At the very least, this might help to make the errors less biased (I think the GLPN tends to underestimate).</p>
 <p>It could be useful to make use of successive frames, but I can't find any easily available pre-trained nets that do this. <a href="https://github.com/facebookresearch/consistent_depth">This Facebook repo</a> uses single-frame neural depth as the prior for a more conventional SfM method. That might not be too hard to get going, but it seems superficially to be equivalent to just giving the bad point cloud to RTAB-Map with appropriate uncertainties.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>

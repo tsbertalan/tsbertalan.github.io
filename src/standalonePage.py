@@ -253,6 +253,7 @@ def markdown_to_html(md):
         NoItalUnderscExtension(),
         # 'mdx_math',
         # 'pymdownx.arithmatex',
+        'pymdownx.keys',
         pymdownx.emoji.makeExtension(
             emoji_generator=pymdownx.emoji.to_alt,
             # emoji_index=pymdownx.emoji.emojione,  # Doesn't work with :man_shrugging:, THE MOST IMPORTANT EMOJI
