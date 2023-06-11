@@ -141,7 +141,7 @@
 <p>However, I do think the next step here is to</p>
 <ul class="task-list">
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use <a href="https://colmap.github.io/cameras.html">COLMAP</a> to estimate camera parameters from a few frames, and for a few vehicles like <a href="https://github.com/cc959/Matura_Unreal">this guy says he did</a>.</li>
 </ul>
 <p>instead of eyeballing it. (This needs to be redone per vehicle since each requires a different crop of the whole view to exclude dashboard, since the segmentation models don't reliably detect it.)</p>
 <p>However, even at this stage, and even with all the very slow plotting driving the FPS down, the results are good enough ...</p>
@@ -149,21 +149,21 @@
 <p>... that I could imagine doing the following with them:</p>
 <ul class="task-list">
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Set up ROS2 on this machine; maybe in a container.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish as ROS topics these segmented point clouds in some usable format, with suitably backdated timestamps.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Assign the segmented classes to different bins based on how bad (or good) it would be to drive on/through them.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use a Lua mod (see other entries) to</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use a Lua mod (see other entries) to</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Publish acceleration and orientation data as an IMU topic</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Publish acceleration and orientation data as an IMU topic</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Maybe publish some sparse ray tracings as ultrasound topics.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Maybe publish some sparse ray tracings as ultrasound topics.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Accept control commands</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Accept control commands</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Use e.g. <a href="http://introlab.github.io/rtabmap/">RTAB-Map</a> to integrate these.</li>
 </ul>
 <p><em>(I checked all these off since I'm migrating them to the next journal entry [[FS22 2023-05-18]].)</em></p>
 <p>It might also be worth trying to find a monocular depth network that gives better predictions (<a href="https://huggingface.co/docs/transformers/model_doc/dpt">DPT</a> sounds good -- I might be able to use one trunk network to get both depth and segmentation). Alternatively (and this would take a bunch of time), I could use those sparse raytraces to make my own  sparsely-supervised fine-tuning dataset. At the very least, this might help to make the errors less biased (I think the GLPN tends to underestimate).</p>
