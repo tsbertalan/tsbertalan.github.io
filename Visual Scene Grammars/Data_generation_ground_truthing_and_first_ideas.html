@@ -287,17 +287,21 @@ W 727719 3 -7 -2913432 D -129285487554 049856513 D 30555 10540 D -70 -577 H 4611
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Extend the grammar to multiple walls, joined at corners.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Train some networks!</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Train some networks!<ul class="task-list">
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Make something like an autoencoder for our images--start with simple convolutional and LSTM nets trained from scratch, then move to fine-tuning of big pre-trained networks.</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> How can we constrain the encoder to produce sentences in our grammar (or, at least, a grammar it decides on itself)?</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> How can we make our autoencoder probabilistic? Both the encoder $p(X|S)$ and decoder $p(S|X)$, where $X$ is the encoding and $S$ is the sense (image).</li>
+</ul>
+</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do online Bayesian inference in these scenes.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do online Bayesian inference in these scenes.<ul class="task-list">
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> If the Bayes update is posterior $ = p(X|S) \propto p(S|X) p(X)$, then how can we embed in a larger network either a KF, EKF, UF, or PF to handle the representation of the prior $p(X)$?</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
