@@ -86,16 +86,28 @@
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
 <div class="demo-crumbs mdl-color-text--grey-500">
-<a href="../index.html">Home</a> &gt; <a href="index.html">Games as Robotics Simulators</a> &gt; <span>Reasons</span><a href="https://github.com/tsbertalan/FarmAutomation/tree/66a52cb1c721be840cf409eaa8f97d17671732fb" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Code as of 27 April</a>
+<a href="../index.html">Home</a> &gt; <span>SceneGrammar</span>
 </div>
-<span></span><h1>Reasons</h1>
-<span></span><ol>
-<li>Farm Simulator has reasonably realistic vehicle dynamics and appearance.</li>
-<li>It has a thriving modding community (though, as I came to discover, this is <em>despite</em> the terrible API documentation that's just a doxygen dump).</li>
-<li>in particular, the FS19 version of the flagship <a href="https://github.com/Courseplay/Courseplay_FS22">Courseplay</a> <a href="https://web.archive.org/web/20230419/https://github.com/Courseplay/Courseplay_FS22">(Archived)</a> on-field automation mod (see also <a href="https://github.com/Stephan-S/FS22_AutoDrive">autodrive</a> <a href="https://web.archive.org/web/20230419/https://github.com/Stephan-S/FS22_AutoDrive">(Archived)</a> for road networks) hasn't had a commit for since Christmas Eve 2021, so I bought FS22 on sale. It does seem less buggy.</li>
-</ol>
-<p>So, I'm going to try using it instead of the more recalcitrant GTAV as a simulation platform.</p>
-<p>I spent some time setting up a development environment and some scripts to quickly reload script changes.</p>
+<span></span><ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Create a <em>very</em> simple grammar generator and validator.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Make a pipeline in either Blender or Gazebo for generating scene renderings.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do each of the probabilistic inferences needed for Bayes $p(g|s) = p(g) \cdot p(s|g) / p(s)$ for graph $g$ and sense $s$, except we don't really need $p(s)$, and the $p(g)$ part is handled by our choice of Kalman, EKalman, UKalman, or particle filter.<ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Select the needed network heads: $g\rightarrow s$ etc.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Find some pre-trained nets to build from.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Fine tune a little bit.</li>
+</ul>
+</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do online inference!</li>
+</ul>
+<span></span><h2>Entries</h2>
+<p><a href="Scene_Grammar__First_Attempt.html" title="23 August, 2023">Scene Grammar - First Attempt</a> <small><i>23 August, 2023</i></small></p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>

@@ -95,9 +95,9 @@
 <iframe width="560" height="315" src="https://www.youtube.com/embed/KhBlflgKe1Q" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <p>This uses a fairly simple TF tree, half of which is internal transforms used by the Kinect.</p>
-<p><a href="frames.png"><img src="frames.png" width="100%"></a></p>
+<p><img alt="frames.png" src="frames.png"></p>
 <p>The rqt_graph is a little more complicated, but only superficially so.</p>
-<p><a href="rosgraph.svg"><img src="rosgraph.svg" width="100%"></a></p>
+<p><img alt="rosgraph.svg" src="rosgraph.svg"></p>
 <p>We have a chain of input from left to right--sensing (<code>/camera</code> and <code>/listen_to_encoder</code>), perception (<code>/rtabmap</code>), planning (<code>/move_base</code>, in particular <code>/move_base/TebLocalPlannerROS</code>), and finally actuation (<code>/ackermann_motor_controller</code>).</p>
 <p>The planning process goes roughly like this: </p>
 <p>RTAB-map collects the RGBD data from the Kinect 1 sensor (generated using OpenNI), and performs SLAM with this data. Odometry at the moment is purely visual--no information is incorporated from the Kinect's onboard accelerometer, or from the wheel encoders. RTAB-map classifies the points it finds into obstacles and ground (based, I believe, on the angle of the local tangent vector from vertical). The obstacle points are projected down into a 2D occupancy grid.</p>

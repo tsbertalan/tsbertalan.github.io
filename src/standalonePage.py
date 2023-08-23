@@ -184,7 +184,7 @@ def article(title, content, heading=None, breadcrumbs=None, sourceLink=None, ent
 
     # If we have entries to show, list them here.
     if len(entries) > 0:
-        entry_list = '<h2>Journal Entries</h2>'
+        entry_list = '<h2>Entries</h2>'
         # entry_list += '<ul>'
         for entry in entries:
             # entry_list += '<li>'

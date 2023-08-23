@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <a href="index.html">SceneGrammar</a> &gt; <span>Scene Grammar - First Attempt</span>
+</div>
+<span></span><h1>Scene Grammar - First Attempt</h1>
+<span></span><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">'..'</span><span class="p">,</span> <span class="s1">'src'</span><span class="p">)))</span>
+<span class="n">fig_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">'..'</span><span class="p">,</span> <span class="s1">'doc'</span><span class="p">))</span>
+<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<span class="n">show_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span>
+<span class="kn">from</span> <span class="nn">blender_render_scene</span> <span class="kn">import</span> <span class="n">render</span>
+</pre></div>
+
+
+<h2>TL;DR</h2>
+<p>I want to define a ground-truth scene grammar whereby sentences like</p>
+<p><code>W 6 20 5 0 D 2 -1 H 2 30 D 1 1</code></p>
+<p>can be rendered to images ...</p>
+<div class="codehilite"><pre><span></span><span class="n">render</span><span class="p">(</span><span class="s1">'W 6 20 5 0 D 2 -1 H 2 30 D 1 1'</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_2_0.png"></p>
+<p>... and, from there, use this as a testing environment to develop neural networks with an inductive bias towards representing natural scenes with either
+1. a grammar we provide, of objects of interest (e.g., objects with useful robotic affordances like handles or tools or steps), or
+2. a grammar created during training in response to the data or, even in response to embodied experiences.</p>
+<h2>Introduction</h2>
+<p>Lately LLMs have gotten really good at imitating languages (most notably human language), even zero-shot. Even better, they're starting to be joined to image pipelines for both input and output.</p>
+<p>On the other hand, one of the (perhaps abandoned) tasks of robotics is to build <em>semantically structured</em> maps of the environment. Most performant SLAM approaches these days instead use a granular data-driven approach.</p>
+<p>One historical barrier to structured mapping was the brittleness of object recognition--unseen instances of even known object classes could not easily be ingested to the map. However, with modern multimodal foundation models, we might be able to get the best of both worlds: a structured map with a data-driven structure (a <em>language</em>, and flexible recognition of the objects of that language's grammar.</p>
+<p>Here, I'll demonstrate some partial work towards this idea.</p>
+<h2>A Grammar for Handle-on-Door-in-Wall Scenes</h2>
+<p>I'll start by defining a grammar of very simple scenes: exactly one wall, with zero or more doors in that wall, and zero or one handles per door.</p>
+<p>Strings in this grammar look like this:</p>
+<div class="codehilite"><pre><span></span><span class="n">scene_description</span> <span class="o">=</span> <span class="s1">'W 8 0 5 0 D 1 0 H 1 0'</span>
+</pre></div>
+
+
+<p>Here, we describe
+- one wall 8 meters long,
+- with $0^\circ$ rotation,
+- 5 meters forward from the viewer, and
+- 0 meters offset from the viewer;
+- with one door that's
+  - 1 meter wide and
+  - centered on the wall; and
+  - with a handle offset 1/3 meters from the door's center (the 3 is hardcoded in the grammar parser)
+  - with $0^\circ$ rotation.</p>
+<p>Note that we're limiting ourselves to signed integers for the numeric parts, as a simplifying assumption.</p>
+<p>Let's implement this.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">scene_graph_gt</span> <span class="k">as</span> <span class="nn">gt</span>
+</pre></div>
+
+
+<p>First, we note that we can use a regular expression for quick validation of strings in this grammar:</p>
+<div class="codehilite"><pre><span></span><span class="n">checker</span> <span class="o">=</span> <span class="n">gt</span><span class="o">.</span><span class="n">GrammarChecker</span><span class="p">()</span>
+<span class="n">checker</span><span class="o">.</span><span class="n">wall_regex_no_labels</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>'W (-?\\\\d+) (-?\\\\d+) (-?\\\\d+) (-?\\\\d+)( D (-?\\\\d+) (-?\\\\d+)( H (-?\\\\d+) (-?\\\\d+))?)*'
+</pre></div>
+
+
+<p>However, to do more interesting things with the grammar, we'll need to parse it. We'll use the library <code>pyparsing</code>.</p>
+<div class="codehilite"><pre><span></span><span class="n">parser</span> <span class="o">=</span> <span class="n">gt</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+<span class="n">gt</span><span class="o">.</span><span class="n">show_grammar</span><span class="p">(</span><span class="n">png_path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fig_dir</span><span class="p">,</span> <span class="s1">'full_scene_grammar.png'</span><span class="p">))</span>
+<span class="n">show_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fig_dir</span><span class="p">,</span> <span class="s1">'full_scene_grammar.png'</span><span class="p">))</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_13_0.png"></p>
+<p>We can use this grammar to parse our scene description to a dictionary ...</p>
+<div class="codehilite"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">parse_scene_string</span><span class="p">(</span><span class="n">scene_description</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>[{'wall': {'angle': 0,
+   'length': 8,
+   'offsets': (5, 0),
+   'doors': [{'length': 1,
+     'offset': 0,
+     'handle': {'offset': 1, 'angle': 0}}]}}]
+</pre></div>
+
+
+<p>... or to a tree of useful classes with helpful <code>repr</code>s.</p>
+<div class="codehilite"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">parse_scene_string</span><span class="p">(</span><span class="n">scene_description</span><span class="p">,</span> <span class="n">as_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>[Wall(dy=8 m (D), rz=0 deg, x=5 m, y=0 m, doors=[Door(dy=1 m (D), y=0 m, handle=Handle(y=1 m, rx=0 deg))])]
+</pre></div>
+
+
+<p>(Note that both are actually lists of what I said, because we want to expand later to scenes with multiple walls. But that's a problem for future us.)</p>
+<h2>Random Sampling</h2>
+<p>One other way that our regex description is useful is for generating random samples from the language. For this, we use the library <code>hypothesis</code> for this. But an important caveat that the strings are all ASCII! The <code>\d</code> in the regex can match some other languages as well:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">hypothesis</span><span class="o">,</span> <span class="nn">re</span>
+<span class="n">hypothesis</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">regex</span> <span class="o">=</span> <span class="s1">'\d'</span> <span class="o">*</span> <span class="mi">12</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Any Unicode:'</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">.</span><span class="n">strategies</span><span class="o">.</span><span class="n">from_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">fullmatch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">example</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'ASCII Only:'</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">.</span><span class="n">strategies</span><span class="o">.</span><span class="n">from_regex</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">ASCII</span><span class="p">),</span> <span class="n">fullmatch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">example</span><span class="p">())</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>Any Unicode: 11
+ASCII Only: 687748656284
+</pre></div>
+
+
+<p>So, some samples:</p>
+<div class="codehilite"><pre><span></span><span class="n">sample_strings</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">sample_strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">checker</span><span class="o">.</span><span class="n">sample</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sample_strings</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>W -63724542779 44 6361587958637131810475 -63724542779 D 0621262966150 772480323022437516952535 H 2949465 0
+W -0512060 83 -7 -67377883429 D -197742176 7 H 0892148694159354859726166593 -3424708779974 D 6 -02 D 6516 -27895 D 778997928900393 -2 H 9 -59 D 661 -135364923 D 0272326197109412757 93260512394965 H -108803146073241 5 D -30346857705440635 -78345636
+W 3 -5902 1 -876
+W 727719 3 -7 -2913432 D -129285487554 049856513 D 30555 10540 D -70 -577 H 461129 07502 D 66119096579461386181 346 H 6753940555758 84292689 D -13 2397 H 01004640 5532 D -148 -3
+</pre></div>
+
+
+<p>This might be a good exploration of the structural space, of the language, but the numeric values aren't too nice. Instead, we'll take the trees for each of these, and run a few visitors over them, replacing numeric values with samples from more reasonable distributions (depending on whether the number represents an angle, an unsigned length, or a signed distance).</p>
+<div class="codehilite"><pre><span></span><span class="n">fixed_asts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_strings</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">ast</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_scene_string</span><span class="p">(</span><span class="n">sample_strings</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">as_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'Before:'</span><span class="p">,</span> <span class="n">ast</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">resample_large_numbers_inplace</span><span class="p">(</span><span class="n">ast</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">'After: '</span><span class="p">,</span> <span class="n">ast</span><span class="p">)</span>
+    <span class="n">fixed_asts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ast</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span><span class="mf">0</span>
+<span class="n">Before</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">63724542779</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">44</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">6361587958637131810475</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">63724542779</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">621262966150</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">772480323022437516952535</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">2949465</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">0</span><span class="w"> </span><span class="n">deg</span><span class="p">))</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+<span class="n">After</span><span class="p">:</span><span class="w">  </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">44</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">0</span><span class="w"> </span><span class="n">deg</span><span class="p">))</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+<span class="mf">1</span>
+<span class="n">Before</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">512060</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">83</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=-</span><span class="mf">7</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">67377883429</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">197742176</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">7</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">892148694159354859726166593</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">3424708779974</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">6516</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">27895</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">778997928900393</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">9</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">59</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">661</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">135364923</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">272326197109412757</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">93260512394965</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=-</span><span class="mf">108803146073241</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">30346857705440635</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">78345636</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">)</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+<span class="n">After</span><span class="p">:</span><span class="w">  </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">83</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">18</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">59</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">)</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+<span class="mf">2</span>
+<span class="n">Before</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=-</span><span class="mf">5902</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">876</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[]</span><span class="p">)</span><span class="err">]</span>
+<span class="n">After</span><span class="p">:</span><span class="w">  </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=-</span><span class="mf">162</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[]</span><span class="p">)</span><span class="err">]</span>
+<span class="mf">3</span>
+<span class="n">Before</span><span class="p">:</span><span class="w"> </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">727719</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=-</span><span class="mf">7</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">2913432</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">129285487554</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">49856513</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">30555</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">10540</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">70</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">577</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">461129</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">7502</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">66119096579461386181</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">346</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">6753940555758</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">84292689</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">13</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">2397</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1004640</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">5532</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=-</span><span class="mf">148</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=-</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">)</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+<span class="n">After</span><span class="p">:</span><span class="w">  </span><span class="err">[</span><span class="n">Wall</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">rz</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">deg</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">doors</span><span class="o">=</span><span class="err">[</span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">3</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">163</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=-</span><span class="mf">72</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">6</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">2</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">Handle</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">4</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="o">=</span><span class="mf">65</span><span class="w"> </span><span class="n">deg</span><span class="p">)),</span><span class="w"> </span><span class="n">Door</span><span class="p">(</span><span class="n">dy</span><span class="o">=</span><span class="mf">5</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">D</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="mf">1</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">handle</span><span class="o">=</span><span class="n">None</span><span class="p">)</span><span class="err">]</span><span class="p">)</span><span class="err">]</span>
+</pre></div>
+
+
+<h2>Rendering</h2>
+<p>For our image tasks, we'll want to render these scenes. We'll use Blender to do this. I have never done as much as deleted the default cube by Blender GUI before, and I'm not about to start now--we'll drive it fully from Python.</p>
+<p>Briefly, we do this by drawing all walls, doors, and handles as rectangular cuboids, parented appropriately (since the grammar implies relative coordinates). Cuboids are created from scratch by their eight vercies, six faces, and twelve edges defined relative to the parent frame.</p>
+<p>We add a single point light source high up, and use a camera with a reasonable focal length, field of view, and resolution.</p>
+<div class="codehilite"><pre><span></span><span class="n">render</span><span class="p">(</span><span class="n">scene_description</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_26_0.png"></p>
+<p>This looks nice, and we can do it for other scene descriptions as well. Let's draw a scene with a narrow door with a rotated handle, and a wide door without. The wall will be slightly rotated as well.</p>
+<div class="codehilite"><pre><span></span><span class="n">two_doors</span> <span class="o">=</span> <span class="s1">'W 6 15 5 0 D 1 1 H 1 30 D 2 -1'</span>
+<span class="n">render</span><span class="p">(</span><span class="n">two_doors</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_28_0.png"></p>
+<p>However, if we render some of our random samples, we'll see that they have some problems (even with our fixes to the numeric values, simplifed to <code>parser.sample</code>), such as ...</p>
+<p>Fully off-screen geometry ...</p>
+<div class="codehilite"><pre><span></span><span class="n">render</span><span class="p">(</span><span class="s1">'W 2 -2 2 6 D 4 5 H 1 0 D 2 3 D 6 1 H 3 9 D 3 3 D 2 4 H 1 164 D 6 2 D 2 2 D 6 3 D 4 6 D 4 4 H 6 42'</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_31_0.png"></p>
+<p>... or
+1. overlapping doors, 
+2. doors that extend beyond the wall that's supposed to contain them, and
+3. (not necessarily a problem) geometry that extends off-screen, making the full description of the scene unknowable</p>
+<p>:</p>
+<div class="codehilite"><pre><span></span><span class="n">render</span><span class="p">(</span><span class="s1">'W 4 -164 5 4 D 6 6 D 6 3 D 5 2 H 4 -17 D 5 2 D 1 2 D 1 4 H 5 -127 D 3 3 H 6 127 D 6 4 D 2 4 H 4 80 D 4 4'</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_33_0.png"></p>
+<p>Here are a few more:</p>
+<div class="codehilite"><pre><span></span><span class="n">show_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fig_dir</span><span class="p">,</span> <span class="s1">'random_scenes.png'</span><span class="p">))</span> 
+</pre></div>
+
+
+<p><img alt="png" src="SceneGrammarNotebook_35_0.png"></p>
+<p>We'll have do deal with that in future work, however, because I'm done working on this for now.</p>
+<h2>Future Work</h2>
+<ul class="task-list">
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Filter random samples for physical validity.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Filter random samples for on-screen visibility.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Extend the grammar to multiple walls, joined at corners.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Train some networks!</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Make something like an autoencoder for our images--start with simple convolutional and LSTM nets trained from scratch, then move to fine-tuning of big pre-trained networks.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> How can we constrain the encoder to produce sentences in our grammar (or, at least, a grammar it decides on itself)?</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> How can we make our autoencoder probabilistic? Both the encoder $p(X|S)$ and decoder $p(S|X)$, where $X$ is the encoding and $S$ is the sense (image).</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do online Bayesian inference in these scenes.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> If the Bayes update is posterior $ = p(X|S) \propto p(S|X) p(X)$, then how can we embed in a larger network either a KF, EKF, UF, or PF to handle the representation of the prior $p(X)$?</li>
+</ul>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>

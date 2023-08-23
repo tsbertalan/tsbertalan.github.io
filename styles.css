@@ -18,6 +18,10 @@
   display: none;
 }
 
+img {
+  max-width: 100%;
+}
+
 .portfolio-logo-row {
   min-height: 200px;
 }

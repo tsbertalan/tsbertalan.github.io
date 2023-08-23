@@ -6,7 +6,7 @@ import codecs
 from shutil import copy, SameFileError
 from subprocess import check_output, CalledProcessError
 import markdown
-import json
+import json5 as json
 
 import sys
 HERE = realpath(dirname(__file__))
