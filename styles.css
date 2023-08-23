@@ -22,6 +22,10 @@
   max-width: 100%;
 }
 
+.demo-container pre {
+  overflow: auto;
+}
+
 .portfolio-logo-row {
   min-height: 200px;
 }
