@@ -108,9 +108,11 @@
 
 
 <p><img alt="png" src="SceneGrammarNotebook_2_0.png"></p>
-<p>... and, from there, use this as a testing environment to develop neural networks with an inductive bias towards representing natural scenes with either
-1. a grammar we provide, of objects of interest (e.g., objects with useful robotic affordances like handles or tools or steps), or
-2. a grammar created during training in response to the data or, even in response to embodied experiences.</p>
+<p>... and, from there, use this as a testing environment to develop neural networks with an inductive bias towards representing natural scenes with either</p>
+<ol>
+<li>a grammar we provide, of objects of interest (e.g., objects with useful robotic affordances like handles or tools or steps), or</li>
+<li>a grammar created during training in response to the data or, even in response to embodied experiences.</li>
+</ol>
 <h2>Introduction</h2>
 <p>Lately LLMs have gotten really good at imitating languages (most notably human language), even zero-shot. Even better, they're starting to be joined to image pipelines for both input and output.</p>
 <p>On the other hand, one of the (perhaps abandoned) tasks of robotics is to build <em>semantically structured</em> maps of the environment. Most performant SLAM approaches these days instead use a granular data-driven approach.</p>
@@ -211,7 +213,7 @@ W 727719 3 -7 -2913432 D -129285487554 049856513 D 30555 10540 D -70 -577 H 4611
 </pre></div>
 
 
-<p>This might be a good exploration of the structural space, of the language, but the numeric values aren't too nice. Instead, we'll take the trees for each of these, and run a few visitors over them, replacing numeric values with samples from more reasonable distributions (depending on whether the number represents an angle, an unsigned length, or a signed distance).</p>
+<p>This might be a good exploration of the structural space of the language, but the numeric values aren't too nice. Instead, we'll take the trees for each of these, and run a few visitors over them, replacing numeric values with samples from more reasonable distributions (depending on whether the number represents an angle, an unsigned length, or a signed distance).</p>
 <div class="codehilite"><pre><span></span><span class="n">fixed_asts</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_strings</span><span class="p">)):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
