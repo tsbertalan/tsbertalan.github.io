@@ -115,7 +115,12 @@ with some information that's probably ultimately useless to the user; namely the
 <label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Sometimes the player thread runs out of of things to say because the model thread is too slow to generate them. Not sure what can be done about this. <em>Silero seems fast enough for this not to be a problem.</em>
 </li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Get the memory usage down. It's something like 5.3GB! Maybe quantized models could help with this. <em>Well, actually, Process Explorer reports a much smaller number? Hard to tell.</em>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Get the memory usage down. It's something like 5.3GB! Maybe quantized models could help with this.</li>
+<li>Well, actually, Process Explorer reports a much smaller number? Hard to tell.</li>
+<li>It now (with the Silero model) seems that it's more like 600MB of CPU memory (I'm still unsure about it's actual GPU memory, which was what the 5.3GB number was about) when doing nothing,<ul>
+<li>plus maybe 10MB per sentence when they're sitting in the the TTS queue</li>
+<li>plus about 1MB per sentence when they're sitting in the speaker queue</li>
+</ul>
 </li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Worse, sometimes the sentence is too long for the TacoTron, and it starts outputing gibberish. Do smaller chunks.</li>
