@@ -98,12 +98,14 @@
 
 <p>Two worker threads handle the work: one to make the waves, and the other to speak them. The GUI breaks the given text up into chunks at sentence-like boundaries (using a few whitelisting regexes followed by a few blacklisting regexes to find those boundaries) and pushes them onto a first queue.</p>
 
-<p>The first worker thread preprocesses this text to tokens, ~tacotron2s it to a spectrogram, waveglows it to a big 1D array~ uses the turnkey Silero offline PyTorch TTS engine to make a wave from this, and pushes that to a second queue.</p>
+<p>The first worker thread preprocesses this text to tokens, ~tacotron2s it to a spectrogram, waveglows it to a big 1D array~ uses the turnkey Silero offline PyTorch TTS engine to make a wave from this, and pushes that to a queue for our UI to ingest.</p>
 
-<p>The second worker thread pops the 1D array off the queue, and plays it out loud (blocking that thread appropriately).</p>
+<p>The second worker thread pops dictionaries containing audio and metadata off a different queue, and plays the audio out loud (blocking that thread appropriately).</p>
 
 <p>There's a nice little GUI that lets you type in text and add it to the queue,
 with some information that's probably ultimately useless to the user; namely the length of the two queues, and messages returned from the two workers in a autoscrolling log box.</p>
+
+<p>Underneath the log window, there's a scrollable canvas of buttons to play the indicated results. If you click one, it and all following boxes change text color to blue to indicate they're queued for playing. Then the player worker starts popping them, and turning them green as it goes.</p>
 
 <p>Some problems I could eventually fix:</p>
 
@@ -117,7 +119,7 @@ with some information that's probably ultimately useless to the user; namely the
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Get the memory usage down. It's something like 5.3GB! Maybe quantized models could help with this.</li>
 <li>Well, actually, Process Explorer reports a much smaller number? Hard to tell.</li>
-<li>It now (with the Silero model) seems that it's more like 600MB of CPU memory (I'm still unsure about it's actual GPU memory, which was what the 5.3GB number was about) when doing nothing,<ul>
+<li>It now (with the Silero model) seems that it's more like 200MB of CPU memory (I'm still unsure about it's actual GPU memory, which was what the 5.3GB number was about) when doing nothing,<ul>
 <li>plus maybe 10MB per sentence when they're sitting in the the TTS queue</li>
 <li>plus about 1MB per sentence when they're sitting in the speaker queue</li>
 </ul>
@@ -125,13 +127,15 @@ with some information that's probably ultimately useless to the user; namely the
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Worse, sometimes the sentence is too long for the TacoTron, and it starts outputing gibberish. Do smaller chunks.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Make a playhead UI.<ul class="task-list">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Improve the playhead UI.<ul class="task-list">
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Add play/pause buttons.</li>
+<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Don't just discard converted audio--let the user go back to previous chunks with the playhead.</li>
+<li class="task-list-item">
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Add pause buttons, not just stop-all.</li>
 <li class="task-list-item">
 <label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Indicate how much of the text is converted to audio with some kind of "buffering" playhead indicator.</li>
 <li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Don't just discard converted audio--let the user go back to previous chunks with the playhead.</li>
+<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Maybe instead of buttons for TTS'd sentences, have a text canvas with clickable regions. Much easier to scan visually.</li>
 </ul>
 </li>
 <li class="task-list-item">
