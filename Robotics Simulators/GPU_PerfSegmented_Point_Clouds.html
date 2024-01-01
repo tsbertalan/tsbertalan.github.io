@@ -118,9 +118,9 @@
 <ol>
 <li>$\vec x$ is the camera's 3d position;</li>
 <li>the extrinsic parameters are</li>
-<li>$\mathbf{R} = \begin{bmatrix} c_z c_y,&amp; c_z s_y s_x - s_z c_x, &amp;c_z s_y c_x + s_z s_x \\ s_z c_y,&amp;s_z s_y s_x + c_z c_x,&amp; s_z, s_y, c_x - c_z s_x \\ -s_y,&amp;c_y s_x,&amp;c_y c_x \end{bmatrix} $ , the $3\times3$  rotation defined by sines $s_i$ and cosines $c_i$ of the $i=x,y,z$ Euler angles,</li>
+<li>$\mathbf{R} = \left[\begin{array}{ccc} c_z c_y,&amp; c_z s_y s_x - s_z c_x, &amp;c_z s_y c_x + s_z s_x \\ s_z c_y,&amp;s_z s_y s_x + c_z c_x,&amp; s_z, s_y, c_x - c_z s_x \\ -s_y,&amp;c_y s_x,&amp;c_y c_x \end{array}\right]$ , the $3\times3$  rotation defined by sines $s_i$ and cosines $c_i$ of the $i=x,y,z$ Euler angles,</li>
 <li>and $\vec T$, the $3\times 1$ translation of the camera;</li>
-<li>$\mathbf{K} =  \begin{bmatrix} \ell_u, &amp; 0, &amp; u_0 \\ 0, &amp; \ell_v, &amp; v_0 \\ 0,&amp;0,&amp;1 \end{bmatrix} $ is the (intrinsic) camera matrix;</li>
+<li>$\mathbf{K} =  \left[\begin{array}{ccc} \ell_u, &amp; 0, &amp; u_0 \\ 0, &amp; \ell_v, &amp; v_0 \\ 0,&amp;0,&amp;1 \end{array}\right]$ is the (intrinsic) camera matrix;</li>
 <li>$\vec u$ is the $2\times1$ images space coordinates (defined as going from 0 to 1, from top left to bottom right);</li>
 <li>and $d$ is the scalar depth (this equation is defined per pixel).</li>
 </ol>
