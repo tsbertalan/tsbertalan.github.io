@@ -106,7 +106,7 @@
    So, I'll probably  just use this and gmapping. KISS.</li>
 </ol>
 <h4>Speed control</h4>
-<p>I have some doubts here. In <a href="http://tomsb.net/Gunnar/">previous work</a>, I had a tight control loop running on an Arduino to maintain commanded motor speeds. Here, I don't have wheel encoders, so the best I might be able to do is have a loose loop between my (likely very poor) odometry from the perception phase to my motor command interface in the driver phase.</p>
+<p>I have some doubts here. In <a href="https://www.tomsb.net/Gunnar/">previous work</a>, I had a tight control loop running on an Arduino to maintain commanded motor speeds. Here, I don't have wheel encoders, so the best I might be able to do is have a loose loop between my (likely very poor) odometry from the perception phase to my motor command interface in the driver phase.</p>
 <p>The more I think about this, the more I think that adding some sort of wheel encoders would greatly simplify many other parts of the design. Maybe I should do that Hall-effect sensor side project after all.</p>
 <h4>Planning</h4>
 <p>Once I can watch the map being generated as I teleop around, I can set up a medium-level planning stack.</p>
