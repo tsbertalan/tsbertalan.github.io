@@ -3,3 +3,12 @@ pygments
 md-mermaid
 lxml
 pymdown-extensions
+json5
+tqdm
+boltons
+urlextract
+-e git+https://github.com/tsbertalan/mistune.git@0e514e192c47802fd054010c6b05f79463b5903f#egg=mistune
+pandas
+diskcache
+jinja2
+networkx
