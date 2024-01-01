@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <a href="index.html">Visual Scene Grammars</a> &gt; <span>Program Synthesis for Concatenation</span>
+</div>
+<span></span><h1>Program Synthesis for Concatenation</h1>
+<span></span><p>I discovered [[2023-10-31|Today]] that I can generate grammars that concatenate several module RHSs together into one big RHS vector:</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_grammar</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">terminals</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">terminals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">terminals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'F1'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'F3'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'F5'</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'S -&gt; E</span><span class="si">{</span><span class="n">M</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">terminal</span><span class="p">,</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">terminals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">dimension</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">terminal</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"'"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">terminal</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"'"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">terminal</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'No digits allowed in terminal names.'</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'E</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> -&gt; '</span>
+        <span class="k">for</span> <span class="n">terminal</span><span class="p">,</span> <span class="n">dimension</span> <span class="ow">in</span> <span class="n">terminals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">dimension</span>
+            <span class="n">terminal</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">terminal</span><span class="si">}</span><span class="s2">_d</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">'"</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">rule</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">terminal</span><span class="si">}</span><span class="s2"> E</span><span class="si">{</span><span class="n">i</span><span class="o">-</span><span class="n">t</span><span class="si">}</span><span class="s2"> | "</span>
+                <span class="n">rule</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"E</span><span class="si">{</span><span class="n">i</span><span class="o">-</span><span class="n">t</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">terminal</span><span class="si">}</span><span class="s2"> | "</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+    <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"E0 -&gt; "</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span>
+</pre></div>
+
+
+<p>In <a href="https://chat.openai.com/c/1c6ced01-4038-49f0-97ab-96c36ba3e8af">a fairly one-sided conversation with GPT3.5</a>, I decided these grammars only have $O\left(2\sum_{i=1}^M |{FN}_i|\right)$ productions (the "size" of the grammar), where ${FN}_i$ is the set of terminals $FN$ like $F1$, $F3$, $F5$ with $N \le i$, and $|\cdot|$ is the set cardinality. This is not factorial explosion, so it might be usable.</p>
+<p>So, with the generated grammar</p>
+<div class="codehilite"><pre><span></span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">E9</span>
+<span class="n">E9</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E7</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E7</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E8</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E8</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E8</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E6</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E6</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E7</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E7</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E7</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E5</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E5</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E6</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E6</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E6</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E4</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E5</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E5</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E5</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E3</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E4</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E4</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E2</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E3</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E3</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E1</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E2</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="n">E0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E0</span><span class="w"> </span><span class="s">'pen_d2'</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E1</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="s">'pid_d1'</span><span class="w"> </span><span class="n">E0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">E0</span><span class="w"> </span><span class="s">'pid_d1'</span>
+<span class="n">E0</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span>
+</pre></div>
+
+
+<p>the test string</p>
+<p><code>['pen_d2', 'pen_d2', 'pen_d2', 'pid_d1', 'pid_d1', 'pid_d1']</code></p>
+<p>parses like</p>
+<div class="codehilite"><pre><span></span>         S                                                  
+         |                                                  
+         E9                                                 
+   ______|_____________                                     
+  |                    E8                                   
+  |       _____________|______                              
+  |      |                    E7                            
+  |      |       _____________|_____                        
+  |      |      |                   E6                      
+  |      |      |       ____________|____                   
+  |      |      |      |                 E4                 
+  |      |      |      |       __________|_____             
+  |      |      |      |      |                E2           
+  |      |      |      |      |           _____|___         
+  |      |      |      |      |          |         E0       
+  |      |      |      |      |          |         |
+pid_d1 pid_d1 pid_d1 pen_d2 pen_d2     pen_d2     ...
+</pre></div>
+
+
+<p>![[sum_grammar.png|600]]</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
