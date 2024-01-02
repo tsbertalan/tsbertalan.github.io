@@ -93,48 +93,6 @@
 <p>Felix Dietrich, Alexei Makeev, George Kevrekidis, Nikolaos Evangelou, Tom Bertalan, Sebastian Reich, Ioannis G Kevrekidis. <a href="https://pubmed.ncbi.nlm.nih.gov/36859209/"><em>Chaos</em> 33(2) (2023)</a>.  <a href="https://doi.org/10.1063/5.0113632">DOI: 10.1063/5.0113632</a></p>
 
 <p>We identify effective stochastic differential equations (SDEs) for coarse observables of fine-grained particle- or agent-based simulations; these SDEs then provide useful coarse surrogate models of the fine scale dynamics. We approximate the drift and diffusivity functions in these effective SDEs through neural networks, which can be thought of as effective stochastic ResNets. The loss function is inspired by, and embodies, the structure of established stochastic numerical integrators (here, Euler-Maruyama and Milstein); our approximations can thus benefit from backward error analysis of these underlying numerical schemes. They also lend themselves naturally to "physics-informed" gray-box identification when approximate coarse models, such as mean field equations, are available. Existing numerical integration schemes for Langevin-type equations and for stochastic partial differential equations can also be used for training; we demonstrate this on a stochastically forced oscillator and the stochastic wave equation. Our approach does not require long trajectories, works on scattered snapshot data, and is designed to naturally handle different time steps per snapshot. We consider both the case where the coarse collective observables are known in advance, as well as the case where they must be found in a data-driven manner.</p>
-
-<p>Euler-Maruyama:
-$$
-\hat x_{k+1} = x_k + hf(x_k)+\sigma(x_k)dW
-$$
-Euler-Milstein:
-$$
-\hat x_{k+1} = x_k + hf(x_k)+\sigma(x_k) dW 
-+ \frac{1}{2}\sigma(x_k)
-\frac{d}{dx}
-\left[\sigma(x_k)\right]
-\left[
-(dW)^2-h
-\right]
-$$
-Here, the hats indicate that (a) $f$ and $\sigma$ are only approximate neural surrogates for the true function, and (b) these integration schemes are themselves only approximations of the "true" dynamics, even with correct $f$ and $\sigma$.</p>
-
-<p>Let
-$$
-dW=\epsilon\sim\mathcal N(0,1)
-$$
-and
-$$
-z=hf(x_k) + \sigma(x_k)dW 
-\sim q(z|x_k)
-=
-\mathcal N(hf(x_k),\sigma(x_k))
-$$
-Then (in e.g. the EM case), 
-$$
-\hat x_{k+1}=x_k + z \sim \rho(x_{k+1})
-$$
-is has some resemblance to a VAE with latent variable $z$, and we could consider training it as one. Namely, we train with a two term loss. The first term is the KL divergence between $q$ and a standard-Gaussian prior $\mathcal N(0,1)$. The second term is the likelihood of the data $x_{k+1}$ under the predictive distribution $\rho(x_{k+1})$,
-$$ {loss}
-\mathcal L 
-=
-D_{KL}(q,\mathcal N(0,1))
--
-\log\rho(x_{k+1})
-$$</p>
-
-<p>Note that the true data $x_{k+1}$ is used as the argument to $\rho$, not $\hat x_{k+1}$.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>
