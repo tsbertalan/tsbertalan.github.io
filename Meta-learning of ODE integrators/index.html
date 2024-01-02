@@ -93,23 +93,6 @@
 <p>Yue Guo, Felix Dietrich, Tom Bertalan, Danimir T. Doncevic, Manuel Dahmen, Ioannis G. Kevrekidis, and Qianxiao Li. <a href="https://doi.org/10.1137/21M1418629">doi.org/10.1137/21M1418629</a></p>
 
 <p>We study the learning of numerical algorithms for scientific computing, which combines mathematically driven, handcrafted design of general algorithm structure with a data-driven adaptation to specific classes of tasks. This represents a departure from the classical approaches in numerical analysis, which typically do not feature such learning-based adaptations. As a case study, we develop a machine learning approach that automatically learns effective solvers for initial value problems in the form of ordinary differential equations (ODEs), based on the Runge--Kutta (RK) integrator architecture. We show that we can learn high-order integrators for targeted families of differential equations without the need for computing integrator coefficients by hand. Moreover, we demonstrate that in certain cases we can obtain superior performance to classical RK methods. This can be attributed to certain properties of the ODE families being identified and exploited by the approach. Overall, this work demonstrates an effective learning-based approach to the design of algorithms for the numerical solution of differential equations. This can be readily extended to other numerical tasks.</p>
-
-<h2>Definition of a Generalized Krylov Type Subspace</h2>
-
-<p>Let $X$ be a normed vector space and $f:X\rightarrow X$ be a function distinct from identity. For $x\in X$ and $n\geq 1$, a generalized Krylov subspace is a subspace of $X$ defined as
-$$
-\mathcal{K}_n(f,x) = \mathrm{Span}
-{
-    v_0, v_1, \dots,v_{n-1}
-}
-$$
-where $v_0 = f(x)$ and for each $r \geq 1$,
-$$
-v_r = \sum_{j=1}^{m} a_{rj} f(b_{rj} x + \sum_{k=0}^{r-1} c_{rjk} v_k)
-$$
-for some $a_{rj},b_{rj},c_{rjk} \in \mathbb{R}$.</p>
-
-<p>[Maybe $v_0 = x$ is better? If so, then this includes the usual Krylov subspace by choosing $f(x)=Ax$ and the a,b,cs properly] </p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>
