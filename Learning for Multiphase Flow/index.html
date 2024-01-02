@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Learning for Multiphase Flow</span><a href="http://github.com/tsbertalan/multiphase_flow" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Project Files</a>
+</div>
+<span></span><h1>Multiphase Flow</h1>
+
+<p>Learn various grey- and black-box ODEs and PDEs for a multiphase flow project from Gretar Tryggvason's lab.</p>
+
+<h2>Development of closures for coarse-scale modeling of multiphase and free surface flows using machine learning</h2>
+
+<p>Cristina Martin Linares, Tom Bertalan, Eleni Koronaki, Jiacai Lu, Gretar Tryggvason, and Ioannis Kevrekidis. <a href="https://ui.adsabs.harvard.edu/abs/2021APS..DFDM31001M/abstract">APS Division of Fluid Dynamics (2021), abstract id.M31.001</a></p>
+
+<p>The aim of this work is to learn coarse-grained PDEs as well as reduced-order models of those using a data-driven approach. We train a neural network to learn an approximate inertial form: ODEs for the coarse-scale system behavior obtained from the fine-scale simulations of a bubbly multiphase flow in a vertical channel. We average in the direction parallel to the overall flow to create a dataset of one-spatial-dimension, time-dependent profiles. We perform Proper Orthogonal Decomposition (POD) to reduce the high-dimensional averaged snapshot data to a truncated set of 10 leading-mode amplitude coefficients, and further reduce these through an autoencoder. We then train a second neural network to approximate the continuous-time dynamics of the system in terms of the amplitudes of the <code>determining'' POD coefficients (after filtering through the autoencoder) and also reconstruct the full solution via a third network that approximates the remaining POD coefficients as a function of the determining ones. Finally, we also learn a</code>grey-box'' model for the right-hand-side operator of the averaged PDE that uses the known parts. To evolve the relevant fields, a pair of unknown closure terms, the wall-normal liquid flux, and summed dissipative terms are learned from coarse evolution data, using only spatial local information. </p>
+
+<h2>Neural Network approach to reduced order modeling of multiphase flows</h2>
+
+<p>Cristina P. Martin Linares, Tom Bertalan, Jiacai Lu, Seungjoon Lee, Ioannis Kevrekidis, and Gretar Tryggvason. <a href="https://ui.adsabs.harvard.edu/abs/2020APS..DFDK09021M/abstract">APS Division of Fluid Dynamics (2020), abstract id.K09.021</a></p>
+
+<p>We explore the use of Neural Networks (NN) to learn black as well as grey box models of the Partial Differential Equations (PDE) that govern multiphase flows in a 2-Dimensional (2-D) vertical channel. The data is generated using Direct Numerical Simulations (DNS). The covariance method is used to perform Proper Orthogonal Decomposition (POD) on the velocity and void fraction to filter the data so we can learn an effective PDE. The selected POD modes are further reduced through an autoencoder. The selected minimum number of non-linear projections have a one-to-one correspondence with the first few POD modes while reducing the loss function. The POD modes are used to evolve the solution in time using NN. We also use a NN to learn the functional form of the PDE and use the learned PDE to predict the dynamics. The closure terms in the averaged multiphase flow equations are predicted using NN and the predicted PDE is used to evolve in time the velocity and the void fraction, in another method. The developed models are used to predict the dynamics of flows with different initial and boundary conditions. </p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>

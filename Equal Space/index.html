@@ -90,9 +90,11 @@
 </div>
 <span></span><h1>Emergent Space</h1>
 
-<p>This project was <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9184577/">published in Nature Communications</a> June 2022.</p>
+<h2>Learning emergent partial differential equations in a learned emergent space</h2>
 
-<p><a href="http://dx.doi.org/10.1016/j.acha.2015.06.008">Previous Work</a> in our lab
+<p>Felix Kemeth, Tom Bertalan, Thomas Thiem, Felix Dietrich, Sung Joon Moon, Carlon Laing, and Ioannis Kevrekidis. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9184577/"><em>Nature Communications</em> 13 (2022)</a>. DOI: <a href="https://doi.org/10.1038%2Fs41467-022-30628-6">10.1038/s41467-022-30628-6</a></p>
+
+<p><a href="http://dx.doi.org/10.1016/j.acha.2015.06.008" title="Parsimonious representation of nonlinear dynamical systems through manifold learning: A chemotaxis case study" alt="Parsimonious representation of nonlinear dynamical systems through manifold learning: A chemotaxis case study">Previous Work</a> in our lab
 uses nonlinear dimensionality reduction techniques to embed the states
 of a high-dimensional dynamical system in a submanifold of lower dimension,
 providing insight on the true coarse dynamics of the system.</p>
@@ -134,6 +136,20 @@ or when trajectory matrices represent real-world experimental data,
 it is not always clear what the underlying heterogneous parameters are.
 Hence, the equal space technique aims to extract the relevant heterogeneities
 directly from sample trajectories.</p>
+
+<h2>Global and local reduced models for interacting, heterogeneous agents</h2>
+
+<p>Thomas Thiem, Felix Kemeth, Tom Bertalan, Carlo Laing, and Ioannis Kevrekidis. <a href="https://pubmed.ncbi.nlm.nih.gov/34340348/"><em>Chaos</em> 31(7) (2021)</a>. DOI: <a href="https://doi.org/10.1063/5.0055840">10.1063/5.0055840</a></p>
+
+<p>Large collections of coupled, heterogeneous agents can manifest complex dynamical behavior presenting difficulties for simulation and analysis. However, if the collective dynamics lie on a low-dimensional manifold, then the original agent-based model may be approximated with a simplified surrogate model on and near the low-dimensional space where the dynamics live. Analytically identifying such simplified models can be challenging or impossible, but here we present a data-driven coarse-graining methodology for discovering such reduced models.</p>
+
+<p>We consider two types of reduced models: globally based models that use global information and predict dynamics using information from the whole ensemble and locally based models that use local information, that is, information from just a subset of agents close (close in heterogeneity space, not physical space) to an agent, to predict the dynamics of an agent. For both approaches, we are able to learn laws governing the behavior of the reduced system on the low-dimensional manifold directly from time series of states from the agent-based system. These laws take the form of either a system of ordinary differential equations (ODEs), for the globally based approach, or a partial differential equation (PDE) in the locally based case.</p>
+
+<p>For each technique, we employ a specialized artificial neural network integrator that has been templated on an Euler time stepper (i.e., a ResNet) to learn the laws of the reduced model. As part of our methodology, we utilize the proper orthogonal decomposition (POD) to identify the low-dimensional space of the dynamics. Our globally based technique uses the resulting POD basis to define a set of coordinates for the agent states in this space and then seeks to learn the time evolution of these coordinates as a system of ODEs.</p>
+
+<p>For the locally based technique, we propose a methodology for learning a partial differential equation representation of the agents; the PDE law depends on the state variables and partial derivatives of the state variables with respect to model heterogeneities. We require that the state variables are smooth with respect to model heterogeneities, which permit us to cast the discrete agent-based problem as a continuous one in heterogeneity space. The agents in such a representation bear similarity to the discretization points used in typical finite element/volume methods.</p>
+
+<p>As an illustration of the efficacy of our techniques, we consider a simplified coupled neuron model for rhythmic oscillations in the pre-Btzinger complex and demonstrate how our data-driven surrogate models are able to produce dynamics comparable to the dynamics of the full system. A nontrivial conclusion is that the dynamics can be equally well reproduced by an all-to-all coupled and by a locally coupled model of the same agents.</p>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>
