@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Learning stochastic DEs from data</span>
+</div>
+<span></span><h1>Variational Neural SDEs</h1>
+
+<p>Felix Dietrich, Alexei Makeev, George Kevrekidis, Nikolaos Evangelou, Tom Bertalan, Sebastian Reich, Ioannis G Kevrekidis. <a href="https://pubmed.ncbi.nlm.nih.gov/36859209/"><em>Chaos</em> 33(2) (2023)</a>.  <a href="https://doi.org/10.1063/5.0113632">DOI: 10.1063/5.0113632</a></p>
+
+<p>We identify effective stochastic differential equations (SDEs) for coarse observables of fine-grained particle- or agent-based simulations; these SDEs then provide useful coarse surrogate models of the fine scale dynamics. We approximate the drift and diffusivity functions in these effective SDEs through neural networks, which can be thought of as effective stochastic ResNets. The loss function is inspired by, and embodies, the structure of established stochastic numerical integrators (here, Euler-Maruyama and Milstein); our approximations can thus benefit from backward error analysis of these underlying numerical schemes. They also lend themselves naturally to "physics-informed" gray-box identification when approximate coarse models, such as mean field equations, are available. Existing numerical integration schemes for Langevin-type equations and for stochastic partial differential equations can also be used for training; we demonstrate this on a stochastically forced oscillator and the stochastic wave equation. Our approach does not require long trajectories, works on scattered snapshot data, and is designed to naturally handle different time steps per snapshot. We consider both the case where the coarse collective observables are known in advance, as well as the case where they must be found in a data-driven manner.</p>
+
+<p>Euler-Maruyama:
+$$
+\hat x_{k+1} = x_k + hf(x_k)+\sigma(x_k)dW
+$$
+Euler-Milstein:
+$$
+\hat x_{k+1} = x_k + hf(x_k)+\sigma(x_k) dW 
++ \frac{1}{2}\sigma(x_k)
+\frac{d}{dx}
+\left[\sigma(x_k)\right]
+\left[
+(dW)^2-h
+\right]
+$$
+Here, the hats indicate that (a) $f$ and $\sigma$ are only approximate neural surrogates for the true function, and (b) these integration schemes are themselves only approximations of the "true" dynamics, even with correct $f$ and $\sigma$.</p>
+
+<p>Let
+$$
+dW=\epsilon\sim\mathcal N(0,1)
+$$
+and
+$$
+z=hf(x_k) + \sigma(x_k)dW 
+\sim q(z|x_k)
+=
+\mathcal N(hf(x_k),\sigma(x_k))
+$$
+Then (in e.g. the EM case), 
+$$
+\hat x_{k+1}=x_k + z \sim \rho(x_{k+1})
+$$
+is has some resemblance to a VAE with latent variable $z$, and we could consider training it as one. Namely, we train with a two term loss. The first term is the KL divergence between $q$ and a standard-Gaussian prior $\mathcal N(0,1)$. The second term is the likelihood of the data $x_{k+1}$ under the predictive distribution $\rho(x_{k+1})$,
+$$ {loss}
+\mathcal L 
+=
+D_{KL}(q,\mathcal N(0,1))
+-
+\log\rho(x_{k+1})
+$$</p>
+
+<p>Note that the true data $x_{k+1}$ is used as the argument to $\rho$, not $\hat x_{k+1}$.</p>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
