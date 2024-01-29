@@ -88,69 +88,13 @@
 <div class="demo-crumbs mdl-color-text--grey-500">
 <a href="../index.html">Home</a> &gt; <span>Visual Scene Grammars</span>
 </div>
-<span></span><ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Create a <em>very</em> simple grammar generator and validator.</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Make a pipeline in either Blender or Gazebo for generating scene renderings.</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> [[Use grammatical evolution for program synthesis from known modules]]</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> [[Write an outer-inner-optimizer framework for mixed fine tuning and grammatical hyperparameter selection]]</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Figure out how to expand the module set.</li>
-</ul>
+<span></span><p>Develop a modular grammar for dynamic scene representations.</p>
 
-<h2>State Estimation --  learning the observer</h2>
+<p>Start by creating a simple grammar generator and validator. Establish a rendering pipeline in either Blender or Gazebo to visualize scenes. Explore the application of grammatical evolution for program synthesis, and implement an outer-inner-optimizer framework for mixed fine-tuning and grammatical hyperparameter selection. Expand the module set and conduct probabilistic inferences needed for Bayesian state estimation. </p>
 
-<ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do each of the probabilistic inferences needed for Bayes $p(g|s) = p(g) \cdot p(s|g) / p(s)$ for graph $g$ and sense $s$, except we don't really need $p(s)$, and the $p(g)$ part is handled by our choice of Kalman, EKalman, UKalman, or particle filter.<ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Select the needed network heads: $g\rightarrow s$ etc.</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Find some pre-trained nets to build from.</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Fine tune a little bit.</li>
-</ul>
-</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> Do online inference!</li>
-</ul>
+<p>Utilize pre-trained neural networks for building and fine-tune as needed. Implement online inference methods to enhance real-time capabilities. Draw inspiration from the works of modular neural ordinary differential equations and modular meta-learning.</p>
 
-<h2>Other notes and projects</h2>
-
-<p>[[2023-10-31|Last night]] I had a [[dream about using my hands and my eyes]].</p>
-
-<p>See also [[a grammar for generating DAG programs]].</p>
-
-<h2>Possible Collaborators</h2>
-
-<ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> [[Seth Hutchinson]] of Georgia Tech (controls and some thoughts about LLMs therein)<ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> find and read some of the work of Seth Hutchinson, and relate it to my grammatical dynamics project. <em>I didn't see anything obviously related on his GScholar, but I asked about it [[2023-12-29]].</em>
-</li>
-</ul>
-</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> [[Gioele Zardini]] of MIT (group theory and compositionality)</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled checked><span class="task-list-indicator"></span></label> Contact graph guys from [[2023-11-21]] 8am seminar. <em>Can't find the seminar. Oh well.</em>
-</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> [[Kempner Institute]]<ul class="task-list">
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> ==<a href="https://cogscikid.com/main-pages/publications/">Wilka Carvalho</a>==</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> ==<a href="https://psychology.fas.harvard.edu/people/samuel-j-gershman">Samuel J. Gershman</a>== "... how richly structured knowledge about the environment is acquired ...* (psychology)</li>
-<li class="task-list-item">
-<label class="task-list-control"><input type="checkbox" disabled><span class="task-list-indicator"></span></label> <a href="https://scholar.google.com/citations?hl=en&amp;user=AmubonoAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">David Brandfonbrener</a>
-</li>
-</ul>
-</li>
-</ul>
+<p>This project aims to advance state estimation and learning in observers for dynamic scenes, with an overarching goal of achieving a emergent modular grammar system for scene representation.</p>
 <span></span><h2>Entries</h2>
 <p><a href="Data_generation_ground_truthing_and_first_ideas.html" title="23 August, 2023">Data generation, ground truthing, and first ideas</a> <small><i>23 August, 2023</i></small></p>
 <p><a href="Program_Synthesis_for_Concatenation.html" title="Halloween, 2023">Program Synthesis for Concatenation</a> <small><i>Halloween, 2023</i></small></p>

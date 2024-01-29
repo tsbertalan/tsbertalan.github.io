@@ -69,13 +69,13 @@ def index(cards=[]):
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
     bioCellSubcell.append(Tag('p', tagText='''
-    I am a Postdoctoral Fellow in the Chemical and Biomolecular Engineering department
-    at Johns Hopkins University.
+    I am a Research Software Engineer in the Chemical and Biomolecular Engineering department
+    at The University of Massachusetts at Lowell.
     I received my PhD from Princeton University's
     department of Chemical and Biological Engineering, 
     with a Graduate Certificate in Computational and Information Science.
 
-    Before working at JHU, I was a Postdoctoral Associate in the MAE department at MIT.
+    Before working at UML, I was a postdoc at MIT and JHU.
                                                                   '''))
     bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in data mining, dimensionality reduction,
