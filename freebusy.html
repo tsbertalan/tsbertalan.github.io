@@ -108,27 +108,29 @@
 					&gt; <span>Free/Busy Times</span>
                     <center>
                         <p style="font-size: 20;">
-                            <a target="_blank" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3DFI3FeZ3imknkYdnqQll4P0p2oa0ye-hT6KdVetyBQUuWbvikr8twF5GHn4smZ8Ae9oMg    jnPS?gv=true">Schedule a Meeting</a>
-
-                            <!-- Google Calendar Appointment Scheduling begin -->
-                            <!--
-                            <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
-                            <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
-                            <script>
-                            (function() {
-                              var target = document.currentScript;
-                              window.addEventListener('load', function() {
-                                calendar.schedulingButton.load({
-                                  url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3DFI3FeZ3imknkYdnqQll4P0p2oa0ye-hT6KdVetyBQUuWbvikr8twF5GHn4smZ8Ae9oMgjnPS?gv=true',
-                                  color: '#039BE5',
-                                  label: "Schedule a Meeting",
-                                  target,
-                                });
-                              });
-                            })();
-                            </script>
-                            -->
-                            <!-- end Google Calendar Appointment Scheduling -->
+							<!-- Google Calendar Appointment Scheduling begin -->
+							<link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+							<script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+							<script>
+							var target = (function() {
+							var target = document.currentScript;
+							window.addEventListener('load', function() {
+								calendar.schedulingButton.load({
+								url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3DFI3FeZ3imknkYdnqQll4P0p2oa0ye-hT6KdVetyBQUuWbvikr8twF5GHn4smZ8Ae9oMgjnPS?gv=true',
+								color: '#039BE5',
+								label: "Schedule a Meeting",
+								target,
+								});
+								// Find the button.
+								var button = target.nextElementSibling;
+								// Change its class and drop its style.
+								button.className = 'mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect';
+								button.style = '';
+							});
+							return target;
+							})();
+							</script>
+							<!-- end Google Calendar Appointment Scheduling -->
                         </p>
                     </center>
 					<!-- <a href="http://github.com/tsbertalan/gudrun" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Project Files</a> -->
