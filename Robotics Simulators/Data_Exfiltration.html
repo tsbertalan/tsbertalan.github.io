@@ -90,25 +90,25 @@
 </div>
 <span></span><h1>Data Exfiltration</h1>
 <span></span><p>Thanks to the Lua extension in VSC from user sumneko, I can F12 my way to the superclass constructor <code>AIDriveStrategyFieldWorkCourse.new</code>. Thanks to Copilot, I can speak Lua well enough to</p>
-<div class="codehilite"><pre><span></span><span class="kr">function</span> <span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">customMt</span><span class="p">)</span>
-   <span class="c1">-- We'll save telemetry data to a file as we drive:</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="s2">"telemetry.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="kr">function</span><span class="w"> </span><span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="nv">customMt</span><span class="p">)</span>
+<span class="w">   </span><span class="c1">-- We'll save telemetry data to a file as we drive:</span>
+<span class="w">    </span><span class="nv">self</span><span class="p">.</span><span class="py">telemtry_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">io.open</span><span class="p">(</span><span class="s2">"telemetry.csv"</span><span class="p">,</span><span class="w"> </span><span class="s2">"w"</span><span class="p">)</span>
 
-    <span class="c1">-- Write the column headers: dt, vX, vY, vZ, gx, gz, moveForwards, maxSpeed</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Opening telemetry file with columns: dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="s2">"dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">-- Write the column headers: dt, vX, vY, vZ, gx, gz, moveForwards, maxSpeed</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="s1">'Opening telemetry file with columns: dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">self</span><span class="p">.</span><span class="py">telemtry_file</span><span class="p">:</span><span class="nf">write</span><span class="p">(</span><span class="s2">"dt,vX,vY,vZ,gx,gz,moveForwards,maxSpeed</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="c1">-- ...</span>
+<span class="w">    </span><span class="c1">-- ...</span>
 <span class="kr">end</span>
 
-<span class="kr">function</span> <span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">:</span><span class="nf">getDriveData</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">vX</span><span class="p">,</span> <span class="n">vY</span><span class="p">,</span> <span class="n">vZ</span><span class="p">)</span>
-    <span class="c1">-- ... generate gx, gz here ...</span>
-    <span class="c1">-- Save the data to the telemtry file.</span>
-    <span class="n">self</span><span class="p">.</span><span class="n">telemtry_file</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span>
-        <span class="s2">"%f,%f,%f,%f,%f,%f,%s,%f</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> 
-        <span class="n">dt</span><span class="p">,</span> <span class="n">vX</span><span class="p">,</span> <span class="n">vY</span><span class="p">,</span> <span class="n">vZ</span><span class="p">,</span> <span class="n">gx</span><span class="p">,</span> <span class="n">gz</span><span class="p">,</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">moveForwards</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">maxSpeed</span>
-    <span class="p">))</span>
-    <span class="c1">-- ...</span>
+<span class="kr">function</span><span class="w"> </span><span class="nc">AIDriveStrategyFieldWorkCourse</span><span class="p">:</span><span class="nf">getDriveData</span><span class="p">(</span><span class="nv">dt</span><span class="p">,</span><span class="w"> </span><span class="nv">vX</span><span class="p">,</span><span class="w"> </span><span class="nv">vY</span><span class="p">,</span><span class="w"> </span><span class="nv">vZ</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">-- ... generate gx, gz here ...</span>
+<span class="w">    </span><span class="c1">-- Save the data to the telemtry file.</span>
+<span class="w">    </span><span class="nv">self</span><span class="p">.</span><span class="py">telemtry_file</span><span class="p">:</span><span class="nf">write</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"%f,%f,%f,%f,%f,%f,%s,%f</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="nv">dt</span><span class="p">,</span><span class="w"> </span><span class="nv">vX</span><span class="p">,</span><span class="w"> </span><span class="nv">vY</span><span class="p">,</span><span class="w"> </span><span class="nv">vZ</span><span class="p">,</span><span class="w"> </span><span class="nv">gx</span><span class="p">,</span><span class="w"> </span><span class="nv">gz</span><span class="p">,</span><span class="w"> </span><span class="nb">tostring</span><span class="p">(</span><span class="nv">moveForwards</span><span class="p">),</span><span class="w"> </span><span class="nv">self</span><span class="p">.</span><span class="py">maxSpeed</span>
+<span class="w">    </span><span class="p">))</span>
+<span class="w">    </span><span class="c1">-- ...</span>
 <span class="kr">end</span>
 </pre></div>
 

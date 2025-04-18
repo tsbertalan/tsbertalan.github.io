@@ -105,7 +105,7 @@
 
 <p>such that <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.dag.topological_sort.html"><code>nx.topological_sort</code></a> </p>
 
-<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_next</span><span class="p">(</span><span class="n">markdown_str</span><span class="p">):</span>
+<div class="codehilite"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_next</span><span class="p">(</span><span class="n">markdown_str</span><span class="p">):</span>
     <span class="n">partially_ordered_tree</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">markdown_str</span><span class="p">)</span>
     <span class="n">fully_ordered_dag</span> <span class="o">=</span> <span class="n">create_ordered_dag</span><span class="p">(</span><span class="n">partially_ordered_tree</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">fully_ordered_dag</span><span class="p">):</span>

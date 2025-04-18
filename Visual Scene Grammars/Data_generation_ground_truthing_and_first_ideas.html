@@ -89,13 +89,13 @@
 <a href="../index.html">Home</a> &gt; <a href="index.html">Visual Scene Grammars</a> &gt; <span>Data generation, ground truthing, and first ideas</span>
 </div>
 <span></span><h1>Data generation, ground truthing, and first ideas</h1>
-<span></span><div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span></span><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
 <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">'..'</span><span class="p">,</span> <span class="s1">'src'</span><span class="p">)))</span>
 <span class="n">fig_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s1">'..'</span><span class="p">,</span> <span class="s1">'doc'</span><span class="p">))</span>
-<span class="kn">import</span> <span class="nn">PIL.Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
 <span class="n">show_image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span>
-<span class="kn">from</span> <span class="nn">blender_render_scene</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blender_render_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">render</span>
 </pre></div>
 
 
@@ -137,7 +137,7 @@
   - with $0^\circ$ rotation.</p>
 <p>Note that we're limiting ourselves to signed integers for the numeric parts, as a simplifying assumption.</p>
 <p>Let's implement this.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">scene_graph_gt</span> <span class="k">as</span> <span class="nn">gt</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scene_graph_gt</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gt</span>
 </pre></div>
 
 
@@ -185,7 +185,7 @@
 <p>(Note that both are actually lists of what I said, because we want to expand later to scenes with multiple walls. But that's a problem for future us.)</p>
 <h2>Random Sampling</h2>
 <p>One other way that our regex description is useful is for generating random samples from the language. For this, we use the library <code>hypothesis</code> for this. But an important caveat that the strings are all ASCII! The <code>\d</code> in the regex can match some other languages as well:</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">hypothesis</span><span class="o">,</span> <span class="nn">re</span>
+<div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">hypothesis</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span>
 <span class="n">hypothesis</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">regex</span> <span class="o">=</span> <span class="s1">'\d'</span> <span class="o">*</span> <span class="mi">12</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Any Unicode:'</span><span class="p">,</span> <span class="n">hypothesis</span><span class="o">.</span><span class="n">strategies</span><span class="o">.</span><span class="n">from_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">fullmatch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">example</span><span class="p">())</span>
