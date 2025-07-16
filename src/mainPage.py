@@ -68,15 +68,9 @@ def index(cards=[]):
     bioCell.append(Tag('center', toAppend=[Tag('h1', cls='mdl-typography--display-3 h1-mainpage', tagText='Tom Bertalan')]))
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
-    bioCellSubcell.append(Tag('p', tagText='''
-    I am a Research Software Engineer in the Chemical and Biomolecular Engineering department
-    at The University of Massachusetts at Lowell.
-    I received my PhD from Princeton University's
-    department of Chemical and Biological Engineering, 
-    with a Graduate Certificate in Computational and Information Science.
+    bioCellSubcell.append(Tag('p', tagText='''I'm a Data scientist in Amgen's Transformative Digital Capabilities group in Cambridge, MA. He received his PhD from Princeton University's department of Chemical and Biological Engineering, followed by research and engineering work at MIT, JHU, and UMass Lowell.
 
-    Before working at UML, I was a postdoc at MIT and JHU.
-                                                                  '''))
+My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.'''))
     bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in data mining, dimensionality reduction,
     and system identification (using neural networks)
