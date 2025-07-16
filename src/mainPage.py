@@ -68,16 +68,12 @@ def index(cards=[]):
     bioCell.append(Tag('center', toAppend=[Tag('h1', cls='mdl-typography--display-3 h1-mainpage', tagText='Tom Bertalan')]))
     bioCellSubcell = Div(cls='mdl-cell mdl-cell--12-col')
     bioCell.append(bioCellSubcell)
-    bioCellSubcell.append(Tag('p', tagText='''I'm a Data scientist in Amgen's Transformative Digital Capabilities group in Cambridge, MA. He received his PhD from Princeton University's department of Chemical and Biological Engineering, followed by research and engineering work at MIT, JHU, and UMass Lowell.
+    bioCellSubcell.append(Tag('p', tagText='''I'm a Data scientist in Amgen's Transformative Digital Capabilities group in Cambridge, MA. I received my PhD from Princeton University's department of Chemical and Biological Engineering, followed by research and engineering work at MIT, JHU, and UMass Lowell.
 
 My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.'''))
     bioCellSubcell.append(Tag('p', tagText='''
-    My research interests are in data mining, dimensionality reduction,
-    and system identification (using neural networks)
-    for high-dimensional dynamical systems, 
-    with applications in robotic perception and planning, 
-    and computational neuroscience.
-                                                                  '''))
+    My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.
+                              '''))
     
     # A menu.
     bioCellSubcell.append(
