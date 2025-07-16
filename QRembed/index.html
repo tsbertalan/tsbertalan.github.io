@@ -88,7 +88,66 @@
 <div class="demo-crumbs mdl-color-text--grey-500">
 <a href="../index.html">Home</a> &gt; <span>QRembed</span><a href="http://github.com/com/tsbertalan/QRembed" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Project Files</a>
 </div>
-<span></span>QRembed</div>
+<span></span><h1>QRembed</h1>
+
+<h2>Usage</h2>
+
+<p>Embed a file or directory in QR/DataMatrix images optionally using 7z volumes.</p>
+
+<div class="codehilite"><pre><span></span>python<span class="w"> </span>bin/qrembed.py<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OUTPUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--method<span class="w"> </span><span class="o">{</span>qr,datamatrix<span class="o">}]</span><span class="w"> </span><span class="o">[</span>--chunked<span class="o">]</span><span class="w"> </span><span class="o">[</span>--chunk-size<span class="w"> </span>CHUNK_SIZE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--retain-zips<span class="o">]</span><span class="w"> </span>input_path
+</pre></div>
+
+<ul>
+<li>
+<code>input_path</code>: Path to the file or directory to embed</li>
+<li>
+<code>-o OUTPUT, --output OUTPUT</code>: Output image file (default: <input>.png)</li>
+<li>
+<code>--method {qr,datamatrix}</code>: Encoding method: qr or datamatrix (default: qr)</li>
+<li>
+<code>--chunked</code>: Enable chunked archive mode (split file/dir into 7z volumes for multiple codes)</li>
+<li>
+<code>--chunk-size CHUNK_SIZE</code>: Chunk size in bytes (default: 2900 for QR, required for --chunked)</li>
+<li>
+<code>--retain-zips</code>: Move 7z volume files to the target parent directory after encoding</li>
+</ul>
+
+<p><strong>Note:</strong></p>
+
+<ul>
+<li>Uses the largest QR code size and lowest error correction to maximize data capacity.</li>
+<li>If the file is too large to fit in a QR code, an error will be raised unless chunked mode is used.</li>
+</ul>
+
+<p>Be warned--this doen't scale super well: a 10kB file took 4 (dense) QR codes, and I expect this is linear. But if your only data storage medium is physical QR codes, I guess this could be useful?</p>
+
+<h2>Decoding</h2>
+
+<p>What seemed to work for me as to use <a href="https://github.com/markusfisch/BinaryEye">Binary Eye</a> to download the QR codes directly to files, saving as FILENAME.7z.001 etc. (note the two periods). Then I could use <a href="https://play.google.com/store/apps/details?id=org.joa.zipperplus7&amp;hl=en-US&amp;pli=1">7Zipper</a> to extract by starting with the 001th.</p>
+
+<h2>Progress</h2>
+
+<ul>
+<li>CLI can encode any file or directory as a series of QR or DataMatrix codes, using 7z volumes for multipart support.</li>
+<li>Default QR chunk size is set to 2900 bytes (empirically determined).</li>
+<li>Output PNGs and (optionally) 7z volumes are moved to the target's parent directory.</li>
+<li>Manual transfer and reassembly is possible, but tedious for large files.</li>
+<li>No standard for including filenames in QR payloads; most phone QR readers do not extract or display custom headers.</li>
+</ul>
+
+<h2>Possible Next Steps</h2>
+
+<ul>
+<li>Write a Python script to decode a folder of QR images and reassemble the original file/volume.</li>
+<li>Explore or build a mobile app for batch QR scanning and automatic reassembly.</li>
+<li>Add support for other 2D codes (e.g., Aztec) or optimize for text files.</li>
+<li>Improve error handling and user feedback for failed QR encodings.</li>
+<li>Add optional metadata (e.g., chunk number, total chunks) in a way that is easy to parse by custom tools.</li>
+<li>Document the decoding/reassembly process for users.</li>
+<li>Consider designing a minimal mobile "app" (e.g., a Python script, PWA, or small APK) that can be distributed via QR codes (ideally &lt;10 QRs for the installer itself).</li>
+<li>This would enable fully offline, low-tech distribution of the decoding tool.</li>
+</ul>
+</div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
 </div></main>
 </div></body>
