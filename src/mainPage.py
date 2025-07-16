@@ -70,7 +70,10 @@ def index(cards=[]):
     bioCell.append(bioCellSubcell)
     bioCellSubcell.append(Tag('p', tagText='''I'm a Data scientist in Amgen's Transformative Digital Capabilities group in Cambridge, MA. I received my PhD from Princeton University's department of Chemical and Biological Engineering, followed by research and engineering work at MIT, JHU, and UMass Lowell.
 
-My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.'''))
+My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.
+
+Unless otherwise noted, work described here is my own, and does not represent the views of my employer or any other organization.
+                              '''))
     bioCellSubcell.append(Tag('p', tagText='''
     My research interests are in hybrid modeling, neural system identification, and neurosymbolic computing; with applications in pharmaceutical and chemical processing, and robotics.
                               '''))
