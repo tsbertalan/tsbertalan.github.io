@@ -59,6 +59,31 @@ projectDirs = projectDirs[::-1]
 cards = []
 starredCards = []
 
+def remote_to_web(remote_url):
+    """
+    Convert USER@SITE:PATH.git to https://SITE/PATH
+    and http[s]://SITE/PATH.git to https://SITE/PATH
+    If it doesn't fit those two patterns, return unchanged.
+    """
+    if 'github' not in remote_url.lower():
+        print('\n\n\n>>>>Detected non-github remote URL:', remote_url, '<<<<\n\n\n')
+    if remote_url.startswith('http://') or remote_url.startswith('https://'):
+        parsed = urlparse(remote_url)
+        site = parsed.netloc
+        path = parsed.path
+        if path.endswith('.git'):
+            path = path[:-4]
+        return f'https://{site}{path}'
+    elif '@' in remote_url and ':' in remote_url:
+        # e.g. git@github.com:tsbertalan/thingy.git
+        user_site, path = remote_url.split(':', 1)
+        site = user_site.split('@', 1)[1]
+        if path.endswith('.git'):
+            path = path[:-4]
+        return f'https://{site}/{path}'
+    else:
+        return remote_url
+
 for projectDir in projectDirs:
 
         
@@ -128,15 +153,7 @@ for projectDir in projectDirs:
             remotes = [l for l in cmd_output if 'github' in l and 'bertalan' in l]
             if len(remotes) > 0:
                 remote_url = remotes[0].split()[1]
-                if remote_url.startswith('http'):
-                    parsed = urlparse(remote_url)
-                    # parsed.path: '/tsbertalan/QRembed.git'
-                    repo_path = parsed.path
-                    if repo_path.endswith('.git'):
-                        repo_path = repo_path[:-4]
-                    repo = 'https://github.com' + repo_path
-                else:
-                    repo = 'https://github.com/' + remote_url[15:][:-4]
+                repo = remote_to_web(remote_url)
         except CalledProcessError:
             pass
             
