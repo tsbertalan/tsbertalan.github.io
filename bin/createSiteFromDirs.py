@@ -7,6 +7,7 @@ from shutil import copy, SameFileError
 from subprocess import check_output, CalledProcessError
 import markdown
 import json5 as json
+from urllib.parse import urlparse  # Python 3 import for urlparse
 
 import sys
 HERE = realpath(dirname(__file__))
@@ -126,7 +127,16 @@ for projectDir in projectDirs:
             cmd_output = check_output(["git", "remote", "-v"], cwd=projectDir).decode('utf-8').split('\n')
             remotes = [l for l in cmd_output if 'github' in l and 'bertalan' in l]
             if len(remotes) > 0:
-                repo = 'http://github.com/' + remotes[0].split()[1][15:][:-4]
+                remote_url = remotes[0].split()[1]
+                if remote_url.startswith('http'):
+                    parsed = urlparse(remote_url)
+                    # parsed.path: '/tsbertalan/QRembed.git'
+                    repo_path = parsed.path
+                    if repo_path.endswith('.git'):
+                        repo_path = repo_path[:-4]
+                    repo = 'https://github.com' + repo_path
+                else:
+                    repo = 'https://github.com/' + remote_url[15:][:-4]
         except CalledProcessError:
             pass
             

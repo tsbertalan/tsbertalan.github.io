@@ -13,4 +13,5 @@ diskcache
 jinja2
 networkx
 chardet
+urlparse
 
