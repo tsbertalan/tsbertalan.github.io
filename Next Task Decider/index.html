@@ -193,6 +193,49 @@ root
 
 <p>I'm still considering the right abstraction for ordering those <code>next</code>s contextually.</p>
 
+<h2>CalDAV Integration and Bidirectional Sync</h2>
+
+<p>The project now includes a CalDAV server implementation that bridges markdown task lists to calendar clients like Thunderbird. The current implementation (<code>simple_caldav_server.py</code>) provides a read-only interface that:</p>
+
+<ol>
+<li>Parses markdown journal files for task lists using checkbox syntax (<code>- [ ]</code> and <code>- [x]</code>)</li>
+<li>Performs topological sorting based on indentation hierarchy (children before parents)</li>
+<li>Assigns staggered due times counting backward from 6 PM to create a natural priority order</li>
+<li>Serves tasks via CalDAV protocol at <code>http://tian.local.tomsb.net:8081/calendar/</code>
+</li>
+</ol>
+
+<h3>Future Enhancement: Bidirectional Sync</h3>
+
+<p>A key enhancement being considered is <strong>bidirectional synchronization</strong> where:</p>
+
+<ul>
+<li>Checking off tasks in Thunderbird (or other CalDAV clients) would automatically update the markdown source</li>
+<li>
+<code>- [ ]</code> would become <code>- [x]</code> when marked complete in the calendar client</li>
+<li>Task modifications in the client would reflect back to the original markdown files</li>
+</ul>
+
+<p>This would create a seamless workflow where users can manage tasks either through:</p>
+
+<ul>
+<li>Direct markdown editing (using tools like Obsidian)</li>
+<li>Calendar clients (Thunderbird, Evolution, etc.)</li>
+<li>Mobile CalDAV apps</li>
+</ul>
+
+<p><strong>Implementation Notes:</strong></p>
+
+<ul>
+<li>A previous implementation exploring this bidirectional sync was removed in commit <code>2861cd10</code>
+</li>
+<li>The feature would require monitoring CalDAV PROPFIND/PROPPATCH requests to detect task status changes</li>
+<li>File watching and atomic updates would be needed to avoid conflicts between markdown edits and CalDAV updates</li>
+<li>Proper conflict resolution would be essential for concurrent modifications</li>
+</ul>
+
+<p>This bidirectional sync would make the system truly collaborative between markdown-based task management and standard calendar workflows.</p>
+
 <script>mermaid.initialize({startOnLoad:true});</script>
 </div>
 <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
