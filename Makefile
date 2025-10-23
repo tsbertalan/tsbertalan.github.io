@@ -1,5 +1,5 @@
 all:
-	cp ../Job\ Search/Resume/TomBertalan-Resume-Bioproc-latest.pdf ./resume_TomBertalan.pdf
+	cp ../Job\ Search/Resume/TomBertalan-Resume-latest.pdf ./resume_TomBertalan.pdf
 	bash make.sh
 
 view:

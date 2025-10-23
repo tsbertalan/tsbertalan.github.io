@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_orange-blue.min.css">
+<script src="https://code.getmdl.io/1.2.1/material.min.js" defer></script><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.demo-ribbon {
+  width: 100%;
+  height: 40vh;
+  //background-image: url("hero.png");
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.demo-main {
+  margin-top: -35vh;
+  flex-shrink: 0;
+}
+
+.demo-header .mdl-layout__header-row {
+  padding-left: 40px;
+}
+
+.demo-container {
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.demo-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.demo-layout.is-small-screen .demo-content {
+  padding: 40px 28px;
+}
+
+.demo-content h3 {
+  margin-top: 48px;
+}
+
+.demo-footer {
+  padding-left: 40px;
+}
+
+.demo-footer .mdl-mini-footer--link-list a {
+  font-size: 13px;
+}
+#view-source {
+    float: right;
+}
+</style>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']],
+      processEscapes: true,
+    }
+  }
+  </script><script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script><script type="text/javascript" src="../mermaid.min.js" async></script><link rel="stylesheet" href="../colorful.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../pygments.css">
+<link rel="stylesheet" href="../colorful.css">
+<script>
+                    function show(toExpand)
+                    {
+                    if(
+                       document.getElementById(toExpand).style.display == 'none'
+                       ||
+                       document.getElementById(toExpand).style.display == ''
+                       )
+                        document.getElementById(toExpand).style.display = 'block';
+                    else
+                        document.getElementById(toExpand).style.display = 'none';
+                    }
+                    </script><style></style>
+</head>
+<body><div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+<header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800"><div class="mdl-layout__header-row">
+<span class="mdl-layout-title"><a href="../index.html" style="text-decoration:none; color:#444;" class="mdl-typography--headline">Tom Bertalan</a></span><div class="mdl-layout-spacer"></div>
+</div></header><div class="demo-ribbon"></div>
+<main class="demo-main mdl-layout__content"><div class="demo-container mdl-grid">
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+<div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+<div class="demo-crumbs mdl-color-text--grey-500">
+<a href="../index.html">Home</a> &gt; <span>Bayesian (N)ODEs</span>
+</div>
+<span></span><h1>Bayesian (N)ODEs</h1>
+
+<p>I fit a white-box ODE via Markov Chain Monte Carlo (MCMC) using PyMC. The ODE models a simple pendulum. While this is a white-box model, it's easy enough to swap in black-box neural components for e.g. the frictive damping term.</p>
+
+<p>This has the benefit of estimating <em>full distributions per parameter</em> (here, only three parameters), allowing for calibrated uncertainty of outputs.</p>
+
+<p><img src="pendulum_posterior_predictive.png" alt="hero"></p>
+
+<p>Results were fit from 8 episodes of 64 steps each, $\delta t=0.08$ [s], observation noise std=0.3 (initial conditions were noise-free).</p>
+
+<p>Inference summary:</p>
+
+<style>
+    /* Minimal, elegant table styles */
+    .table-minimal {
+        border-collapse: collapse;
+        width: 60%;
+        max-width: 800px;
+        font-size: 0.95rem;
+        color: #222;
+        margin-bottom: 0.75rem;
+        border: none;
+    }
+    .table-minimal th {
+        border-left: none !important;
+        border-right: none !important;
+    }
+    .table-minimal td {
+        border-left: none !important;
+        border-right: none !important;
+    }
+    .table-minimal caption {
+        caption-side: top;
+        text-align: left;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+    }
+    .table-minimal thead th {
+        text-align: left;
+        font-weight: 600;
+        padding: 0.4rem 0.6rem;
+        color: #444;
+        border-bottom: 1px solid #e9e9e9;
+    }
+    .table-minimal tbody td {
+        padding: 0.35rem 0.6rem;
+        text-align: right;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+        font-variant-numeric: tabular-nums;
+        color: #111;
+        border: none;
+    }
+    .table-minimal tbody td.param {
+        text-align: left;
+        font-family: inherit;
+        font-weight: 500;
+    }
+    .table-minimal tbody tr {
+        border-top: 1px solid #e9e9e9;
+    }
+    .table-minimal tbody tr:nth-child(odd) td {
+        background-color: #f9f9f9;
+    }
+    .table-minimal tbody tr:hover td {
+        background-color: #f1f1f1;
+    }
+    .table-minimal tbody tr + tr td {
+        border-top: none;
+    }
+    .table-minimal tbody tr:last-child td {
+        border-bottom: 1px solid #000;
+    }
+</style>
+
+<table border="1" class="dataframe table-minimal">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>hdi_3%</th>
+      <th>hdi_97%</th>
+      <th>mcse_mean</th>
+      <th>mcse_sd</th>
+      <th>ess_bulk</th>
+      <th>ess_tail</th>
+      <th>r_hat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>m</th>
+      <td>1.949</td>
+      <td>0.133</td>
+      <td>1.713</td>
+      <td>2.199</td>
+      <td>0.004</td>
+      <td>0.003</td>
+      <td>1408.0</td>
+      <td>1474.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>L</th>
+      <td>1.507</td>
+      <td>0.006</td>
+      <td>1.496</td>
+      <td>1.518</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>1326.0</td>
+      <td>1507.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>sigma</th>
+      <td>0.295</td>
+      <td>0.007</td>
+      <td>0.283</td>
+      <td>0.308</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>1399.0</td>
+      <td>1070.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Legend:</p>
+
+<ul>
+<li>
+<strong>Mean</strong>: Posterior mean</li>
+<li>
+<strong>SD</strong>: Posterior standard deviation</li>
+<li>
+<strong>HDI (n%)</strong>: Lower/ bound of Highest Density Interval (HDI)--narrowest possible credible quantiles containing whatever percent of posterior mass</li>
+<li>
+<strong>MCSE (mean/sd)</strong>: Monte Carlo Standard Error for mean/std--how much simulation noise remains in estimates due to finite number of samples</li>
+<li>
+<strong>ESS (bulk/tail)</strong>: Effective Sample Size--amount of independent information in the (bulk/tail) region of the posterior. Larger is better; should be near the total number of samples (=chains x draws) for good mixing.</li>
+<li>
+<strong>$\hat{{R}}$</strong>: Potential Scale Reduction Factor (Gelman-Rubin statistic)--measures mixing between chains. Values close to 1.0 indicate good mixing, that is, that chains are exploring the same posterior distribution.</li>
+<li>
+<strong>sigma</strong>: Observation noise RV (HalfNormal prior)</li>
+<li>
+<strong>m</strong>: Pendulum mass RV (HalfNormal prior)</li>
+<li>
+<strong>L</strong>: Pendulum length RV (HalfNormal prior)</li>
+</ul>
+</div>
+<div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+</div></main>
+</div></body>
+</html>
