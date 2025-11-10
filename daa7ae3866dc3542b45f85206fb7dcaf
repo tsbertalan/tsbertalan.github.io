@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+# Decrypt Base32 text back to original bytes.
+# Usage: python3 decrypt_key.py [CIPHERTEXT.txt] > OUTPUT
+import sys, re, base64, hashlib, hmac, struct, getpass
+
+MAGIC=b"HK1"; VER=1
+
+def kdf(pw, salt):
+    dk=hashlib.scrypt(pw,salt=salt,n=2**14,r=8,p=1,dklen=64); return dk[:32],dk[32:]
+
+def xor_stream(k, nonce, data):
+    out=bytearray(); ctr=0; i=0
+    import hashlib, hmac, struct
+    while i<len(data):
+        block=hmac.new(k, nonce+struct.pack(">Q",ctr), "sha256").digest()
+        n=min(len(block), len(data)-i)
+        out.extend(b ^ block[j] for j,b in enumerate(data[i:i+n]))
+        i+=n; ctr+=1
+    return bytes(out)
+
+def main():
+    text = sys.stdin.read() if len(sys.argv)<2 else open(sys.argv[1]).read()
+    b32 = re.sub(r"[^A-Z2-7]", "", text.upper())
+    blob = base64.b32decode(b32)
+    if blob[:3]!=MAGIC or blob[3]!=VER: sys.exit("Bad header")
+    i=4
+    salt=blob[i:i+16]; i+=16
+    nonce=blob[i:i+16]; i+=16
+    (plen,)=struct.unpack(">Q", blob[i:i+8]); i+=8
+    hdr_end = i              # end of header (before tag)
+    tag=blob[i:i+32]; i+=32
+    ct=blob[i:]
+    enc_key, mac_key = kdf(getpass.getpass("Passphrase: ").encode(), salt)
+    import hashlib, hmac
+    # The MAC was computed over the header (up to plen) + ciphertext when sealing.
+    # Verify against that value (don't include the tag itself in the MAC input).
+    if not hmac.compare_digest(tag, hmac.new(mac_key, blob[:hdr_end]+ct, "sha256").digest()):
+        sys.exit("Auth failed")
+    pt = xor_stream(enc_key, nonce, ct)
+    sys.stdout.buffer.write(pt[:plen])
+
+if __name__ == "__main__": main()
