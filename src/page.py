@@ -4,8 +4,8 @@ from utils import tostring, child, Tag
 def Head():
     head = Tag('head')
     head.append(Tag('link', rel='stylesheet', href="https://fonts.googleapis.com/icon?family=Material+Icons"))
-    head.append(Tag('link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.deep_orange-blue.min.css'))
-    script = Tag('script', src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.min.js", defer='true')
+    head.append(Tag('link', rel='stylesheet', href='/vendor/material.deep_orange-blue.min.css'))
+    script = Tag('script', src="/vendor/material.min.js", defer='true')
     head.append(script)
     head.append(Tag('meta', name='viewport', content="width=device-width, initial-scale=1.0"))
     return head
