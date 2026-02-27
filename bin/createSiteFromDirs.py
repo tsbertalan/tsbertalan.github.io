@@ -58,6 +58,7 @@ projectDirs.sort()
 projectDirs = projectDirs[::-1]
 cards = []
 starredCards = []
+generatedDirs = []  # Track all directories we create
 
 def remote_to_web(remote_url):
     """
@@ -127,10 +128,12 @@ for projectDir in projectDirs:
     # Prepare a folder to put the output in.
     destinationFileLocation = join(wwwDir, baseProjectName, 'index.html')
     linkDestination = join(baseProjectName, 'index.html')
+    projectOutputDir = dirname(destinationFileLocation)
+    generatedDirs.append(baseProjectName)  # Track this directory
     try:
-        makedirs(dirname(destinationFileLocation), exist_ok=True)
+        makedirs(projectOutputDir, exist_ok=True)
     except OSError as e:
-        print(f'Failed to make directory {dirname(destinationFileLocation)}: {e}')
+        print(f'Failed to make directory {projectOutputDir}: {e}')
 
     # Copy hero image to output folder.        
     if hero is None:
@@ -256,3 +259,10 @@ homepageFileLocation = join(wwwDir, 'index.html')
 utils.writePage(homepageHtml, [], homepageFileLocation, None, DEBUG=False)
 if False:
     utils.displayHtml(homepageHtml, fname=homepageFileLocation)
+
+# Write list of generated directories
+generatedDirsFile = join(wwwDir, '.generated_dirs')
+with open(generatedDirsFile, 'w') as f:
+    for dir_name in generatedDirs:
+        f.write(dir_name + '\n')
+print(f'Wrote list of {len(generatedDirs)} generated directories to {generatedDirsFile}')
